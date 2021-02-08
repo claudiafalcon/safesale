@@ -1,0 +1,31 @@
+## Query.nearbyProperties.req.vtl
+#set( $distance = $util.defaultIfNull($ctx.args.m, 500) )
+#set( $limit = $util.defaultIfNull($ctx.args.limit, 10) )
+{  
+  "version": "2017-02-28",  
+  "operation": "GET",  
+  "path": "/property/doc/_search",  
+  "params": {    
+    "body": {      
+     #if( $context.args.nextToken )"search_after": ["$context.args.nextToken"], #end       
+     "size" : ${limit},      
+     "query": {        
+      "bool" : { "must" : { "match_all" : {} },          
+      "filter" : {            
+       "geo_distance" : {              
+        "distance" : "${distance}m", 
+        "distance_type": "arc",             
+        "location" : $util.toJson($ctx.args.location) }          
+       }        
+      }      
+     },      
+     "sort": [{ 
+       "_geo_distance": {          
+        "location": $util.toJson($ctx.args.location),          
+        "order": "asc",          
+        "unit": "m",          
+        "distance_type": "arc"        
+       } 
+     }]
+   }  
+}}

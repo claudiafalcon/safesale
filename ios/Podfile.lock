@@ -1,0 +1,139 @@
+PODS:
+  - Amplify (1.5.3):
+    - Amplify/Default (= 1.5.3)
+  - Amplify/Default (1.5.3)
+  - amplify_api (0.0.1):
+    - Amplify
+    - AmplifyPlugins/AWSAPIPlugin
+    - Flutter
+  - amplify_auth_cognito (0.0.1):
+    - Amplify
+    - AmplifyPlugins/AWSCognitoAuthPlugin
+    - Flutter
+    - ObjectMapper
+  - amplify_flutter (0.0.1):
+    - Amplify
+    - AmplifyPlugins/AWSAPIPlugin
+    - AmplifyPlugins/AWSCognitoAuthPlugin
+    - AWSPluginsCore
+    - Flutter
+  - amplify_storage_s3 (0.0.1):
+    - Amplify
+    - AmplifyPlugins/AWSS3StoragePlugin
+    - Flutter
+  - AmplifyPlugins/AWSAPIPlugin (1.5.3):
+    - AppSyncRealTimeClient (~> 1.4.0)
+    - AWSCore (~> 2.22.0)
+    - AWSPluginsCore (= 1.5.3)
+  - AmplifyPlugins/AWSCognitoAuthPlugin (1.5.3):
+    - AWSAuthCore (~> 2.22.0)
+    - AWSCognitoIdentityProvider (~> 2.22.0)
+    - AWSCognitoIdentityProviderASF (~> 2.22.0)
+    - AWSCore (~> 2.22.0)
+    - AWSMobileClient (~> 2.22.0)
+    - AWSPluginsCore (= 1.5.3)
+  - AmplifyPlugins/AWSS3StoragePlugin (1.5.3):
+    - AWSCore (~> 2.22.0)
+    - AWSPluginsCore (= 1.5.3)
+    - AWSS3 (~> 2.22.0)
+  - AppSyncRealTimeClient (1.4.2):
+    - Starscream (~> 3.1.0)
+  - AWSAuthCore (2.22.0):
+    - AWSCore (= 2.22.0)
+  - AWSCognitoIdentityProvider (2.22.0):
+    - AWSCognitoIdentityProviderASF (= 2.22.0)
+    - AWSCore (= 2.22.0)
+  - AWSCognitoIdentityProviderASF (2.22.0)
+  - AWSCore (2.22.0)
+  - AWSMobileClient (2.22.0):
+    - AWSAuthCore (= 2.22.0)
+    - AWSCognitoIdentityProvider (= 2.22.0)
+    - AWSCognitoIdentityProviderASF (= 2.22.0)
+    - AWSCore (= 2.22.0)
+  - AWSPluginsCore (1.5.3):
+    - Amplify (= 1.5.3)
+    - AWSCore (~> 2.22.0)
+  - AWSS3 (2.22.0):
+    - AWSCore (= 2.22.0)
+  - connectivity (0.0.1):
+    - Flutter
+    - Reachability
+  - Flutter (1.0.0)
+  - ObjectMapper (4.2.0)
+  - path_provider (0.0.1):
+    - Flutter
+  - Reachability (3.2)
+  - Starscream (3.1.1)
+  - video_player (0.0.1):
+    - Flutter
+
+DEPENDENCIES:
+  - amplify_api (from `.symlinks/plugins/amplify_api/ios`)
+  - amplify_auth_cognito (from `.symlinks/plugins/amplify_auth_cognito/ios`)
+  - amplify_flutter (from `.symlinks/plugins/amplify_flutter/ios`)
+  - amplify_storage_s3 (from `.symlinks/plugins/amplify_storage_s3/ios`)
+  - connectivity (from `.symlinks/plugins/connectivity/ios`)
+  - Flutter (from `Flutter`)
+  - path_provider (from `.symlinks/plugins/path_provider/ios`)
+  - video_player (from `.symlinks/plugins/video_player/ios`)
+
+SPEC REPOS:
+  trunk:
+    - Amplify
+    - AmplifyPlugins
+    - AppSyncRealTimeClient
+    - AWSAuthCore
+    - AWSCognitoIdentityProvider
+    - AWSCognitoIdentityProviderASF
+    - AWSCore
+    - AWSMobileClient
+    - AWSPluginsCore
+    - AWSS3
+    - ObjectMapper
+    - Reachability
+    - Starscream
+
+EXTERNAL SOURCES:
+  amplify_api:
+    :path: ".symlinks/plugins/amplify_api/ios"
+  amplify_auth_cognito:
+    :path: ".symlinks/plugins/amplify_auth_cognito/ios"
+  amplify_flutter:
+    :path: ".symlinks/plugins/amplify_flutter/ios"
+  amplify_storage_s3:
+    :path: ".symlinks/plugins/amplify_storage_s3/ios"
+  connectivity:
+    :path: ".symlinks/plugins/connectivity/ios"
+  Flutter:
+    :path: Flutter
+  path_provider:
+    :path: ".symlinks/plugins/path_provider/ios"
+  video_player:
+    :path: ".symlinks/plugins/video_player/ios"
+
+SPEC CHECKSUMS:
+  Amplify: 48c0d81972469bec6743685f1fae6e34b1ad29f9
+  amplify_api: 51656581dc3ed85707b7210d9171d403722130f7
+  amplify_auth_cognito: 21e6e4acd861653d73875ee7d8ddce1a404e23cf
+  amplify_flutter: f798a433825189b60e49b9aa512d75cc6a2abdb4
+  amplify_storage_s3: bf5954f417944919e702998a0ce95e742015063a
+  AmplifyPlugins: fcbe0f03d980db2f31b7d5bcf580092dfe4931a3
+  AppSyncRealTimeClient: 7fb160294d067b6c0c4b3c4ab91e953fd4cfba30
+  AWSAuthCore: b54e2008da479e5a6ffdb6b482821d8f5a9afaa4
+  AWSCognitoIdentityProvider: 32a91ad644e49e40235a408a8fbb96ea74891f19
+  AWSCognitoIdentityProviderASF: 8b92721c17f2951ecd5bcfb749d5534f2851c2c7
+  AWSCore: 8bd1def9cb0b6770c65b6d394f1c1cbc0a5562b7
+  AWSMobileClient: bba690cc09c6569cc1111141beaa4e2f789f536b
+  AWSPluginsCore: ccd588bdf701106f9ba6f255d95c43b84b7632a2
+  AWSS3: 6d254539495f866786c8d2b829ccd57de1082f92
+  connectivity: c4130b2985d4ef6fd26f9702e886bd5260681467
+  Flutter: 0e3d915762c693b495b44d77113d4970485de6ec
+  ObjectMapper: 1eb41f610210777375fa806bf161dc39fb832b81
+  path_provider: abfe2b5c733d04e238b0d8691db0cfd63a27a93c
+  Reachability: 33e18b67625424e47b6cde6d202dce689ad7af96
+  Starscream: 4bb2f9942274833f7b4d296a55504dcfc7edb7b0
+  video_player: 9cc823b1d9da7e8427ee591e8438bfbcde500e6e
+
+PODFILE CHECKSUM: 7368163408c647b7eb699d0d788ba6718e18fb8d
+
+COCOAPODS: 1.10.1

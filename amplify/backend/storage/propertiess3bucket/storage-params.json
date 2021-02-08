@@ -1,0 +1,9 @@
+{
+    "groupPermissionMap": {
+        "UserGroupSaleForce": [
+            "create/update",
+            "read",
+            "delete"
+        ]
+    }
+}

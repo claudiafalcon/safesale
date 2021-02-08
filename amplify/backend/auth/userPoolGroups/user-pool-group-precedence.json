@@ -1,0 +1,14 @@
+[
+    {
+        "groupName": "UserGroupFinalUsers",
+        "precedence": 1
+    },
+    {
+        "groupName": "UserGroupCustomers",
+        "precedence": 2
+    },
+    {
+        "groupName": "UserGroupSaleForce",
+        "precedence": 3
+    }
+]

@@ -1,0 +1,18 @@
+{
+  "trigger": true,
+  "modules": [
+    "add-to-group"
+  ],
+  "parentResource": "safesaleba936a14",
+  "functionName": "safesaleba936a14PostConfirmation",
+  "resourceName": "safesaleba936a14PostConfirmation",
+  "parentStack": "auth",
+  "triggerEnvs": "[]",
+  "triggerDir": "/usr/local/lib/node_modules/@aws-amplify/cli/node_modules/amplify-category-auth/provider-utils/awscloudformation/triggers/PostConfirmation",
+  "triggerTemplate": "PostConfirmation.json.ejs",
+  "roleName": "safesaleba936a14PostConfirmation",
+  "skipEdit": true,
+  "GROUP": "UserGroupFinalUsers",
+  "enableCors": false,
+  "triggerEventPath": "PostConfirmation.event.json"
+}

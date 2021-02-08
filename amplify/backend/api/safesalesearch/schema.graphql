@@ -1,0 +1,72 @@
+type Property @model @searchable @auth(
+  rules:[
+    {allow: groups, groups:["UserGroupSaleForce"]}
+    {allow: private, operations:[read]},
+    {allow: public, operations:[read], provider:iam}
+  ]
+)
+{
+  id: ID!
+  nombre: String!
+  tipo: String !
+  propietario: String!
+  location:Location!
+  descripcion: String
+  caracteristicas: String 
+  precio: String
+  recamaras: Int
+  asesor: String
+  construccion_m2: Int
+  amenidades: String
+  estacionamientos: Int
+  localidad: String
+  inventario: Int
+  propertyGeohash: String
+  terreno_m2: Int
+  direccion: String
+  creacion: String
+  propertyHashKey: String
+  cp: String
+  edad: Int
+  pais: String
+  entidad: String
+  status: String
+  video: S3Object
+  galery: [S3Object]
+} 
+type S3Object {
+  bucket: String!
+  region: String!
+  key: String!
+ 
+}
+
+type Location {
+  lat: Float!
+  lon: Float!
+}
+
+type Query {
+ nearbyProperties(
+   location: LocationInput!, 
+   m: Int, 
+   limit: Int, 
+   nextToken: String
+ ): ModelPropertyPointConnection 
+  @auth(rules: [
+    {allow: groups, groups:["UserGroupSaleForce"]}
+    {allow: private},
+      { allow: public, provider: iam }
+    ])
+}
+input LocationInput {
+  lat: Float!
+  lon: Float!
+}
+type ModelPropertyPointConnection   @aws_iam @aws_cognito_user_pools{
+ items: [Property]
+ total: Int
+ nextToken: String
+}
+
+
