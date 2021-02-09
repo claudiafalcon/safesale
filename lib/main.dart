@@ -102,7 +102,9 @@ class _MyAppState extends State<MyApp> {
             } else {
               return Container(
                 alignment: Alignment.center,
-                child: CircularProgressIndicator(),
+                child: Image.asset(
+                  "images/loading.gif",
+                ),
               );
             }
           }),

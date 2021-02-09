@@ -23,6 +23,8 @@ class Property {
   final String entidad;
   final int estacionamientos;
   final int inventario;
+  final int wc;
+  final int baths;
   final String localidad;
   final String pais;
   final String precio;
@@ -57,7 +59,9 @@ class Property {
       this.propietario,
       this.recamaras,
       this.terrenoM2,
-      this.updatedAt});
+      this.updatedAt,
+      this.wc,
+      this.baths});
 
   factory Property.fromJson(Map<String, dynamic> data) {
     List<Media> gallery = <Media>[];
@@ -102,6 +106,8 @@ class Property {
       recamaras: data["recamaras"] == null ? 0 : data["recamaras"] as int,
       terrenoM2: data["terreno_m2"] == null ? 0 : data["terreno_m2"] as int,
       updatedAt: data["createdAt"] == null ? null : data["createdAt"] as String,
+      wc: data["wc"] == null ? 0 : data["wc"] as int,
+      baths: data["baths"] == null ? 0 : data["baths"] as int,
     );
   }
 }

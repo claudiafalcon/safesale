@@ -1,3 +1,4 @@
+import 'dart:async' show StreamController;
 import 'dart:convert';
 
 import 'package:amplify_api/amplify_api.dart';
@@ -14,13 +15,32 @@ import 'package:amplify_flutter/amplify.dart';
 import 'package:safesale/graphql/authqueries.dart';
 import 'package:safesale/models/property.dart';
 
+enum SearchFlowStatus { started, finalized, error }
+
+class SearchState {
+  final SearchFlowStatus searchFlowStatus;
+
+  SearchState({this.searchFlowStatus});
+}
+
 class SearchService {
+  List<Property> _properties;
+
+  List<Property> getProperties() {
+    return _properties;
+  }
+
+  final searchStateController = StreamController<SearchState>();
+
   List<Property> parseProperties(List jsonList) {
     return jsonList.map<Property>((json) => Property.fromJson(json)).toList();
   }
 
-  Future<List<Property>> fetchProperties() async {
+  void fetchProperties(double lat, double lon) async {
     try {
+      final state = SearchState(searchFlowStatus: SearchFlowStatus.started);
+      searchStateController.add(state);
+
       CognitoAuthSession res = await Amplify.Auth.fetchAuthSession(
           options: CognitoSessionOptions(getAWSCredentials: true));
 
@@ -53,12 +73,15 @@ class SearchService {
         }
         final List parsedList =
             json.decode(response.body)["data"]["nearbyProperties"]["items"];
-        return parseProperties(parsedList);
+        _properties = parseProperties(parsedList);
+        final state = SearchState(searchFlowStatus: SearchFlowStatus.finalized);
+        searchStateController.add(state);
+        return;
       } else {
         var operation = Amplify.API.query(
             request: GraphQLRequest<String>(
                 document: q_nerbyProperties,
-                variables: {"lat": 19.55, "lon": -99}));
+                variables: {"lat": lat, "lon": lon}));
         var response = await operation.response;
         var data = response.data;
         final List parsedList = json.decode(data)["nearbyProperties"]["items"];
