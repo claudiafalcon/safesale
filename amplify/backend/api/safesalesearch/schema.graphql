@@ -15,6 +15,8 @@ type Property @model @searchable @auth(
   caracteristicas: String 
   precio: String
   recamaras: Int
+  wc: Int
+  baths: Int
   asesor: String
   construccion_m2: Int
   amenidades: String

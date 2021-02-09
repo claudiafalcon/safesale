@@ -1,6 +1,8 @@
 import 'dart:ui';
-
+import 'dart:async';
 import 'package:flutter/material.dart';
+import 'package:location/location.dart' show Location, LocationData;
+
 import 'package:safesale/models/media.dart';
 import 'package:safesale/models/property.dart';
 
@@ -11,6 +13,7 @@ import 'package:safesale/services/search_service.dart';
 
 import 'package:google_fonts/google_fonts.dart';
 import 'package:video_player/video_player.dart';
+//import 'package:location_permissions/location_permissions.dart';
 
 class VideoPage extends StatefulWidget {
   @override
@@ -20,9 +23,39 @@ class VideoPage extends StatefulWidget {
 class _VideoPageState extends State<VideoPage> {
   final _searchService = SearchService();
 
+  LocationData currentLocation;
+
+  List<Property> result;
+
+  //PermissionStatus _permissionStatus = PermissionStatus.unknown;
+
   @override
   initState() {
     super.initState();
+    //  _listenForPermissionStatus();
+    setInitialLocation();
+  }
+
+  // void _listenForPermissionStatus() {
+  // final Future<PermissionStatus> statusFuture =
+  //   LocationPermissions().checkPermissionStatus();
+
+  //statusFuture.then((PermissionStatus status) {
+  // setState(() {
+  //  _permissionStatus = status;
+  //});
+  //});
+  //}
+
+  Future<void> setInitialLocation() async {
+    Location location = new Location();
+    // establece la ubicación inicial tirando del usuario
+    // ubicación actual de getLocation () de la ubicación
+    currentLocation = await location.getLocation();
+    _searchService.fetchProperties(
+        currentLocation.latitude, currentLocation.longitude);
+
+    // destino codificado para este ejemplo
   }
 
   buildprofile() {
@@ -124,18 +157,23 @@ class _VideoPageState extends State<VideoPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: FutureBuilder<List<Property>>(
-          future: _searchService.fetchProperties(),
+      body: StreamBuilder<SearchState>(
+          stream: _searchService.searchStateController.stream,
           builder: (context, snapshot) {
-            if (!snapshot.hasData) {
-              return Center(child: CircularProgressIndicator());
+            if (!snapshot.hasData ||
+                snapshot.data.searchFlowStatus == SearchFlowStatus.started) {
+              return Center(
+                  child: Image.asset(
+                "images/loading.gif",
+              ));
             }
+            result = _searchService.getProperties();
             return PageView.builder(
-                itemCount: snapshot.data.length,
+                itemCount: result.length,
                 controller: PageController(initialPage: 0, viewportFraction: 1),
                 scrollDirection: Axis.vertical,
                 itemBuilder: (context, index) {
-                  Property property = snapshot.data[index];
+                  Property property = result[index];
                   return Stack(children: [
                     VideoPlayerItem(property.video.key)
                     //video
@@ -182,7 +220,7 @@ class _VideoPageState extends State<VideoPage> {
                                         buildicon(
                                             'images/RECAMARA.svg',
                                             Text(
-                                              "2",
+                                              property.recamaras.toString(),
                                               textAlign: TextAlign.center,
                                               style: GoogleFonts.raleway(
                                                 textStyle: TextStyle(
@@ -195,7 +233,7 @@ class _VideoPageState extends State<VideoPage> {
                                         buildicon(
                                             'images/BANO.svg',
                                             Text(
-                                              "2",
+                                              property.baths.toString(),
                                               textAlign: TextAlign.center,
                                               style: GoogleFonts.raleway(
                                                 textStyle: TextStyle(
@@ -208,7 +246,7 @@ class _VideoPageState extends State<VideoPage> {
                                         buildicon(
                                             'images/MEDIOBANO.svg',
                                             Text(
-                                              "2",
+                                              property.wc.toString(),
                                               textAlign: TextAlign.center,
                                               style: GoogleFonts.raleway(
                                                 textStyle: TextStyle(
@@ -221,7 +259,8 @@ class _VideoPageState extends State<VideoPage> {
                                         buildicon(
                                             'images/ESTACIONAMIENTO.svg',
                                             Text(
-                                              "2",
+                                              property.estacionamientos
+                                                  .toString(),
                                               textAlign: TextAlign.center,
                                               style: GoogleFonts.raleway(
                                                 textStyle: TextStyle(
@@ -234,7 +273,8 @@ class _VideoPageState extends State<VideoPage> {
                                         buildicon(
                                             'images/TERRENO.svg',
                                             Text(
-                                              "2",
+                                              property.terrenoM2.toString() +
+                                                  "m2",
                                               textAlign: TextAlign.center,
                                               style: GoogleFonts.raleway(
                                                 textStyle: TextStyle(
@@ -247,7 +287,9 @@ class _VideoPageState extends State<VideoPage> {
                                         buildicon(
                                             'images/CONSTRUCCION.svg',
                                             Text(
-                                              "1200 m2",
+                                              property.construccionM2
+                                                      .toString() +
+                                                  "m2",
                                               textAlign: TextAlign.center,
                                               style: GoogleFonts.raleway(
                                                 textStyle: TextStyle(
@@ -260,7 +302,7 @@ class _VideoPageState extends State<VideoPage> {
                                         buildicon(
                                             'images/CITAS.svg',
                                             Text(
-                                              "12 yr",
+                                              property.edad.toString() + "yr",
                                               textAlign: TextAlign.center,
                                               style: GoogleFonts.raleway(
                                                 textStyle: TextStyle(
@@ -449,7 +491,10 @@ class _VideoPlayerItemState extends State<VideoPlayerItem> {
   // @override
   Widget build(BuildContext context) {
     return (_controller == null || _controller.value.initialized == false)
-        ? Center(child: CircularProgressIndicator())
+        ? Center(
+            child: Image.asset(
+            "images/loading.gif",
+          ))
         : Stack(fit: StackFit.expand, children: [
             AspectRatio(
                 aspectRatio: _controller.value.aspectRatio,

@@ -59,6 +59,8 @@ PODS:
     - Flutter
     - Reachability
   - Flutter (1.0.0)
+  - location (0.0.1):
+    - Flutter
   - ObjectMapper (4.2.0)
   - path_provider (0.0.1):
     - Flutter
@@ -74,6 +76,7 @@ DEPENDENCIES:
   - amplify_storage_s3 (from `.symlinks/plugins/amplify_storage_s3/ios`)
   - connectivity (from `.symlinks/plugins/connectivity/ios`)
   - Flutter (from `Flutter`)
+  - location (from `.symlinks/plugins/location/ios`)
   - path_provider (from `.symlinks/plugins/path_provider/ios`)
   - video_player (from `.symlinks/plugins/video_player/ios`)
 
@@ -106,6 +109,8 @@ EXTERNAL SOURCES:
     :path: ".symlinks/plugins/connectivity/ios"
   Flutter:
     :path: Flutter
+  location:
+    :path: ".symlinks/plugins/location/ios"
   path_provider:
     :path: ".symlinks/plugins/path_provider/ios"
   video_player:
@@ -128,6 +133,7 @@ SPEC CHECKSUMS:
   AWSS3: 6d254539495f866786c8d2b829ccd57de1082f92
   connectivity: c4130b2985d4ef6fd26f9702e886bd5260681467
   Flutter: 0e3d915762c693b495b44d77113d4970485de6ec
+  location: 3a2eed4dd2fab25e7b7baf2a9efefe82b512d740
   ObjectMapper: 1eb41f610210777375fa806bf161dc39fb832b81
   path_provider: abfe2b5c733d04e238b0d8691db0cfd63a27a93c
   Reachability: 33e18b67625424e47b6cde6d202dce689ad7af96
