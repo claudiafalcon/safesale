@@ -62,7 +62,7 @@ class SearchService {
                 {'Content-Type': 'application/graphql; charset=utf-8'}),
             body: new Map<String, Object>.from({
               'query': q_nerbyProperties,
-              'variables': {"lat": 19.55, "lon": -99}
+              'variables': {"lat": lat, "lon": lon}
             }));
         http.Response response;
         try {

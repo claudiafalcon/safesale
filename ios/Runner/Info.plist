@@ -48,5 +48,9 @@
 	</dict>
 	<key>NSLocationWhenInUseUsageDescription</key>
 	<string>Correcta visualizacion</string>
+	<key>UISupportedInterfaceOrientations</key>
+	<array>
+    	<string>UIInterfaceOrientationPortrait</string>
+	</array>
 </dict>
 </plist>

@@ -101,6 +101,9 @@ class _MyAppState extends State<MyApp> {
               );
             } else {
               return Container(
+                color: Colors.black,
+                width: 70,
+                height: 70,
                 alignment: Alignment.center,
                 child: Image.asset(
                   "images/loading.gif",

@@ -9,6 +9,25 @@
     },
     {
         "groupName": "UserGroupSaleForce",
-        "precedence": 3
+        "precedence": 3,
+        "customPolicies": [
+            {
+                "PolicyName": "safesaleba936a14-admin-group-policy",
+                "PolicyDocument": {
+                    "Version": "2012-10-17",
+                    "Statement": [
+                        {
+                            "Sid": "VisualEditor0",
+                            "Effect": "Allow",
+                            "Action": [
+                                "s3:PutObject",
+                                "s3:DeleteObject"
+                            ],
+                            "Resource": "arn:aws:s3:::properiesvodstream-dev-input-1lxg6thx/*"
+                        }
+                    ]
+                }
+            }
+        ]
     }
 ]

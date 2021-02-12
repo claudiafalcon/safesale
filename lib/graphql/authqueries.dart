@@ -4,9 +4,7 @@ const q_nerbyProperties = '''query MyQuery(\$lat:Float!, \$lon: Float!) {
                                       nextToken
                                       items {
                                         video {
-                                          region
-                                          key
-                                          bucket
+                                          id
                                         }
                                         updatedAt
                                         tipo

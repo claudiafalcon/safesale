@@ -5,6 +5,7 @@ import 'package:location/location.dart' show Location, LocationData;
 
 import 'package:safesale/models/media.dart';
 import 'package:safesale/models/property.dart';
+import 'package:safesale/services/video_mod.dart';
 
 import 'package:safesale/variables.dart';
 import 'package:safesale/widgets/circle_animation.dart';
@@ -13,6 +14,7 @@ import 'package:safesale/services/search_service.dart';
 
 import 'package:google_fonts/google_fonts.dart';
 import 'package:video_player/video_player.dart';
+import 'package:yoyo_player/yoyo_player.dart';
 //import 'package:location_permissions/location_permissions.dart';
 
 class VideoPage extends StatefulWidget {
@@ -60,15 +62,15 @@ class _VideoPageState extends State<VideoPage> {
 
   buildprofile() {
     return Container(
-      width: 60,
-      height: 60,
+      width: 40,
+      height: 40,
       child: Stack(
         children: [
           Positioned(
-            left: (60 / 2) - (50 / 2),
+            left: (40 / 2) - (30 / 2),
             child: Container(
-              width: 50,
-              height: 50,
+              width: 30,
+              height: 30,
               padding: EdgeInsets.all(1),
               decoration: BoxDecoration(
                 color: Color.fromARGB(20, 255, 255, 255),
@@ -84,7 +86,7 @@ class _VideoPageState extends State<VideoPage> {
             ),
           ),
           Positioned(
-            left: (60 / 2),
+            left: (40 / 2),
             child: Container(
               width: 20,
               height: 20,
@@ -136,7 +138,7 @@ class _VideoPageState extends State<VideoPage> {
       height: 60,
       child: Column(children: [
         Container(
-          padding: EdgeInsets.all(11.0),
+          padding: EdgeInsets.all(8.0),
           height: 50,
           width: 50,
           decoration: BoxDecoration(
@@ -157,15 +159,20 @@ class _VideoPageState extends State<VideoPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Colors.black,
       body: StreamBuilder<SearchState>(
           stream: _searchService.searchStateController.stream,
           builder: (context, snapshot) {
             if (!snapshot.hasData ||
                 snapshot.data.searchFlowStatus == SearchFlowStatus.started) {
-              return Center(
-                  child: Image.asset(
-                "images/loading.gif",
-              ));
+              return Container(
+                  alignment: Alignment.center,
+                  width: 70,
+                  height: 70,
+                  child: Container() //Image.asset(
+                  // "images/loading.gif",
+                  //),
+                  );
             }
             result = _searchService.getProperties();
             return PageView.builder(
@@ -175,168 +182,97 @@ class _VideoPageState extends State<VideoPage> {
                 itemBuilder: (context, index) {
                   Property property = result[index];
                   return Stack(children: [
-                    VideoPlayerItem(property.video.key)
+                    VideoPlayerItem(property.id)
                     //video
                     ,
                     Column(children: [
                       // top section
                       Container(
-                        height: 150,
+                        padding: const EdgeInsets.all(8.0),
+                        height: 140,
                         child: Row(
-                          //crossAxisAlignment: CrossAxisAlignment.end,
+                          crossAxisAlignment: CrossAxisAlignment.end,
                           mainAxisSize: MainAxisSize.min,
                           children: [
-                            Text("Following",
-                                style: farsiSimpleStyle(
-                                    12, Colors.white, FontWeight.bold)),
-                            Text("For you",
-                                style: farsiSimpleStyle(
-                                    12, Colors.white, FontWeight.bold)),
+                            //CircleAnimation(buildmusicalalbum()),
+
+                            Flexible(
+                                child: Padding(
+                                    padding: const EdgeInsets.only(
+                                        left: 8.0, top: 50),
+                                    child: Column(
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.start,
+                                        children: <Widget>[
+                                          Padding(
+                                              padding: const EdgeInsets.only(
+                                                  left: 8.0),
+                                              child: Text(
+                                                property.nombre,
+                                                style: GoogleFonts.raleway(
+                                                  textStyle: TextStyle(
+                                                    color: Colors.white,
+                                                    fontSize: 24,
+                                                    fontWeight: FontWeight.bold,
+                                                  ),
+                                                ),
+                                              ))
+                                        ])))
+                            /* Text(
+                              property.nombre,
+                              overflow: TextOverflow.ellipsis,
+                              softWrap: true,
+                              textAlign: TextAlign.left,
+                              style: GoogleFonts.raleway(
+                                textStyle: TextStyle(
+                                  color: Colors.white,
+                                  fontSize: 27.5,
+                                  fontWeight: FontWeight.bold,
+                                ),
+                              ),
+                            )*/
                           ],
                         ),
                       ),
-
                       //Middle section
                       Expanded(
                         child: Row(
                             mainAxisSize: MainAxisSize.max,
                             crossAxisAlignment: CrossAxisAlignment.end,
                             children: [
-                              Expanded(
-                                  child: Container(
-                                height: 80,
-                                color: Colors.black26,
-                                padding: EdgeInsets.only(left: 20),
-                                child: Column(
-                                  mainAxisSize: MainAxisSize.max,
-                                  crossAxisAlignment: CrossAxisAlignment.center,
-                                  mainAxisAlignment:
-                                      MainAxisAlignment.spaceEvenly,
-                                  children: [
-                                    Row(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.spaceEvenly,
-                                      children: [
-                                        buildicon(
-                                            'images/RECAMARA.svg',
-                                            Text(
-                                              property.recamaras.toString(),
-                                              textAlign: TextAlign.center,
-                                              style: GoogleFonts.raleway(
-                                                textStyle: TextStyle(
-                                                  color: Colors.white,
-                                                  fontSize: 14,
-                                                  fontWeight: FontWeight.w600,
-                                                ),
-                                              ),
-                                            )),
-                                        buildicon(
-                                            'images/BANO.svg',
-                                            Text(
-                                              property.baths.toString(),
-                                              textAlign: TextAlign.center,
-                                              style: GoogleFonts.raleway(
-                                                textStyle: TextStyle(
-                                                  color: Colors.white,
-                                                  fontSize: 14,
-                                                  fontWeight: FontWeight.w600,
-                                                ),
-                                              ),
-                                            )),
-                                        buildicon(
-                                            'images/MEDIOBANO.svg',
-                                            Text(
-                                              property.wc.toString(),
-                                              textAlign: TextAlign.center,
-                                              style: GoogleFonts.raleway(
-                                                textStyle: TextStyle(
-                                                  color: Colors.white,
-                                                  fontSize: 14,
-                                                  fontWeight: FontWeight.w600,
-                                                ),
-                                              ),
-                                            )),
-                                        buildicon(
-                                            'images/ESTACIONAMIENTO.svg',
-                                            Text(
-                                              property.estacionamientos
-                                                  .toString(),
-                                              textAlign: TextAlign.center,
-                                              style: GoogleFonts.raleway(
-                                                textStyle: TextStyle(
-                                                  color: Colors.white,
-                                                  fontSize: 14,
-                                                  fontWeight: FontWeight.w600,
-                                                ),
-                                              ),
-                                            )),
-                                        buildicon(
-                                            'images/TERRENO.svg',
-                                            Text(
-                                              property.terrenoM2.toString() +
-                                                  "m2",
-                                              textAlign: TextAlign.center,
-                                              style: GoogleFonts.raleway(
-                                                textStyle: TextStyle(
-                                                  color: Colors.white,
-                                                  fontSize: 14,
-                                                  fontWeight: FontWeight.w600,
-                                                ),
-                                              ),
-                                            )),
-                                        buildicon(
-                                            'images/CONSTRUCCION.svg',
-                                            Text(
-                                              property.construccionM2
-                                                      .toString() +
-                                                  "m2",
-                                              textAlign: TextAlign.center,
-                                              style: GoogleFonts.raleway(
-                                                textStyle: TextStyle(
-                                                  color: Colors.white,
-                                                  fontSize: 14,
-                                                  fontWeight: FontWeight.w600,
-                                                ),
-                                              ),
-                                            )),
-                                        buildicon(
-                                            'images/CITAS.svg',
-                                            Text(
-                                              property.edad.toString() + "yr",
-                                              textAlign: TextAlign.center,
-                                              style: GoogleFonts.raleway(
-                                                textStyle: TextStyle(
-                                                  color: Colors.white,
-                                                  fontSize: 14,
-                                                  fontWeight: FontWeight.w600,
-                                                ),
-                                              ),
-                                            )),
-                                      ],
-                                    ),
-                                  ],
-                                ),
-                              )),
                               //rigth section
                               Container(
-                                  width: 100,
+                                  width: MediaQuery.of(context).size.width - 10,
                                   margin: EdgeInsets.only(
                                       top: MediaQuery.of(context).size.height /
-                                          12),
+                                          25),
                                   child: Column(
-                                    mainAxisAlignment:
-                                        MainAxisAlignment.spaceEvenly,
+                                    mainAxisAlignment: MainAxisAlignment.start,
+                                    crossAxisAlignment: CrossAxisAlignment.end,
                                     children: [
+                                      Column(
+                                        children: [
+                                          SvgPicture.asset(
+                                            'images/filter.svg',
+                                            width: 30,
+                                            height: 30,
+                                            color: Colors.white,
+                                          ),
+                                          SizedBox(
+                                            height: 20,
+                                          )
+                                        ],
+                                      ),
                                       buildprofile(),
                                       Column(
                                         children: [
                                           SizedBox(
-                                            height: 50,
+                                            height: 60,
                                           ),
                                           SvgPicture.asset(
                                             'images/CORAZON LIKE.svg',
-                                            width: 50,
-                                            height: 50,
+                                            width: 30,
+                                            height: 30,
                                             color: Colors.white,
                                           ),
                                           SizedBox(
@@ -348,12 +284,12 @@ class _VideoPageState extends State<VideoPage> {
                                         children: [
                                           SvgPicture.asset(
                                             'images/FOTOS.svg',
-                                            width: 50,
-                                            height: 50,
+                                            width: 30,
+                                            height: 30,
                                             color: Colors.white,
                                           ),
                                           SizedBox(
-                                            height: 10,
+                                            height: 20,
                                           ),
                                         ],
                                       ),
@@ -361,12 +297,12 @@ class _VideoPageState extends State<VideoPage> {
                                         children: [
                                           SvgPicture.asset(
                                             'images/UBICACION.svg',
-                                            width: 50,
-                                            height: 50,
+                                            width: 30,
+                                            height: 30,
                                             color: Colors.white,
                                           ),
                                           SizedBox(
-                                            height: 10,
+                                            height: 20,
                                           ),
                                         ],
                                       ),
@@ -374,12 +310,12 @@ class _VideoPageState extends State<VideoPage> {
                                         children: [
                                           SvgPicture.asset(
                                             'images/INFORMACION.svg',
-                                            width: 50,
-                                            height: 50,
+                                            width: 30,
+                                            height: 30,
                                             color: Colors.white,
                                           ),
                                           SizedBox(
-                                            height: 10,
+                                            height: 20,
                                           ),
                                         ],
                                       ),
@@ -387,12 +323,12 @@ class _VideoPageState extends State<VideoPage> {
                                         children: [
                                           SvgPicture.asset(
                                             'images/DUDAS.svg',
-                                            width: 50,
-                                            height: 50,
+                                            width: 30,
+                                            height: 30,
                                             color: Colors.white,
                                           ),
                                           SizedBox(
-                                            height: 10,
+                                            height: 20,
                                           ),
                                         ],
                                       ),
@@ -400,8 +336,8 @@ class _VideoPageState extends State<VideoPage> {
                                         children: [
                                           SvgPicture.asset(
                                             'images/CITAS.svg',
-                                            width: 50,
-                                            height: 50,
+                                            width: 30,
+                                            height: 30,
                                             color: Colors.white,
                                           ),
                                           SizedBox(
@@ -409,7 +345,6 @@ class _VideoPageState extends State<VideoPage> {
                                           ),
                                         ],
                                       ),
-                                      CircleAnimation(buildmusicalalbum()),
                                       Column(
                                         children: [
                                           SizedBox(
@@ -440,13 +375,12 @@ class VideoPlayerItem extends StatefulWidget {
 
 class _VideoPlayerItemState extends State<VideoPlayerItem> {
   VideoPlayerController _controller;
-  String _videoUrl;
   Future<void> _initializeVideoPlayerFuture;
 
   @override
   initState() {
     super.initState();
-    _loadVideo(_videoUrl);
+    //_loadVideo(_videoUrl);
 
     // _controller = VideoPlayerController.network(_videoUrl)
     // ..initialize().then((value) {
@@ -454,51 +388,51 @@ class _VideoPlayerItemState extends State<VideoPlayerItem> {
     // });
   }
 
-  void _loadVideo(String key) async {
-    await Media.getURL(widget.video).then((String result) {
-      _videoUrl = result;
-    });
+  //void _loadVideo(String key) async {
+  //await Media.getURL(widget.video).then((String result) {
+  //_videoUrl = result;
+  //});
 
-    _controller = VideoPlayerController.network(_videoUrl)
-      ..initialize().then((_) {
-        setState(() {});
-      });
-    _controller.setLooping(true);
-    _controller.play();
+  //_controller = VideoPlayerController.network(_videoUrl)
+  //..initialize().then((_) {
+  // setState(() {});
+  // });
+  //_controller.setLooping(true);
+  //_controller.play();
 
-    // _controller = VideoPlayerController.network(_videoUrl);
+  // _controller = VideoPlayerController.network(_videoUrl);
 
-    // _controller.addListener(() {
-    //  setState(() {});
-    //}//);
+  // _controller.addListener(() {
+  //  setState(() {});
+  //}//);
 
-    //await _controller.initialize();
-    //await _controller.play();
-    //controller.setLooping(true);
-    // _controller.setVolume(1.0);
+  //await _controller.initialize();
+  //await _controller.play();
+  //controller.setLooping(true);
+  // _controller.setVolume(1.0);
 
-    // Use the controller to loop the video.
-  }
+  // Use the controller to loop the video.
+  // }
 
-  @override
-  void dispose() {
-    // Ensure disposing of the VideoPlayerController to free up resources.
-    _controller.dispose();
-
-    super.dispose();
-  }
-
+  bool fullscreen = false;
   // @override
   Widget build(BuildContext context) {
-    return (_controller == null || _controller.value.initialized == false)
-        ? Center(
-            child: Image.asset(
-            "images/loading.gif",
-          ))
-        : Stack(fit: StackFit.expand, children: [
-            AspectRatio(
-                aspectRatio: _controller.value.aspectRatio,
-                child: VideoPlayer(_controller))
-          ]);
+    return Stack(fit: StackFit.expand, children: [
+      SafeSalePlayer(
+        aspectRatio: 16 / 9,
+        url: "https://didsugvpn60.cloudfront.net/" +
+            widget.video +
+            "/" +
+            widget.video +
+            ".m3u8",
+        // "https://player.vimeo.com/external/440218055.m3u8?s=7ec886b4db9c3a52e0e7f5f917ba7287685ef67f&oauth2_token_id=1360367101",
+        // "https://sfux-ext.sfux.info/hls/chapter/105/1588724110/1588724110.m3u8",
+        onfullscreen: (t) {
+          setState(() {
+            fullscreen = t;
+          });
+        },
+      )
+    ]);
   }
 }

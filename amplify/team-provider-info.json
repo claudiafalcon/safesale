@@ -13,12 +13,42 @@
     },
     "categories": {
       "auth": {
-        "safesaleba936a14": {}
+        "safesaleba936a14": {},
+        "userPoolGroups": {}
       },
       "function": {
         "safesaleba936a14PostConfirmation": {
           "GROUP": "UserGroupFinalUsers"
+        },
+        "S3Trigger4a34da68": {}
+      },
+      "video": {
+        "properiesvodstream": {
+          "s3UUID": "1lxg6thx"
         }
+      }
+    }
+  },
+  "vod": {
+    "awscloudformation": {
+      "AuthRoleName": "amplify-safesale-vod-80437-authRole",
+      "UnauthRoleArn": "arn:aws:iam::220965052220:role/amplify-safesale-vod-80437-unauthRole",
+      "AuthRoleArn": "arn:aws:iam::220965052220:role/amplify-safesale-vod-80437-authRole",
+      "Region": "us-east-1",
+      "DeploymentBucketName": "amplify-safesale-vod-80437-deployment",
+      "UnauthRoleName": "amplify-safesale-vod-80437-unauthRole",
+      "StackName": "amplify-safesale-vod-80437",
+      "StackId": "arn:aws:cloudformation:us-east-1:220965052220:stack/amplify-safesale-vod-80437/150cbd00-6c72-11eb-9595-0eac49185f5f",
+      "AmplifyAppId": "d2jcky1gmsyyto"
+    },
+    "categories": {
+      "auth": {
+        "safesaleba936a14": {},
+        "userPoolGroups": {}
+      },
+      "function": {
+        "S3Trigger4a34da68": {},
+        "safesaleba936a14PostConfirmation": {}
       }
     }
   }

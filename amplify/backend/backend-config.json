@@ -88,5 +88,12 @@
       }
     }
   },
-  "hosting": {}
+  "hosting": {},
+  "video": {
+    "properiesvodstream": {
+      "service": "video",
+      "serviceType": "video-on-demand",
+      "providerPlugin": "awscloudformation"
+    }
+  }
 }
