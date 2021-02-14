@@ -8,6 +8,7 @@ import 'package:safesale/models/property.dart';
 import 'package:safesale/services/video_mod.dart';
 
 import 'package:safesale/variables.dart';
+import 'package:safesale/videopages/searchview.dart';
 import 'package:safesale/widgets/circle_animation.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:safesale/services/search_service.dart';
@@ -250,18 +251,39 @@ class _VideoPageState extends State<VideoPage> {
                                     mainAxisAlignment: MainAxisAlignment.start,
                                     crossAxisAlignment: CrossAxisAlignment.end,
                                     children: [
-                                      Column(
-                                        children: [
-                                          SvgPicture.asset(
-                                            'images/filter.svg',
-                                            width: 30,
-                                            height: 30,
-                                            color: Colors.white,
-                                          ),
-                                          SizedBox(
-                                            height: 20,
-                                          )
-                                        ],
+                                      Expanded(
+                                        flex: 1,
+                                        child: Column(
+                                          children: [
+                                            Expanded(
+                                              flex: 1,
+                                              child: InkWell(
+                                                onTap: () =>
+                                                    showModalBottomSheet<void>(
+                                                  isScrollControlled: true,
+                                                  context: context,
+                                                  shape: RoundedRectangleBorder(
+                                                      borderRadius:
+                                                          BorderRadius.vertical(
+                                                              top: Radius
+                                                                  .circular(
+                                                                      10.0))),
+                                                  builder: (context) =>
+                                                      SearchPage("22"),
+                                                ),
+                                                child: SvgPicture.asset(
+                                                  'images/filter.svg',
+                                                  width: 30,
+                                                  height: 30,
+                                                  color: Colors.white,
+                                                ),
+                                              ),
+                                            ),
+                                            SizedBox(
+                                              height: 20,
+                                            )
+                                          ],
+                                        ),
                                       ),
                                       buildprofile(),
                                       Column(
