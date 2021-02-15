@@ -40,7 +40,7 @@ class _SearchPageState extends State<SearchPage> {
                   topLeft: Radius.circular(10), topRight: Radius.circular(10)),
               child: Container(
                 width: double.infinity,
-                color: Color.fromRGBO(25, 28, 29, 0.83),
+                color: Color.fromRGBO(67, 73, 75, 0.83),
                 height: MediaQuery.of(context).size.height / 10 * 9.5,
                 child: Wrap(children: [
                   Container(

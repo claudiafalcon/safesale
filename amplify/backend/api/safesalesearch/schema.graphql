@@ -33,7 +33,7 @@ type Property @model @searchable @auth(
   pais: String
   entidad: String
   status: String
-  video: videoObject @connection
+  video: Boolean
   galery: [S3Object]
 } 
 type S3Object {
@@ -73,15 +73,3 @@ type ModelPropertyPointConnection   @aws_iam @aws_cognito_user_pools{
 
 
 
-#DO NOT EDIT
-type videoObject @model
-@auth(
-  rules: [
-    {allow: groups, groups:["UserGroupSaleForce"]}
-    {allow: private, operations:[read]},
-    {allow: public, operations:[read], provider:iam}
-  ]
-)
-{
-  id:ID!
-}
