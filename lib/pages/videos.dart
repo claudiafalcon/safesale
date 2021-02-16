@@ -442,7 +442,7 @@ class _VideoPlayerItemState extends State<VideoPlayerItem> {
     return Stack(fit: StackFit.expand, children: [
       SafeSalePlayer(
         aspectRatio: 16 / 9,
-        url: "https://didsugvpn60.cloudfront.net/" +
+        url: "https://didsugvpn60.cloudfront.net/public/" +
             widget.video +
             "/" +
             widget.video +

@@ -3,9 +3,7 @@ const q_nerbyProperties = '''query MyQuery(\$lat:Float!, \$lon: Float!) {
                                       total
                                       nextToken
                                       items {
-                                        video {
-                                          id
-                                        }
+                                        video 
                                         updatedAt
                                         tipo
                                         terreno_m2

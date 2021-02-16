@@ -38,7 +38,7 @@ PUT /property/_mapping/doc
 }
 
 curl -XDELETE https://search-amplify-elasti-1jhhlzsmb057p-fjseujlcwr2vihi3tcwwxw5lkq.us-east-1.es.amazonaws.com/property              
-{"acknowledged":true}%                                                                                         boofalcon@MacBook-Pro-de-Claudia ~ % curl -XPUT https://search-amplify-elasti-1jhhlzsmb057p-fjseujlcwr2vihi3tcwwxw5lkq.us-east-1.es.amazonaws.com/property -d '{
+{"acknowledged":true}%                                                                                         boofalcon@MacBook-Pro-de-Claudia ~ % curl -XPUT https://search-amplify-elasti-1jhhlzsmb057p-fjseujlcwr2vihi3tcwwxw5lkq.us-east-1.es.amazonaws.com//property/_mapping/doc -d '{
   "settings": {
     "analysis": {
       "analyzer": {
@@ -56,3 +56,104 @@ curl -XDELETE https://search-amplify-elasti-1jhhlzsmb057p-fjseujlcwr2vihi3tcwwxw
     }
   }
 }' -H 'Content-Type: application/json'
+
+
+curl -XPUT https://search-amplify-elasti-1jhhlzsmb057p-fjseujlcwr2vihi3tcwwxw5lkq.us-east-1.es.amazonaws.com/property/_mapping/doc -d '{
+   "properties": {
+    "location": {
+      "type": "geo_point"
+    },
+    "nombre" : {
+        "type": "text",
+          "analyzer": "mianalizador",
+          "fields": {
+            "keyword": {
+              "type": "keyword",
+              "ignore_above": 256
+            }
+          }
+    },
+    "descripcion" : {
+        "type": "text",
+          "analyzer": "mianalizador",
+          "fields": {
+            "keyword": {
+              "type": "keyword",
+              "ignore_above": 256
+            }
+          }
+    },
+    "caracteristicas" : {
+        "type": "text",
+          "analyzer": "mianalizador",
+          "fields": {
+            "keyword": {
+              "type": "keyword",
+              "ignore_above": 256
+            }
+          }
+    },
+    "localidad" : {
+        "type": "text",
+          "analyzer": "mianalizador",
+          "fields": {
+            "keyword": {
+              "type": "keyword",
+              "ignore_above": 256
+            }
+          }
+    },
+    "direccion" : {
+        "type": "text",
+          "analyzer": "mianalizador",
+          "fields": {
+            "keyword": {
+              "type": "keyword",
+              "ignore_above": 256
+            }
+          }
+    },
+    "entidad" : {
+        "type": "text",
+          "analyzer": "mianalizador",
+          "fields": {
+            "keyword": {
+              "type": "keyword",
+              "ignore_above": 256
+            }
+          }
+    }
+  }
+}' -H 'Content-Type: application/json'
+
+curl -XPUT https://search-amplify-elasti-1jhhlzsmb057p-fjseujlcwr2vihi3tcwwxw5lkq.us-east-1.es.amazonaws.com/property -d '{
+   "settings":{
+      "number_of_shards":2,
+      "number_of_replicas":1,
+      "analysis":{
+         "analyzer":{
+            "mianalizador":{
+               "tokenizer":"standard",
+               "filter":[
+                  "lowercase",
+                  "asciifolding",
+                  "default_spanish_stopwords",
+                  "default_spanish_stemmer"
+               ]
+            }
+         },
+         "filter":{
+            "default_spanish_stemmer":{
+               "type":"stemmer",
+               "name":"spanish"
+            },
+            "default_spanish_stopwords":{
+               "type":"stop",
+               "stopwords":[
+                  "_spanish_"
+               ]
+            }
+         }
+      }
+   }
+}'  -H 'Content-Type: application/json'

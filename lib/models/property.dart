@@ -11,7 +11,7 @@ class Property {
   final String status;
   final String tipo;
   final String asesor;
-  final Media video;
+  final bool video;
   final List<Media> gallery;
   final String caracteristicas;
   final int construccionM2;
@@ -79,7 +79,7 @@ class Property {
       status: data["status"] as String,
       tipo: data["tipo"] as String,
       asesor: data["asesor"] as String,
-      video: data["video"] == null ? null : Media.fromJson(data["video"]),
+      video: data["video"] == null ? false : data["video"] as bool,
       gallery: gallery,
       caracteristicas: data["carcateristicas"] == null
           ? ''
