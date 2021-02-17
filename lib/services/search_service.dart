@@ -14,6 +14,7 @@ import 'package:amplify_flutter/amplify.dart';
 
 import 'package:safesale/graphql/authqueries.dart';
 import 'package:safesale/models/property.dart';
+import 'package:safesale/models/searchcriterio.dart';
 
 enum SearchFlowStatus { started, finalized, error }
 
@@ -24,10 +25,18 @@ class SearchState {
 }
 
 class SearchService {
+  static final SearchService _searchService = SearchService._internal();
+
+  SearchService._internal();
+
   List<Property> _properties;
 
   List<Property> getProperties() {
     return _properties;
+  }
+
+  factory SearchService() {
+    return _searchService;
   }
 
   final searchStateController = StreamController<SearchState>();
@@ -85,6 +94,61 @@ class SearchService {
         var response = await operation.response;
         var data = response.data;
         final List parsedList = json.decode(data)["nearbyProperties"]["items"];
+        return compute(parseProperties, parsedList);
+      }
+    } catch (e) {
+      print(e);
+    }
+    return null;
+  }
+
+  void searchProperties(SearchCriterio criterio) async {
+    try {
+      final state = SearchState(searchFlowStatus: SearchFlowStatus.started);
+      searchStateController.add(state);
+
+      CognitoAuthSession res = await Amplify.Auth.fetchAuthSession(
+          options: CognitoSessionOptions(getAWSCredentials: true));
+
+      if (!res.isSignedIn) {
+        var amplifyconfigJson = jsonDecode(amplifyconfig);
+        final endpoint = amplifyconfigJson["api"]["plugins"]["awsAPIPlugin"]
+            ["safesalesearch"]["endpoint"];
+        final region = amplifyconfigJson["api"]["plugins"]["awsAPIPlugin"]
+            ["safesalesearch"]["region"];
+        final awsSigV4Client = new AwsSigV4Client(res.credentials.awsAccessKey,
+            res.credentials.awsSecretKey, endpoint,
+            serviceName: 'appsync',
+            sessionToken: res.credentials.sessionToken,
+            region: region);
+        final signedRequest = new SigV4Request(awsSigV4Client,
+            method: 'POST',
+            path: '',
+            headers: new Map<String, String>.from(
+                {'Content-Type': 'application/graphql; charset=utf-8'}),
+            body: new Map<String, Object>.from({
+              'query': q_preffix_search(criterio),
+            }));
+        http.Response response;
+        try {
+          response = await http.post(signedRequest.url,
+              headers: signedRequest.headers, body: signedRequest.body);
+        } catch (e) {
+          print(e);
+        }
+        final List parsedList =
+            json.decode(response.body)["data"]["searchProperties"]["items"];
+        _properties = parseProperties(parsedList);
+        final state = SearchState(searchFlowStatus: SearchFlowStatus.finalized);
+        searchStateController.add(state);
+        return;
+      } else {
+        var operation = Amplify.API.query(
+            request:
+                GraphQLRequest<String>(document: q_preffix_search(criterio)));
+        var response = await operation.response;
+        var data = response.data;
+        final List parsedList = json.decode(data)["searchProperties"]["items"];
         return compute(parseProperties, parsedList);
       }
     } catch (e) {

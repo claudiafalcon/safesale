@@ -4,6 +4,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:safesale/models/searchcriterio.dart';
+import 'package:safesale/services/search_service.dart';
 
 class SearchPage extends StatefulWidget {
   final String id;
@@ -14,15 +16,8 @@ class SearchPage extends StatefulWidget {
 
 class _SearchPageState extends State<SearchPage> {
   final _formKey = GlobalKey<FormState>();
-  String _tipoInmueble;
-  var _recamaras;
-  var _banos;
-  var _estacionamientos;
-  String _criterio;
-  var _terreno;
-  var _construccion;
-  var _precio_inferior;
-  var _precio_superior;
+  var _criterio = new SearchCriterio();
+  final _searchService = SearchService();
 
   List _amenidades = [];
   @override
@@ -72,9 +67,10 @@ class _SearchPageState extends State<SearchPage> {
                               if (value.isEmpty) {
                                 return 'Por favor introduce un criterio de búsqueda';
                               }
+                              _criterio.criteria = value;
                               return null;
                             },
-                            onSaved: (val) => _criterio = val,
+                            onSaved: (val) => _criterio.criteria = val,
                           ),
                         ),
                       ]),
@@ -116,16 +112,16 @@ class _SearchPageState extends State<SearchPage> {
                                     InkWell(
                                       onTap: () {
                                         setState(() {
-                                          _tipoInmueble == 'Casa'
-                                              ? _tipoInmueble = ''
-                                              : _tipoInmueble = 'Casa';
+                                          _criterio.tipo == 'Casa'
+                                              ? _criterio.tipo = ''
+                                              : _criterio.tipo = 'Casa';
                                         });
                                       },
                                       child: SvgPicture.asset(
                                         'images/CASA.svg',
                                         width: 40,
                                         height: 40,
-                                        color: _tipoInmueble == 'Casa'
+                                        color: _criterio.tipo == 'Casa'
                                             ? Color.fromRGBO(0, 59, 139, 1)
                                             : Color.fromRGBO(167, 167, 167, 1),
                                       ),
@@ -133,16 +129,16 @@ class _SearchPageState extends State<SearchPage> {
                                     InkWell(
                                       onTap: () {
                                         setState(() {
-                                          _tipoInmueble == 'Terreno'
-                                              ? _tipoInmueble = ''
-                                              : _tipoInmueble = 'Terreno';
+                                          _criterio.tipo == 'Terreno'
+                                              ? _criterio.tipo = ''
+                                              : _criterio.tipo = 'Terreno';
                                         });
                                       },
                                       child: SvgPicture.asset(
                                         'images/TERRENO AZUL.svg',
                                         width: 40,
                                         height: 40,
-                                        color: _tipoInmueble == 'Terreno'
+                                        color: _criterio.tipo == 'Terreno'
                                             ? Color.fromRGBO(0, 59, 139, 1)
                                             : Color.fromRGBO(167, 167, 167, 1),
                                       ),
@@ -150,16 +146,16 @@ class _SearchPageState extends State<SearchPage> {
                                     InkWell(
                                       onTap: () {
                                         setState(() {
-                                          _tipoInmueble == 'Departamento'
-                                              ? _tipoInmueble = ''
-                                              : _tipoInmueble = 'Departamento';
+                                          _criterio.tipo == 'Departamento'
+                                              ? _criterio.tipo = ''
+                                              : _criterio.tipo = 'Departamento';
                                         });
                                       },
                                       child: SvgPicture.asset(
                                         'images/DEPARTAMENTOS.svg',
                                         width: 40,
                                         height: 40,
-                                        color: _tipoInmueble == 'Departamento'
+                                        color: _criterio.tipo == 'Departamento'
                                             ? Color.fromRGBO(0, 59, 139, 1)
                                             : Color.fromRGBO(167, 167, 167, 1),
                                       ),
@@ -206,7 +202,7 @@ class _SearchPageState extends State<SearchPage> {
                                     InkWell(
                                       onTap: () {
                                         setState(() {
-                                          _recamaras = null;
+                                          _criterio.recamaras = null;
                                         });
                                       },
                                       child: ClipRect(
@@ -217,7 +213,8 @@ class _SearchPageState extends State<SearchPage> {
                                                           0, 59, 139, 1),
                                                       width: 1.0,
                                                       style: BorderStyle.solid),
-                                                  color: _recamaras == null
+                                                  color: _criterio.recamaras ==
+                                                          null
                                                       ? Color.fromRGBO(
                                                           0, 59, 139, 1)
                                                       : Colors.white),
@@ -233,7 +230,8 @@ class _SearchPageState extends State<SearchPage> {
                                                     textAlign: TextAlign.center,
                                                     style: GoogleFonts.raleway(
                                                       textStyle: TextStyle(
-                                                        color: _recamaras ==
+                                                        color: _criterio
+                                                                    .recamaras ==
                                                                 null
                                                             ? Colors.white
                                                             : Color.fromRGBO(
@@ -248,9 +246,9 @@ class _SearchPageState extends State<SearchPage> {
                                     InkWell(
                                       onTap: () {
                                         setState(() {
-                                          _recamaras == 1
-                                              ? _recamaras = null
-                                              : _recamaras = 1;
+                                          _criterio.recamaras == 1
+                                              ? _criterio.recamaras = null
+                                              : _criterio.recamaras = 1;
                                         });
                                       },
                                       child: ClipRect(
@@ -261,7 +259,7 @@ class _SearchPageState extends State<SearchPage> {
                                                         0, 59, 139, 1),
                                                     width: 1.0,
                                                     style: BorderStyle.solid),
-                                                color: _recamaras == 1
+                                                color: _criterio.recamaras == 1
                                                     ? Color.fromRGBO(
                                                         0, 59, 139, 1)
                                                     : Colors.white,
@@ -278,7 +276,9 @@ class _SearchPageState extends State<SearchPage> {
                                                     textAlign: TextAlign.center,
                                                     style: GoogleFonts.raleway(
                                                       textStyle: TextStyle(
-                                                        color: _recamaras == 1
+                                                        color: _criterio
+                                                                    .recamaras ==
+                                                                1
                                                             ? Colors.white
                                                             : Color.fromRGBO(
                                                                 0, 59, 139, 1),
@@ -292,9 +292,9 @@ class _SearchPageState extends State<SearchPage> {
                                     InkWell(
                                       onTap: () {
                                         setState(() {
-                                          _recamaras == 2
-                                              ? _recamaras = null
-                                              : _recamaras = 2;
+                                          _criterio.recamaras == 2
+                                              ? _criterio.recamaras = null
+                                              : _criterio.recamaras = 2;
                                         });
                                       },
                                       child: ClipRect(
@@ -305,7 +305,7 @@ class _SearchPageState extends State<SearchPage> {
                                                         0, 59, 139, 1),
                                                     width: 1.0,
                                                     style: BorderStyle.solid),
-                                                color: _recamaras == 2
+                                                color: _criterio.recamaras == 2
                                                     ? Color.fromRGBO(
                                                         0, 59, 139, 1)
                                                     : Colors.white,
@@ -322,7 +322,9 @@ class _SearchPageState extends State<SearchPage> {
                                                     textAlign: TextAlign.center,
                                                     style: GoogleFonts.raleway(
                                                       textStyle: TextStyle(
-                                                        color: _recamaras == 2
+                                                        color: _criterio
+                                                                    .recamaras ==
+                                                                2
                                                             ? Colors.white
                                                             : Color.fromRGBO(
                                                                 0, 59, 139, 1),
@@ -336,9 +338,9 @@ class _SearchPageState extends State<SearchPage> {
                                     InkWell(
                                       onTap: () {
                                         setState(() {
-                                          _recamaras == 3
-                                              ? _recamaras = null
-                                              : _recamaras = 3;
+                                          _criterio.recamaras == 3
+                                              ? _criterio.recamaras = null
+                                              : _criterio.recamaras = 3;
                                         });
                                       },
                                       child: ClipRect(
@@ -349,7 +351,7 @@ class _SearchPageState extends State<SearchPage> {
                                                         0, 59, 139, 1),
                                                     width: 1.0,
                                                     style: BorderStyle.solid),
-                                                color: _recamaras == 3
+                                                color: _criterio.recamaras == 3
                                                     ? Color.fromRGBO(
                                                         0, 59, 139, 1)
                                                     : Colors.white,
@@ -366,7 +368,9 @@ class _SearchPageState extends State<SearchPage> {
                                                     textAlign: TextAlign.center,
                                                     style: GoogleFonts.raleway(
                                                       textStyle: TextStyle(
-                                                        color: _recamaras == 3
+                                                        color: _criterio
+                                                                    .recamaras ==
+                                                                3
                                                             ? Colors.white
                                                             : Color.fromRGBO(
                                                                 0, 59, 139, 1),
@@ -380,9 +384,9 @@ class _SearchPageState extends State<SearchPage> {
                                     InkWell(
                                       onTap: () {
                                         setState(() {
-                                          _recamaras == 4
-                                              ? _recamaras = null
-                                              : _recamaras = 4;
+                                          _criterio.recamaras == 4
+                                              ? _criterio.recamaras = null
+                                              : _criterio.recamaras = 4;
                                         });
                                       },
                                       child: ClipRect(
@@ -393,7 +397,7 @@ class _SearchPageState extends State<SearchPage> {
                                                         0, 59, 139, 1),
                                                     width: 1.0,
                                                     style: BorderStyle.solid),
-                                                color: _recamaras == 4
+                                                color: _criterio.recamaras == 4
                                                     ? Color.fromRGBO(
                                                         0, 59, 139, 1)
                                                     : Colors.white,
@@ -410,7 +414,9 @@ class _SearchPageState extends State<SearchPage> {
                                                     textAlign: TextAlign.center,
                                                     style: GoogleFonts.raleway(
                                                       textStyle: TextStyle(
-                                                        color: _recamaras == 4
+                                                        color: _criterio
+                                                                    .recamaras ==
+                                                                4
                                                             ? Colors.white
                                                             : Color.fromRGBO(
                                                                 0, 59, 139, 1),
@@ -463,7 +469,7 @@ class _SearchPageState extends State<SearchPage> {
                                     InkWell(
                                       onTap: () {
                                         setState(() {
-                                          _banos = null;
+                                          _criterio.baths = null;
                                         });
                                       },
                                       child: ClipRect(
@@ -474,7 +480,7 @@ class _SearchPageState extends State<SearchPage> {
                                                           0, 59, 139, 1),
                                                       width: 1.0,
                                                       style: BorderStyle.solid),
-                                                  color: _banos == null
+                                                  color: _criterio.baths == null
                                                       ? Color.fromRGBO(
                                                           0, 59, 139, 1)
                                                       : Colors.white),
@@ -490,7 +496,9 @@ class _SearchPageState extends State<SearchPage> {
                                                     textAlign: TextAlign.center,
                                                     style: GoogleFonts.raleway(
                                                       textStyle: TextStyle(
-                                                        color: _banos == null
+                                                        color: _criterio
+                                                                    .baths ==
+                                                                null
                                                             ? Colors.white
                                                             : Color.fromRGBO(
                                                                 0, 59, 139, 1),
@@ -504,9 +512,9 @@ class _SearchPageState extends State<SearchPage> {
                                     InkWell(
                                       onTap: () {
                                         setState(() {
-                                          _banos == 1
-                                              ? _banos = null
-                                              : _banos = 1;
+                                          _criterio.baths == 1
+                                              ? _criterio.baths = null
+                                              : _criterio.baths = 1;
                                         });
                                       },
                                       child: ClipRect(
@@ -517,7 +525,7 @@ class _SearchPageState extends State<SearchPage> {
                                                           0, 59, 139, 1),
                                                       width: 1.0,
                                                       style: BorderStyle.solid),
-                                                  color: _banos == 1
+                                                  color: _criterio.baths == 1
                                                       ? Color.fromRGBO(
                                                           0, 59, 139, 1)
                                                       : Colors.white),
@@ -533,7 +541,9 @@ class _SearchPageState extends State<SearchPage> {
                                                     textAlign: TextAlign.center,
                                                     style: GoogleFonts.raleway(
                                                       textStyle: TextStyle(
-                                                        color: _banos == 1
+                                                        color: _criterio
+                                                                    .baths ==
+                                                                1
                                                             ? Colors.white
                                                             : Color.fromRGBO(
                                                                 0, 59, 139, 1),
@@ -547,9 +557,9 @@ class _SearchPageState extends State<SearchPage> {
                                     InkWell(
                                       onTap: () {
                                         setState(() {
-                                          _banos == 2
-                                              ? _banos = null
-                                              : _banos = 2;
+                                          _criterio.baths == 2
+                                              ? _criterio.baths = null
+                                              : _criterio.baths = 2;
                                         });
                                       },
                                       child: ClipRect(
@@ -560,7 +570,7 @@ class _SearchPageState extends State<SearchPage> {
                                                         0, 59, 139, 1),
                                                     width: 1.0,
                                                     style: BorderStyle.solid),
-                                                color: _banos == 2
+                                                color: _criterio.baths == 2
                                                     ? Color.fromRGBO(
                                                         0, 59, 139, 1)
                                                     : Colors.white,
@@ -577,7 +587,9 @@ class _SearchPageState extends State<SearchPage> {
                                                     textAlign: TextAlign.center,
                                                     style: GoogleFonts.raleway(
                                                       textStyle: TextStyle(
-                                                        color: _banos == 2
+                                                        color: _criterio
+                                                                    .baths ==
+                                                                2
                                                             ? Colors.white
                                                             : Color.fromRGBO(
                                                                 0, 59, 139, 1),
@@ -591,9 +603,9 @@ class _SearchPageState extends State<SearchPage> {
                                     InkWell(
                                       onTap: () {
                                         setState(() {
-                                          _banos == 3
-                                              ? _banos = null
-                                              : _banos = 3;
+                                          _criterio.baths == 3
+                                              ? _criterio.baths = null
+                                              : _criterio.baths = 3;
                                         });
                                       },
                                       child: ClipRect(
@@ -604,7 +616,7 @@ class _SearchPageState extends State<SearchPage> {
                                                         0, 59, 139, 1),
                                                     width: 1.0,
                                                     style: BorderStyle.solid),
-                                                color: _banos == 3
+                                                color: _criterio.baths == 3
                                                     ? Color.fromRGBO(
                                                         0, 59, 139, 1)
                                                     : Colors.white,
@@ -621,7 +633,9 @@ class _SearchPageState extends State<SearchPage> {
                                                     textAlign: TextAlign.center,
                                                     style: GoogleFonts.raleway(
                                                       textStyle: TextStyle(
-                                                        color: _banos == 3
+                                                        color: _criterio
+                                                                    .baths ==
+                                                                3
                                                             ? Colors.white
                                                             : Color.fromRGBO(
                                                                 0, 59, 139, 1),
@@ -635,9 +649,9 @@ class _SearchPageState extends State<SearchPage> {
                                     InkWell(
                                       onTap: () {
                                         setState(() {
-                                          _banos == 4
-                                              ? _banos = null
-                                              : _banos = 4;
+                                          _criterio.baths == 4
+                                              ? _criterio.baths = null
+                                              : _criterio.baths = 4;
                                         });
                                       },
                                       child: ClipRect(
@@ -648,7 +662,7 @@ class _SearchPageState extends State<SearchPage> {
                                                         0, 59, 139, 1),
                                                     width: 1.0,
                                                     style: BorderStyle.solid),
-                                                color: _banos == 4
+                                                color: _criterio.baths == 4
                                                     ? Color.fromRGBO(
                                                         0, 59, 139, 1)
                                                     : Colors.white,
@@ -665,7 +679,9 @@ class _SearchPageState extends State<SearchPage> {
                                                     textAlign: TextAlign.center,
                                                     style: GoogleFonts.raleway(
                                                       textStyle: TextStyle(
-                                                        color: _banos == 4
+                                                        color: _criterio
+                                                                    .baths ==
+                                                                4
                                                             ? Colors.white
                                                             : Color.fromRGBO(
                                                                 0, 59, 139, 1),
@@ -718,7 +734,7 @@ class _SearchPageState extends State<SearchPage> {
                                     InkWell(
                                       onTap: () {
                                         setState(() {
-                                          _estacionamientos = null;
+                                          _criterio.estacionamientos = null;
                                         });
                                       },
                                       child: ClipRect(
@@ -729,11 +745,12 @@ class _SearchPageState extends State<SearchPage> {
                                                           0, 59, 139, 1),
                                                       width: 1.0,
                                                       style: BorderStyle.solid),
-                                                  color:
-                                                      _estacionamientos == null
-                                                          ? Color.fromRGBO(
-                                                              0, 59, 139, 1)
-                                                          : Colors.white),
+                                                  color: _criterio
+                                                              .estacionamientos ==
+                                                          null
+                                                      ? Color.fromRGBO(
+                                                          0, 59, 139, 1)
+                                                      : Colors.white),
                                               width: MediaQuery.of(context)
                                                       .size
                                                       .width *
@@ -746,16 +763,12 @@ class _SearchPageState extends State<SearchPage> {
                                                     textAlign: TextAlign.center,
                                                     style: GoogleFonts.raleway(
                                                       textStyle: TextStyle(
-                                                        color:
-                                                            _estacionamientos ==
-                                                                    null
-                                                                ? Colors.white
-                                                                : Color
-                                                                    .fromRGBO(
-                                                                        0,
-                                                                        59,
-                                                                        139,
-                                                                        1),
+                                                        color: _criterio
+                                                                    .estacionamientos ==
+                                                                null
+                                                            ? Colors.white
+                                                            : Color.fromRGBO(
+                                                                0, 59, 139, 1),
                                                         fontSize: 14,
                                                         fontWeight:
                                                             FontWeight.w600,
@@ -766,9 +779,10 @@ class _SearchPageState extends State<SearchPage> {
                                     InkWell(
                                       onTap: () {
                                         setState(() {
-                                          _estacionamientos == 1
-                                              ? _estacionamientos = null
-                                              : _estacionamientos = 1;
+                                          _criterio.estacionamientos == 1
+                                              ? _criterio.estacionamientos =
+                                                  null
+                                              : _criterio.estacionamientos = 1;
                                         });
                                       },
                                       child: ClipRect(
@@ -779,7 +793,9 @@ class _SearchPageState extends State<SearchPage> {
                                                         0, 59, 139, 1),
                                                     width: 1.0,
                                                     style: BorderStyle.solid),
-                                                color: _estacionamientos == 1
+                                                color: _criterio
+                                                            .estacionamientos ==
+                                                        1
                                                     ? Color.fromRGBO(
                                                         0, 59, 139, 1)
                                                     : Colors.white,
@@ -796,16 +812,12 @@ class _SearchPageState extends State<SearchPage> {
                                                     textAlign: TextAlign.center,
                                                     style: GoogleFonts.raleway(
                                                       textStyle: TextStyle(
-                                                        color:
-                                                            _estacionamientos ==
-                                                                    1
-                                                                ? Colors.white
-                                                                : Color
-                                                                    .fromRGBO(
-                                                                        0,
-                                                                        59,
-                                                                        139,
-                                                                        1),
+                                                        color: _criterio
+                                                                    .estacionamientos ==
+                                                                1
+                                                            ? Colors.white
+                                                            : Color.fromRGBO(
+                                                                0, 59, 139, 1),
                                                         fontSize: 18,
                                                         fontWeight:
                                                             FontWeight.w600,
@@ -816,9 +828,10 @@ class _SearchPageState extends State<SearchPage> {
                                     InkWell(
                                       onTap: () {
                                         setState(() {
-                                          _estacionamientos == 2
-                                              ? _estacionamientos = null
-                                              : _estacionamientos = 2;
+                                          _criterio.estacionamientos == 2
+                                              ? _criterio.estacionamientos =
+                                                  null
+                                              : _criterio.estacionamientos = 2;
                                         });
                                       },
                                       child: ClipRect(
@@ -829,7 +842,9 @@ class _SearchPageState extends State<SearchPage> {
                                                         0, 59, 139, 1),
                                                     width: 1.0,
                                                     style: BorderStyle.solid),
-                                                color: _estacionamientos == 2
+                                                color: _criterio
+                                                            .estacionamientos ==
+                                                        2
                                                     ? Color.fromRGBO(
                                                         0, 59, 139, 1)
                                                     : Colors.white,
@@ -846,16 +861,12 @@ class _SearchPageState extends State<SearchPage> {
                                                     textAlign: TextAlign.center,
                                                     style: GoogleFonts.raleway(
                                                       textStyle: TextStyle(
-                                                        color:
-                                                            _estacionamientos ==
-                                                                    2
-                                                                ? Colors.white
-                                                                : Color
-                                                                    .fromRGBO(
-                                                                        0,
-                                                                        59,
-                                                                        139,
-                                                                        1),
+                                                        color: _criterio
+                                                                    .estacionamientos ==
+                                                                2
+                                                            ? Colors.white
+                                                            : Color.fromRGBO(
+                                                                0, 59, 139, 1),
                                                         fontSize: 18,
                                                         fontWeight:
                                                             FontWeight.w600,
@@ -866,9 +877,10 @@ class _SearchPageState extends State<SearchPage> {
                                     InkWell(
                                       onTap: () {
                                         setState(() {
-                                          _estacionamientos == 3
-                                              ? _estacionamientos = null
-                                              : _estacionamientos = 3;
+                                          _criterio.estacionamientos == 3
+                                              ? _criterio.estacionamientos =
+                                                  null
+                                              : _criterio.estacionamientos = 3;
                                         });
                                       },
                                       child: ClipRect(
@@ -879,7 +891,9 @@ class _SearchPageState extends State<SearchPage> {
                                                         0, 59, 139, 1),
                                                     width: 1.0,
                                                     style: BorderStyle.solid),
-                                                color: _estacionamientos == 3
+                                                color: _criterio
+                                                            .estacionamientos ==
+                                                        3
                                                     ? Color.fromRGBO(
                                                         0, 59, 139, 1)
                                                     : Colors.white,
@@ -896,16 +910,12 @@ class _SearchPageState extends State<SearchPage> {
                                                     textAlign: TextAlign.center,
                                                     style: GoogleFonts.raleway(
                                                       textStyle: TextStyle(
-                                                        color:
-                                                            _estacionamientos ==
-                                                                    3
-                                                                ? Colors.white
-                                                                : Color
-                                                                    .fromRGBO(
-                                                                        0,
-                                                                        59,
-                                                                        139,
-                                                                        1),
+                                                        color: _criterio
+                                                                    .estacionamientos ==
+                                                                3
+                                                            ? Colors.white
+                                                            : Color.fromRGBO(
+                                                                0, 59, 139, 1),
                                                         fontSize: 18,
                                                         fontWeight:
                                                             FontWeight.w600,
@@ -916,9 +926,10 @@ class _SearchPageState extends State<SearchPage> {
                                     InkWell(
                                       onTap: () {
                                         setState(() {
-                                          _estacionamientos == 4
-                                              ? _estacionamientos = null
-                                              : _estacionamientos = 4;
+                                          _criterio.estacionamientos == 4
+                                              ? _criterio.estacionamientos =
+                                                  null
+                                              : _criterio.estacionamientos = 4;
                                         });
                                       },
                                       child: ClipRect(
@@ -929,7 +940,9 @@ class _SearchPageState extends State<SearchPage> {
                                                         0, 59, 139, 1),
                                                     width: 1.0,
                                                     style: BorderStyle.solid),
-                                                color: _estacionamientos == 4
+                                                color: _criterio
+                                                            .estacionamientos ==
+                                                        4
                                                     ? Color.fromRGBO(
                                                         0, 59, 139, 1)
                                                     : Colors.white,
@@ -946,16 +959,12 @@ class _SearchPageState extends State<SearchPage> {
                                                     textAlign: TextAlign.center,
                                                     style: GoogleFonts.raleway(
                                                       textStyle: TextStyle(
-                                                        color:
-                                                            _estacionamientos ==
-                                                                    4
-                                                                ? Colors.white
-                                                                : Color
-                                                                    .fromRGBO(
-                                                                        0,
-                                                                        59,
-                                                                        139,
-                                                                        1),
+                                                        color: _criterio
+                                                                    .estacionamientos ==
+                                                                4
+                                                            ? Colors.white
+                                                            : Color.fromRGBO(
+                                                                0, 59, 139, 1),
                                                         fontSize: 18,
                                                         fontWeight:
                                                             FontWeight.w600,
@@ -1020,7 +1029,8 @@ class _SearchPageState extends State<SearchPage> {
                                                 2,
                                         height: 30,
                                         child: TextFormField(
-                                          onSaved: (val) => _terreno = val,
+                                          onSaved: (val) => _criterio
+                                              .terrenom2 = int.parse(val),
                                           inputFormatters: <TextInputFormatter>[
                                             FilteringTextInputFormatter
                                                 .digitsOnly
@@ -1060,7 +1070,8 @@ class _SearchPageState extends State<SearchPage> {
                                                 2,
                                         height: 30,
                                         child: TextFormField(
-                                          onSaved: (val) => _construccion = val,
+                                          onSaved: (val) => _criterio
+                                              .construccionm2 = int.parse(val),
                                           inputFormatters: <TextInputFormatter>[
                                             FilteringTextInputFormatter
                                                 .digitsOnly
@@ -1132,8 +1143,8 @@ class _SearchPageState extends State<SearchPage> {
                                                 3,
                                         height: 30,
                                         child: TextFormField(
-                                          onSaved: (val) =>
-                                              _precio_inferior = val,
+                                          onSaved: (val) => _criterio
+                                              .preciofrom = int.parse(val),
                                           inputFormatters: <TextInputFormatter>[
                                             FilteringTextInputFormatter
                                                 .digitsOnly
@@ -1173,8 +1184,8 @@ class _SearchPageState extends State<SearchPage> {
                                                 3,
                                         height: 30,
                                         child: TextFormField(
-                                          onSaved: (val) =>
-                                              _precio_superior = val,
+                                          onSaved: (val) => _criterio.precioto =
+                                              int.parse(val),
                                           inputFormatters: <TextInputFormatter>[
                                             FilteringTextInputFormatter
                                                 .digitsOnly
@@ -1365,9 +1376,12 @@ class _SearchPageState extends State<SearchPage> {
                           // otherwise.
 
                           if (_formKey.currentState.validate()) {
+                            if (_amenidades.length > 0)
+                              _criterio.amenidades = _amenidades.join(" OR ");
+
                             // If the form is valid, display a Snackbar.
-                            Scaffold.of(context).showSnackBar(
-                                SnackBar(content: Text('Processing Data')));
+                            _searchService.searchProperties(_criterio);
+                            Navigator.of(context).pop();
                           }
                         },
                       ),

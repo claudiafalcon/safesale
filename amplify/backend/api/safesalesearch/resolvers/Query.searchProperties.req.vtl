@@ -1,0 +1,46 @@
+## Query.searchProperties.req.vtl
+#set( $limit = $util.defaultIfNull($ctx.args.limit, 10) )
+{  
+  "version": "2017-02-28",  
+  "operation": "GET",  
+  "path": "/property/doc/_search",  
+  "params": {    
+    "body": {      
+     #if( $context.args.nextToken ) "search_after": ["$context.args.nextToken"], #end       
+     "size" : ${limit},      
+     "query": {        
+      "bool" : { "must" : [{ 
+                            "multi_match" : {
+                                              "query" : "$context.args.criteria.searchCriteria",
+                                              "type":       "cross_fields",
+                                              "fields": [ "nombre","descripcion","caractecteristicas","entidad","direccion","localidad"]
+                                            }
+                            }
+                            #if ($context.args.criteria.amenidades)
+                            ,{
+                            "query_string" : {
+                                              "query" : "$context.args.criteria.amenidades",
+                                              "fields": ["amenidades"]
+                                            } 
+                            }
+                            #end
+                            ],          
+                "filter" : [
+                            #if( $context.args.criteria.tipo ){ "term":  { "tipo": "$context.args.criteria.tipo"}}, #end 
+                            #if( $context.args.criteria.recamaras ){ "range":  { "recamaras": {"gte": "$context.args.criteria.recamaras"}}}, #end
+                            #if( $context.args.criteria.estacionamientos ){ "range":  { "estacionamientos":{"gte": "$context.args.criteria.estacionamientos"}}}, #end                                                                  
+                            #if( $context.args.criteria.baths ){ "range":  { "baths":{"gte": "$context.args.criteria.baths"}}}, #end  
+                            #if( $context.args.criteria.terreno_m2 ){ "range":  { "terreno_m2":{"gte": "$context.args.criteria.terreno_m2"}}}, #end  
+                            #if( $context.args.criteria.construccion_m2 ){ "range":  { "construccion_m2":{"gte": "$context.args.criteria.construccion_m2"}}}, #end   
+                            #if( $context.args.criteria.precio_from || $context.args.criteria.precio_to )
+                                {  "range": {"precio": { #if( $context.args.criteria.precio_from) "gte" : "$context.args.criteria.precio_from" #if( $context.args.criteria.precio_to) "," #end #end
+                                        #if( $context.args.criteria.precio_to) "lte" : "$context.args.criteria.precio_to" #end }}}  
+                            #end           
+                            ]
+                }
+              },
+                   "sort": [{"_score": {"order": "desc"}},
+    {"_id": {"order":"asc"}}]
+            }
+    }
+}

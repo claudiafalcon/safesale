@@ -38,24 +38,7 @@ PUT /property/_mapping/doc
 }
 
 curl -XDELETE https://search-amplify-elasti-1jhhlzsmb057p-fjseujlcwr2vihi3tcwwxw5lkq.us-east-1.es.amazonaws.com/property              
-{"acknowledged":true}%                                                                                         boofalcon@MacBook-Pro-de-Claudia ~ % curl -XPUT https://search-amplify-elasti-1jhhlzsmb057p-fjseujlcwr2vihi3tcwwxw5lkq.us-east-1.es.amazonaws.com//property/_mapping/doc -d '{
-  "settings": {
-    "analysis": {
-      "analyzer": {
-        "my_analyzer": {
-          "tokenizer": "standard",
-          "filter": [ "lowercase", "my_snow" ]
-        }
-      },
-      "filter": {
-        "my_snow": {
-          "type": "snowball",
-          "language": "Spanish"
-        }
-      }
-    }
-  }
-}' -H 'Content-Type: application/json'
+
 
 
 curl -XPUT https://search-amplify-elasti-1jhhlzsmb057p-fjseujlcwr2vihi3tcwwxw5lkq.us-east-1.es.amazonaws.com/property/_mapping/doc -d '{
@@ -122,6 +105,16 @@ curl -XPUT https://search-amplify-elasti-1jhhlzsmb057p-fjseujlcwr2vihi3tcwwxw5lk
               "ignore_above": 256
             }
           }
+    },
+    "amenidades" : {
+        "type": "text",
+          "analyzer": "mianalizador",
+          "fields": {
+            "keyword": {
+              "type": "keyword",
+              "ignore_above": 256
+            }
+          }
     }
   }
 }' -H 'Content-Type: application/json'
@@ -157,3 +150,40 @@ curl -XPUT https://search-amplify-elasti-1jhhlzsmb057p-fjseujlcwr2vihi3tcwwxw5lk
       }
    }
 }'  -H 'Content-Type: application/json'
+
+
+
+
+GET /_search
+{
+  "query": { 
+     "bool":{
+       "must":[{"multi_match" : {
+      "query":      "atizapan",
+      "type":       "cross_fields",
+      "fields": [ "nombre","descripcion","caractecteristicas","entidad","direccion","localidad"]}}, 
+      {"query_string" : {
+            "query" : "Balcón OR Areas Comunes OR Asador"
+            , "fields": ["amenidades"]
+        }
+         
+         
+       }
+         ]
+           ,
+      "filter": [ 
+        { "term":  { "tipo": "departamento" }},
+        {  "range": {"recamaras": {"gte": "3"}}},
+        {  "range": {"estacionamientos": {"gte": "2"}}},
+        {  "range": {"baths": {"gte": "1"}}},
+        {  "range": {"terreno_m2": {"gte": "1"}}},
+        {  "range": {"construccion_m2": {"gte": "1"}}},
+        {  "range": {"precio": {"gte": "1","lte": "3000000"}}}
+        
+        
+        
+      ]
+    }
+  }
+  
+}

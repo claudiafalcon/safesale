@@ -59,6 +59,17 @@ type Query {
     {allow: groups, groups:["UserGroupSaleForce"]}
     {allow: private},
       { allow: public, provider: iam }
+    ]),
+    
+  searchProperties(
+   criteria: CriteriaInput!, 
+   limit: Int, 
+   nextToken: String
+ ): ModelPropertyPointConnection 
+  @auth(rules: [
+    {allow: groups, groups:["UserGroupSaleForce"]}
+    {allow: private},
+    { allow: public, provider: iam }
     ])
 }
 input LocationInput {
@@ -69,6 +80,21 @@ type ModelPropertyPointConnection   @aws_iam @aws_cognito_user_pools{
  items: [Property]
  total: Int
  nextToken: String
+}
+
+
+
+input CriteriaInput {
+  searchCriteria: String!
+  amenidades: String
+  tipo: String
+  recamaras: Int
+  estacionamientos: Int
+  baths: Int
+  terreno_m2: Int
+  construccion_m2: Int
+  precio_from: Int
+  precio_to: Int
 }
 
 

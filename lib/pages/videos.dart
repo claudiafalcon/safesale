@@ -15,7 +15,7 @@ import 'package:safesale/services/search_service.dart';
 
 import 'package:google_fonts/google_fonts.dart';
 import 'package:video_player/video_player.dart';
-import 'package:yoyo_player/yoyo_player.dart';
+
 //import 'package:location_permissions/location_permissions.dart';
 
 class VideoPage extends StatefulWidget {
@@ -237,55 +237,68 @@ class _VideoPageState extends State<VideoPage> {
                       ),
                       //Middle section
                       Expanded(
-                        child: Row(
-                            mainAxisSize: MainAxisSize.max,
-                            crossAxisAlignment: CrossAxisAlignment.end,
-                            children: [
+                          child: // Row(
+                              //mainAxisSize: MainAxisSize.max,
+                              // mainAxisAlignment: MainAxisAlignment.start,
+                              //crossAxisAlignment: CrossAxisAlignment.end,
+                              //children: [
                               //rigth section
                               Container(
                                   width: MediaQuery.of(context).size.width - 10,
-                                  margin: EdgeInsets.only(
-                                      top: MediaQuery.of(context).size.height /
-                                          25),
+                                  margin: EdgeInsets.only(top: 0),
                                   child: Column(
                                     mainAxisAlignment: MainAxisAlignment.start,
                                     crossAxisAlignment: CrossAxisAlignment.end,
                                     children: [
-                                      Expanded(
-                                        flex: 1,
-                                        child: Column(
-                                          children: [
-                                            Expanded(
-                                              flex: 1,
-                                              child: InkWell(
-                                                onTap: () =>
-                                                    showModalBottomSheet<void>(
-                                                  isScrollControlled: true,
-                                                  context: context,
-                                                  shape: RoundedRectangleBorder(
-                                                      borderRadius:
-                                                          BorderRadius.vertical(
-                                                              top: Radius
-                                                                  .circular(
-                                                                      10.0))),
-                                                  builder: (context) =>
-                                                      SearchPage("22"),
-                                                ),
-                                                child: SvgPicture.asset(
-                                                  'images/filter.svg',
-                                                  width: 30,
-                                                  height: 30,
-                                                  color: Colors.white,
-                                                ),
-                                              ),
+                                      Column(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.start,
+                                        children: [
+                                          InkWell(
+                                            onTap: () =>
+                                                showModalBottomSheet<void>(
+                                              isScrollControlled: true,
+                                              context: context,
+                                              shape: RoundedRectangleBorder(
+                                                  borderRadius:
+                                                      BorderRadius.vertical(
+                                                          top: Radius.circular(
+                                                              10.0))),
+                                              builder: (context) =>
+                                                  SearchPage("22"),
                                             ),
-                                            SizedBox(
-                                              height: 20,
-                                            )
-                                          ],
-                                        ),
+                                            child: SvgPicture.asset(
+                                              'images/filter.svg',
+                                              width: 60,
+                                              height: 60,
+                                              color: Colors.white,
+                                            ),
+                                          ),
+                                          SizedBox(
+                                            height: 20,
+                                          )
+                                        ],
                                       ),
-                                      buildprofile(),
+                                      Column(
+                                        children: [
+                                          InkWell(
+                                            onTap: () => setInitialLocation(),
+                                            child: Icon(
+                                              Icons.explore,
+                                              color: Colors.white,
+                                              size: 50.0,
+                                            ),
+                                          ),
+                                          SizedBox(
+                                            height: MediaQuery.of(context)
+                                                    .size
+                                                    .height /
+                                                50 *
+                                                3,
+                                          )
+                                        ],
+                                      ),
+                                      //buildprofile(),
                                       Column(
                                         children: [
                                           SizedBox(
@@ -376,8 +389,8 @@ class _VideoPageState extends State<VideoPage> {
                                       ),
                                     ],
                                   ))
-                            ]),
-                      ),
+                          //]),
+                          ),
                     ])
                   ]);
                 });
