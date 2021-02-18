@@ -121,7 +121,8 @@ class _LocationPageState extends State<LocationPage> {
                                                   padding:
                                                       const EdgeInsets.all(8.0),
                                                   child: Column(children: [
-                                                    ListItem(
+                                                    Container(
+                                                        child: ListItem(
                                                       parametro: "Pais:",
                                                       texto:
                                                           widget.property.pais,
@@ -130,7 +131,7 @@ class _LocationPageState extends State<LocationPage> {
                                                               58, 184, 234, 1),
                                                       textcolor: Colors.white,
                                                       fontsize: 16,
-                                                    ),
+                                                    )),
                                                     ListItem(
                                                       parametro: "Entidad:",
                                                       texto: widget

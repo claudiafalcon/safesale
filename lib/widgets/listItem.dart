@@ -33,17 +33,14 @@ class _ListItemState extends State<ListItem> {
             size: 12.0,
           ),
         ),
-        Flexible(
-          fit: FlexFit.loose,
-          child: Text(widget.parametro,
-              style: GoogleFonts.raleway(
-                textStyle: TextStyle(
-                  color: widget.textcolor,
-                  fontSize: widget.fontsize,
-                  fontWeight: FontWeight.w600,
-                ),
-              )),
-        ),
+        Text(widget.parametro,
+            style: GoogleFonts.raleway(
+              textStyle: TextStyle(
+                color: widget.textcolor,
+                fontSize: widget.fontsize,
+                fontWeight: FontWeight.w600,
+              ),
+            )),
         Flexible(
           fit: FlexFit.loose,
           child: Padding(
