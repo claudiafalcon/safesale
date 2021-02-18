@@ -16,7 +16,7 @@ import 'package:safesale/graphql/authqueries.dart';
 import 'package:safesale/models/property.dart';
 import 'package:safesale/models/searchcriterio.dart';
 
-enum SearchFlowStatus { started, finalized, error }
+enum SearchFlowStatus { started, finalized, error, empty }
 
 class SearchState {
   final SearchFlowStatus searchFlowStatus;
@@ -138,6 +138,12 @@ class SearchService {
         }
         final List parsedList =
             json.decode(response.body)["data"]["searchProperties"]["items"];
+        if (parsedList.isEmpty) {
+          final state = SearchState(searchFlowStatus: SearchFlowStatus.empty);
+          searchStateController.add(state);
+          return;
+        }
+
         _properties = parseProperties(parsedList);
         final state = SearchState(searchFlowStatus: SearchFlowStatus.finalized);
         searchStateController.add(state);

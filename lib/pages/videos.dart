@@ -3,18 +3,17 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:location/location.dart' show Location, LocationData;
 
-import 'package:safesale/models/media.dart';
 import 'package:safesale/models/property.dart';
 import 'package:safesale/services/video_mod.dart';
 
-import 'package:safesale/variables.dart';
 import 'package:safesale/videopages/locationview.dart';
 import 'package:safesale/videopages/searchview.dart';
-import 'package:safesale/widgets/circle_animation.dart';
+
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:safesale/services/search_service.dart';
 
 import 'package:google_fonts/google_fonts.dart';
+import 'package:safesale/widgets/rigthpropertybar.dart';
 import 'package:video_player/video_player.dart';
 
 //import 'package:location_permissions/location_permissions.dart';
@@ -171,242 +170,60 @@ class _VideoPageState extends State<VideoPage> {
           builder: (context, snapshot) {
             if (!snapshot.hasData ||
                 snapshot.data.searchFlowStatus == SearchFlowStatus.started) {
-              return Container(
-                  alignment: Alignment.center,
+              return Center(
+                child: Container(
+                  color: Colors.black,
                   width: 70,
                   height: 70,
-                  child: Container() //Image.asset(
-                  // "images/loading.gif",
-                  //),
-                  );
-            }
-            result = _searchService.getProperties();
-            return PageView.builder(
-                itemCount: result.length,
-                controller: PageController(initialPage: 0, viewportFraction: 1),
-                scrollDirection: Axis.vertical,
-                itemBuilder: (context, index) {
-                  Property property = result[index];
-                  return Stack(children: [
-                    VideoPlayerItem(property.id)
-                    //video
-                    ,
-                    Column(children: [
-                      // top section
-                      Container(
-                        padding: const EdgeInsets.all(8.0),
-                        height: 140,
-                        child: Row(
-                          crossAxisAlignment: CrossAxisAlignment.end,
-                          mainAxisSize: MainAxisSize.min,
-                          children: [
-                            //CircleAnimation(buildmusicalalbum()),
-
-                            Flexible(
-                                child: Padding(
-                                    padding: const EdgeInsets.only(
-                                        left: 8.0, top: 50),
-                                    child: Column(
-                                        crossAxisAlignment:
-                                            CrossAxisAlignment.start,
-                                        children: <Widget>[
-                                          Padding(
-                                              padding: const EdgeInsets.only(
-                                                  left: 8.0),
-                                              child: Text(
-                                                property.nombre,
-                                                style: GoogleFonts.raleway(
-                                                  textStyle: TextStyle(
-                                                    color: Colors.white,
-                                                    fontSize: 24,
-                                                    fontWeight: FontWeight.bold,
-                                                  ),
-                                                ),
-                                              ))
-                                        ])))
-                            /* Text(
-                              property.nombre,
-                              overflow: TextOverflow.ellipsis,
-                              softWrap: true,
-                              textAlign: TextAlign.left,
-                              style: GoogleFonts.raleway(
-                                textStyle: TextStyle(
-                                  color: Colors.white,
-                                  fontSize: 27.5,
-                                  fontWeight: FontWeight.bold,
-                                ),
-                              ),
-                            )*/
-                          ],
-                        ),
+                  alignment: Alignment.center,
+                  child: Image.asset(
+                    "images/loading.gif",
+                  ),
+                ),
+              );
+            } else if (snapshot.data.searchFlowStatus ==
+                SearchFlowStatus.empty) {
+              return Stack(
+                children: [
+                  Center(
+                    child: Container(
+                      color: Colors.black,
+                      width: 70,
+                      height: 70,
+                      alignment: Alignment.center,
+                      child: Image.asset(
+                        "images/loading.gif",
                       ),
-                      //Middle section
-                      Expanded(
-                          child: // Row(
-                              //mainAxisSize: MainAxisSize.max,
-                              // mainAxisAlignment: MainAxisAlignment.start,
-                              //crossAxisAlignment: CrossAxisAlignment.end,
-                              //children: [
-                              //rigth section
-                              Container(
-                                  width: MediaQuery.of(context).size.width - 10,
-                                  margin: EdgeInsets.only(top: 0),
-                                  child: Column(
-                                    mainAxisAlignment: MainAxisAlignment.start,
-                                    crossAxisAlignment: CrossAxisAlignment.end,
-                                    children: [
-                                      Column(
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.start,
-                                        children: [
-                                          InkWell(
-                                            onTap: () =>
-                                                showModalBottomSheet<void>(
-                                              isScrollControlled: true,
-                                              context: context,
-                                              shape: RoundedRectangleBorder(
-                                                  borderRadius:
-                                                      BorderRadius.vertical(
-                                                          top: Radius.circular(
-                                                              10.0))),
-                                              builder: (context) =>
-                                                  SearchPage("22"),
-                                            ),
-                                            child: buildprofile(result.length),
-                                          ),
-                                          SizedBox(
-                                            height: 20,
-                                          )
-                                        ],
-                                      ),
-                                      Column(
-                                        children: [
-                                          InkWell(
-                                            onTap: () => setInitialLocation(),
-                                            child: Icon(
-                                              Icons.explore,
-                                              color: Colors.white,
-                                              size: 50.0,
-                                            ),
-                                          ),
-                                          SizedBox(
-                                            height: MediaQuery.of(context)
-                                                    .size
-                                                    .height /
-                                                50 *
-                                                1,
-                                          )
-                                        ],
-                                      ),
-                                      Column(
-                                        children: [
-                                          SizedBox(
-                                            height: 60,
-                                          ),
-                                          SvgPicture.asset(
-                                            'images/CORAZON LIKE.svg',
-                                            width: 30,
-                                            height: 30,
-                                            color: Colors.white,
-                                          ),
-                                          SizedBox(
-                                            height: 20,
-                                          )
-                                        ],
-                                      ),
-                                      Column(
-                                        children: [
-                                          SvgPicture.asset(
-                                            'images/FOTOS.svg',
-                                            width: 30,
-                                            height: 30,
-                                            color: Colors.white,
-                                          ),
-                                          SizedBox(
-                                            height: 20,
-                                          ),
-                                        ],
-                                      ),
-                                      Column(
-                                        children: [
-                                          InkWell(
-                                            onTap: () =>
-                                                showModalBottomSheet<void>(
-                                              isScrollControlled: true,
-                                              context: context,
-                                              shape: RoundedRectangleBorder(
-                                                  borderRadius:
-                                                      BorderRadius.vertical(
-                                                          top: Radius.circular(
-                                                              10.0))),
-                                              builder: (context) =>
-                                                  LocationPage(property),
-                                            ),
-                                            child: SvgPicture.asset(
-                                              'images/UBICACION.svg',
-                                              width: 30,
-                                              height: 30,
-                                              color: Colors.white,
-                                            ),
-                                          ),
-                                          SizedBox(
-                                            height: 20,
-                                          ),
-                                        ],
-                                      ),
-                                      Column(
-                                        children: [
-                                          SvgPicture.asset(
-                                            'images/INFORMACION.svg',
-                                            width: 30,
-                                            height: 30,
-                                            color: Colors.white,
-                                          ),
-                                          SizedBox(
-                                            height: 20,
-                                          ),
-                                        ],
-                                      ),
-                                      Column(
-                                        children: [
-                                          SvgPicture.asset(
-                                            'images/DUDAS.svg',
-                                            width: 30,
-                                            height: 30,
-                                            color: Colors.white,
-                                          ),
-                                          SizedBox(
-                                            height: 20,
-                                          ),
-                                        ],
-                                      ),
-                                      Column(
-                                        children: [
-                                          SvgPicture.asset(
-                                            'images/CITAS.svg',
-                                            width: 30,
-                                            height: 30,
-                                            color: Colors.white,
-                                          ),
-                                          SizedBox(
-                                            height: 10,
-                                          ),
-                                        ],
-                                      ),
-                                      Column(
-                                        children: [
-                                          SizedBox(
-                                            height: 20,
-                                          ),
-                                        ],
-                                      ),
-                                    ],
-                                  ))
-                          //]),
-                          ),
-                    ])
-                  ]);
-                });
+                    ),
+                  ),
+                  RightPropertyBar(
+                    total: 0,
+                    headText:
+                        "Ups! no contamos con propiedas acorde a tu búsqueda, pero estamos creciendo",
+                  )
+                ],
+              );
+            } else {
+              result = _searchService.getProperties();
+              return PageView.builder(
+                  itemCount: result.length,
+                  controller:
+                      PageController(initialPage: 0, viewportFraction: 1),
+                  scrollDirection: Axis.vertical,
+                  itemBuilder: (context, index) {
+                    Property property = result[index];
+                    return Stack(children: [
+                      VideoPlayerItem(property.id)
+                      //video
+                      ,
+                      RightPropertyBar(
+                        total: result.length,
+                        property: property,
+                        headText: property.nombre,
+                      )
+                    ]);
+                  });
+            }
           }),
     );
   }
