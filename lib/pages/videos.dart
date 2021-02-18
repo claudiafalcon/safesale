@@ -8,6 +8,7 @@ import 'package:safesale/models/property.dart';
 import 'package:safesale/services/video_mod.dart';
 
 import 'package:safesale/variables.dart';
+import 'package:safesale/videopages/locationview.dart';
 import 'package:safesale/videopages/searchview.dart';
 import 'package:safesale/widgets/circle_animation.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -61,17 +62,17 @@ class _VideoPageState extends State<VideoPage> {
     // destino codificado para este ejemplo
   }
 
-  buildprofile() {
+  buildprofile(int total) {
     return Container(
-      width: 40,
-      height: 40,
+      width: 60,
+      height: 60,
       child: Stack(
         children: [
           Positioned(
-            left: (40 / 2) - (30 / 2),
+            left: (60 / 2) - (50 / 2),
             child: Container(
-              width: 30,
-              height: 30,
+              width: 60,
+              height: 60,
               padding: EdgeInsets.all(1),
               decoration: BoxDecoration(
                 color: Color.fromARGB(20, 255, 255, 255),
@@ -80,14 +81,14 @@ class _VideoPageState extends State<VideoPage> {
               child: ClipRRect(
                 borderRadius: BorderRadius.circular(25),
                 child: SvgPicture.asset(
-                  'images/CAMPANA.svg',
+                  'images/filter.svg',
                   color: Colors.white,
                 ),
               ),
             ),
           ),
           Positioned(
-            left: (40 / 2),
+            left: (60 / 2) + 10,
             child: Container(
               width: 20,
               height: 20,
@@ -95,11 +96,15 @@ class _VideoPageState extends State<VideoPage> {
                 color: Colors.pink,
                 borderRadius: BorderRadius.circular(15),
               ),
-              child: Icon(
-                Icons.add,
-                size: 20,
-                color: Colors.white,
-              ),
+              child: Text(total.toString(),
+                  style: GoogleFonts.raleway(
+                    textStyle: TextStyle(
+                      color: Colors.white,
+                      fontSize: 14,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                  textAlign: TextAlign.center),
             ),
           ),
         ],
@@ -267,12 +272,7 @@ class _VideoPageState extends State<VideoPage> {
                                               builder: (context) =>
                                                   SearchPage("22"),
                                             ),
-                                            child: SvgPicture.asset(
-                                              'images/filter.svg',
-                                              width: 60,
-                                              height: 60,
-                                              color: Colors.white,
-                                            ),
+                                            child: buildprofile(result.length),
                                           ),
                                           SizedBox(
                                             height: 20,
@@ -294,11 +294,10 @@ class _VideoPageState extends State<VideoPage> {
                                                     .size
                                                     .height /
                                                 50 *
-                                                3,
+                                                1,
                                           )
                                         ],
                                       ),
-                                      //buildprofile(),
                                       Column(
                                         children: [
                                           SizedBox(
@@ -330,11 +329,25 @@ class _VideoPageState extends State<VideoPage> {
                                       ),
                                       Column(
                                         children: [
-                                          SvgPicture.asset(
-                                            'images/UBICACION.svg',
-                                            width: 30,
-                                            height: 30,
-                                            color: Colors.white,
+                                          InkWell(
+                                            onTap: () =>
+                                                showModalBottomSheet<void>(
+                                              isScrollControlled: true,
+                                              context: context,
+                                              shape: RoundedRectangleBorder(
+                                                  borderRadius:
+                                                      BorderRadius.vertical(
+                                                          top: Radius.circular(
+                                                              10.0))),
+                                              builder: (context) =>
+                                                  LocationPage(property),
+                                            ),
+                                            child: SvgPicture.asset(
+                                              'images/UBICACION.svg',
+                                              width: 30,
+                                              height: 30,
+                                              color: Colors.white,
+                                            ),
                                           ),
                                           SizedBox(
                                             height: 20,
