@@ -50,6 +50,7 @@ class _LocationPageState extends State<LocationPage> {
 
   @override
   Widget build(BuildContext context) {
+    double _fontsize = MediaQuery.of(context).size.height < 800 ? 12 : 16;
     return ClipRRect(
         borderRadius: BorderRadius.only(
             topLeft: Radius.circular(10), topRight: Radius.circular(10)),
@@ -130,7 +131,7 @@ class _LocationPageState extends State<LocationPage> {
                                                           Color.fromRGBO(
                                                               58, 184, 234, 1),
                                                       textcolor: Colors.white,
-                                                      fontsize: 16,
+                                                      fontsize: _fontsize,
                                                     )),
                                                     ListItem(
                                                       parametro: "Entidad:",
@@ -140,7 +141,7 @@ class _LocationPageState extends State<LocationPage> {
                                                           Color.fromRGBO(
                                                               58, 184, 234, 1),
                                                       textcolor: Colors.white,
-                                                      fontsize: 16,
+                                                      fontsize: _fontsize,
                                                     ),
                                                     ListItem(
                                                       parametro: "Localidad:",
@@ -150,7 +151,7 @@ class _LocationPageState extends State<LocationPage> {
                                                           Color.fromRGBO(
                                                               58, 184, 234, 1),
                                                       textcolor: Colors.white,
-                                                      fontsize: 16,
+                                                      fontsize: _fontsize,
                                                     ),
                                                     ListItem(
                                                       parametro: "Dirección:",
@@ -160,7 +161,7 @@ class _LocationPageState extends State<LocationPage> {
                                                           Color.fromRGBO(
                                                               58, 184, 234, 1),
                                                       textcolor: Colors.white,
-                                                      fontsize: 16,
+                                                      fontsize: _fontsize,
                                                     ),
                                                   ]),
                                                 ),

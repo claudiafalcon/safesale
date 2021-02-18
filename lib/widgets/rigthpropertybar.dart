@@ -92,7 +92,7 @@ class _RightPropertyBarState extends State<RightPropertyBar> {
       // top section
       Container(
         padding: const EdgeInsets.all(8.0),
-        height: 140,
+        height: 160,
         child: Row(
           crossAxisAlignment: CrossAxisAlignment.end,
           mainAxisSize: MainAxisSize.min,
@@ -109,10 +109,14 @@ class _RightPropertyBarState extends State<RightPropertyBar> {
                               padding: const EdgeInsets.only(left: 8.0),
                               child: Text(
                                 widget.headText,
+                                // MediaQuery.of(context).size.toString(),
                                 style: GoogleFonts.raleway(
                                   textStyle: TextStyle(
                                     color: Colors.white,
-                                    fontSize: 24,
+                                    fontSize:
+                                        MediaQuery.of(context).size.height < 800
+                                            ? 17
+                                            : 24,
                                     fontWeight: FontWeight.bold,
                                   ),
                                 ),
