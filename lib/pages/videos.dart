@@ -38,7 +38,14 @@ class _VideoPageState extends State<VideoPage> {
   initState() {
     super.initState();
     //  _listenForPermissionStatus();
+
     setInitialLocation();
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+    // _searchService.getSearchStreamController().close();
   }
 
   // void _listenForPermissionStatus() {
@@ -165,10 +172,12 @@ class _VideoPageState extends State<VideoPage> {
 
   @override
   Widget build(BuildContext context) {
+    //  _searchService.getSearcgStateController().close();
+
     return Scaffold(
       backgroundColor: Colors.white,
       body: StreamBuilder<SearchState>(
-          stream: _searchService.searchStateController.stream,
+          stream: _searchService.getSearchStreamController().stream,
           builder: (context, snapshot) {
             if (!snapshot.hasData ||
                 snapshot.data.searchFlowStatus == SearchFlowStatus.started) {

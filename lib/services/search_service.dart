@@ -39,7 +39,14 @@ class SearchService {
     return _searchService;
   }
 
-  final searchStateController = StreamController<SearchState>();
+  StreamController<SearchState> searchStateController;
+
+  StreamController<SearchState> getSearchStreamController() {
+    if (searchStateController != null) searchStateController.close();
+    if (searchStateController == null || searchStateController.isClosed)
+      searchStateController = StreamController<SearchState>();
+    return searchStateController;
+  }
 
   List<Property> parseProperties(List jsonList) {
     return jsonList.map<Property>((json) => Property.fromJson(json)).toList();

@@ -121,16 +121,16 @@ class _SearchPageState extends State<SearchPage> {
                                       InkWell(
                                         onTap: () {
                                           setState(() {
-                                            _criterio.tipo == 'Casa'
+                                            _criterio.tipo == 'casa'
                                                 ? _criterio.tipo = ''
-                                                : _criterio.tipo = 'Casa';
+                                                : _criterio.tipo = 'casa';
                                           });
                                         },
                                         child: SvgPicture.asset(
                                           'images/CASA.svg',
                                           width: 40,
                                           height: 40,
-                                          color: _criterio.tipo == 'Casa'
+                                          color: _criterio.tipo == 'casa'
                                               ? Color.fromRGBO(0, 59, 139, 1)
                                               : Color.fromRGBO(
                                                   167, 167, 167, 1),
@@ -139,16 +139,16 @@ class _SearchPageState extends State<SearchPage> {
                                       InkWell(
                                         onTap: () {
                                           setState(() {
-                                            _criterio.tipo == 'Terreno'
+                                            _criterio.tipo == 'terreno'
                                                 ? _criterio.tipo = ''
-                                                : _criterio.tipo = 'Terreno';
+                                                : _criterio.tipo = 'terreno';
                                           });
                                         },
                                         child: SvgPicture.asset(
                                           'images/TERRENO AZUL.svg',
                                           width: 40,
                                           height: 40,
-                                          color: _criterio.tipo == 'Terreno'
+                                          color: _criterio.tipo == 'terreno'
                                               ? Color.fromRGBO(0, 59, 139, 1)
                                               : Color.fromRGBO(
                                                   167, 167, 167, 1),
@@ -157,10 +157,10 @@ class _SearchPageState extends State<SearchPage> {
                                       InkWell(
                                         onTap: () {
                                           setState(() {
-                                            _criterio.tipo == 'Departamento'
+                                            _criterio.tipo == 'departamento'
                                                 ? _criterio.tipo = ''
                                                 : _criterio.tipo =
-                                                    'Departamento';
+                                                    'departamento';
                                           });
                                         },
                                         child: SvgPicture.asset(
@@ -168,7 +168,7 @@ class _SearchPageState extends State<SearchPage> {
                                           width: 40,
                                           height: 40,
                                           color: _criterio.tipo ==
-                                                  'Departamento'
+                                                  'departamento'
                                               ? Color.fromRGBO(0, 59, 139, 1)
                                               : Color.fromRGBO(
                                                   167, 167, 167, 1),
@@ -1436,11 +1436,11 @@ class _SearchPageState extends State<SearchPage> {
                                       InkWell(
                                         onTap: () {
                                           setState(() {
-                                            _amenidades.contains("AreasVerdes")
+                                            _amenidades.contains("Areas Verdes")
                                                 ? _amenidades
-                                                    .remove("AreasVerdes")
+                                                    .remove("Areas Verdes")
                                                 : _amenidades
-                                                    .add("AreasVerdes");
+                                                    .add("Areas Verdes");
                                           });
                                         },
                                         child: SvgPicture.asset(
@@ -1448,7 +1448,7 @@ class _SearchPageState extends State<SearchPage> {
                                           width: 40,
                                           height: 40,
                                           color: _amenidades
-                                                  .contains("AreasVerdes")
+                                                  .contains("Areas Verdes")
                                               ? Color.fromRGBO(0, 59, 139, 1)
                                               : Color.fromRGBO(
                                                   167, 167, 167, 1),
@@ -1457,11 +1457,12 @@ class _SearchPageState extends State<SearchPage> {
                                       InkWell(
                                         onTap: () {
                                           setState(() {
-                                            _amenidades.contains("AreasComunes")
+                                            _amenidades
+                                                    .contains("Areas Comunes")
                                                 ? _amenidades
-                                                    .remove("AreasComunes")
+                                                    .remove("Areas Comunes")
                                                 : _amenidades
-                                                    .add("AreasComunes");
+                                                    .add("Areas Comunes");
                                           });
                                         },
                                         child: SvgPicture.asset(
@@ -1469,7 +1470,7 @@ class _SearchPageState extends State<SearchPage> {
                                           width: 40,
                                           height: 40,
                                           color: _amenidades
-                                                  .contains("AreasComunes")
+                                                  .contains("Areas Comunes")
                                               ? Color.fromRGBO(0, 59, 139, 1)
                                               : Color.fromRGBO(
                                                   167, 167, 167, 1),
