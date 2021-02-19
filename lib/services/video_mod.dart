@@ -140,7 +140,7 @@ class _SafeSalePlayerState extends State<SafeSalePlayer>
             color: Colors.black,
             child: Center(
                 child: Padding(
-              padding: const EdgeInsets.only(top: 50),
+              padding: const EdgeInsets.only(top: 70),
               child: AspectRatio(
                 aspectRatio: controller.value.aspectRatio,
                 child: VideoPlayer(controller),
