@@ -13,6 +13,8 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:safesale/services/search_service.dart';
 
 import 'package:google_fonts/google_fonts.dart';
+import 'package:safesale/widgets/empyList.dart';
+import 'package:safesale/widgets/loading.dart';
 import 'package:safesale/widgets/rigthpropertybar.dart';
 import 'package:video_player/video_player.dart';
 
@@ -164,42 +166,21 @@ class _VideoPageState extends State<VideoPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.black,
+      backgroundColor: Colors.white,
       body: StreamBuilder<SearchState>(
           stream: _searchService.searchStateController.stream,
           builder: (context, snapshot) {
             if (!snapshot.hasData ||
                 snapshot.data.searchFlowStatus == SearchFlowStatus.started) {
-              return Center(
-                child: Container(
-                  color: Colors.black,
-                  width: 70,
-                  height: 70,
-                  alignment: Alignment.center,
-                  child: Image.asset(
-                    "images/loading.gif",
-                  ),
-                ),
-              );
+              return LoadingPage();
             } else if (snapshot.data.searchFlowStatus ==
                 SearchFlowStatus.empty) {
               return Stack(
                 children: [
-                  Center(
-                    child: Container(
-                      color: Colors.black,
-                      width: 70,
-                      height: 70,
-                      alignment: Alignment.center,
-                      child: Image.asset(
-                        "images/loading.gif",
-                      ),
-                    ),
-                  ),
+                  EmptyPage(),
                   RightPropertyBar(
                     total: 0,
-                    headText:
-                        "Ups! no contamos con propiedas acorde a tu búsqueda, pero estamos creciendo",
+                    headText: "",
                   )
                 ],
               );
@@ -239,9 +220,6 @@ class VideoPlayerItem extends StatefulWidget {
 }
 
 class _VideoPlayerItemState extends State<VideoPlayerItem> {
-  VideoPlayerController _controller;
-  Future<void> _initializeVideoPlayerFuture;
-
   @override
   initState() {
     super.initState();

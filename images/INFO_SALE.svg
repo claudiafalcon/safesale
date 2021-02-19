@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="64px" height="64px" viewBox="0 0 64 64" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <title>Group</title>
+    <g id="Page-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="Group">
+            <g id="Grupo_186" transform="translate(0.605000, 0.493000)">
+                <g id="Grupo_179" transform="translate(9.000000, 0.000000)" fill="#3AB8EA" fill-rule="nonzero">
+                    <polygon id="Trazado_240" points="0.624 0.507 0.424 62.181 4.088 62.181 4.288 2.949"></polygon>
+                </g>
+                <g id="Grupo_180" transform="translate(0.000000, 8.000000)" fill="#3AB8EA" fill-rule="nonzero">
+                    <polyline id="Trazado_241" points="0.6 4.312 59.628 4.312 62.071 0.648 0.397 0.448"></polyline>
+                </g>
+                <g id="Grupo_181" transform="translate(20.000000, 19.000000)" stroke="#3AB8EA" stroke-width="3.346">
+                    <rect id="Rectángulo_117" x="0.77" y="0.167" width="37.045" height="26.054"></rect>
+                </g>
+                <g id="Grupo_182" transform="translate(22.000000, 15.000000)" fill="#3AB8EA" fill-rule="nonzero">
+                    <path d="M5.466,5.047 L0.988,5.047 L0.988,0.773 L5.466,0.773 L5.466,5.047 Z M1.802,4.233 L4.652,4.233 L4.652,1.587 L1.8,1.587 L1.802,4.233 Z" id="Trazado_242"></path>
+                </g>
+                <g id="Grupo_183" transform="translate(50.000000, 15.000000)" fill="#3AB8EA" fill-rule="nonzero">
+                    <path d="M4.945,5.047 L0.467,5.047 L0.467,0.773 L4.945,0.773 L4.945,5.047 Z M1.281,4.233 L4.131,4.233 L4.131,1.587 L1.281,1.587 L1.281,4.233 Z" id="Trazado_243"></path>
+                </g>
+                <g id="Grupo_184" transform="translate(24.000000, 11.000000)" fill="#3AB8EA" fill-rule="nonzero">
+                    <rect id="Rectángulo_118" transform="translate(1.125407, 2.839106) rotate(-2.490000) translate(-1.125407, -2.839106) " x="0.7184074" y="0.496105662" width="1" height="4.686"></rect>
+                </g>
+                <g id="Grupo_185" transform="translate(52.000000, 11.000000)" fill="#3AB8EA" fill-rule="nonzero">
+                    <rect id="Rectángulo_119" transform="translate(0.807313, 2.838655) rotate(-87.537000) translate(-0.807313, -2.838655) " x="-1.53568739" y="2.43165501" width="4.686" height="1"></rect>
+                </g>
+            </g>
+            <g id="Grupo_187" transform="translate(25.605000, 26.493000)" fill="#FFFFFF" fill-rule="nonzero">
+                <path d="M1.194,8.223 C1.82418037,8.60227336 2.54451685,8.80566654 3.28,8.812 C4.471,8.812 5.166,8.184 5.166,7.274 C5.166,6.431 4.685,5.949 3.466,5.482 C1.994,4.959 1.085,4.198 1.085,2.927 C1.085,1.527 2.249,0.48 4.001,0.48 C4.69188773,0.456633946 5.37746731,0.608335199 5.994,0.921 L5.673,1.87 C5.14667961,1.58750872 4.55833742,1.44042317 3.961,1.442 C2.73,1.442 2.261,2.177 2.261,2.793 C2.261,3.636 2.809,4.051 4.053,4.531 C5.578,5.121 6.353,5.856 6.353,7.181 C6.353,8.571 5.323,9.775 3.196,9.775 C2.39256714,9.78495774 1.60022535,9.5868723 0.896,9.2 L1.194,8.223 Z" id="Trazado_244"></path>
+                <path d="M9.41,6.8 L8.474,9.636 L7.274,9.636 L10.337,0.622 L11.737,0.622 L14.813,9.636 L13.57,9.636 L12.607,6.8 L9.41,6.8 Z M12.366,5.892 L11.483,3.292 C11.283,2.704 11.149,2.168 11.015,1.647 L10.989,1.647 C10.855,2.183 10.708,2.73 10.534,3.279 L9.651,5.888 L12.366,5.892 Z" id="Trazado_245"></path>
+                <polygon id="Trazado_246" points="16.142 0.627 17.306 0.627 17.306 8.665 21.159 8.665 21.159 9.641 16.142 9.641"></polygon>
+                <polygon id="Trazado_247" points="27.128 5.415 23.623 5.415 23.623 8.665 27.529 8.665 27.529 9.641 22.46 9.641 22.46 0.627 27.329 0.627 27.329 1.602 23.623 1.602 23.623 4.451 27.128 4.451"></polygon>
+            </g>
+        </g>
+    </g>
+</svg>

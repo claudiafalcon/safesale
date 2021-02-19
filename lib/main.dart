@@ -10,6 +10,7 @@ import 'package:amplify_api/amplify_api.dart';
 
 import 'package:safesale/signup.dart';
 import 'package:safesale/verification.dart';
+import 'package:safesale/widgets/loading.dart';
 
 void main() {
   runApp(MyApp());
@@ -62,7 +63,7 @@ class _MyAppState extends State<MyApp> {
       theme: ThemeData(
           visualDensity: VisualDensity.adaptivePlatformDensity,
           bottomSheetTheme: BottomSheetThemeData(
-              backgroundColor: Colors.black.withOpacity(0))),
+              backgroundColor: Colors.white.withOpacity(0))),
       // 2
 
       home: StreamBuilder<AuthState>(
@@ -103,15 +104,7 @@ class _MyAppState extends State<MyApp> {
                 onPopPage: (route, result) => route.didPop(result),
               );
             } else {
-              return Container(
-                color: Colors.black,
-                width: 70,
-                height: 70,
-                alignment: Alignment.center,
-                child: Image.asset(
-                  "images/loading.gif",
-                ),
-              );
+              return LoadingPage();
             }
           }),
     );

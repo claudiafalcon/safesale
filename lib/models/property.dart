@@ -81,9 +81,9 @@ class Property {
       asesor: data["asesor"] as String,
       video: data["video"] == null ? false : data["video"] as bool,
       gallery: gallery,
-      caracteristicas: data["carcateristicas"] == null
+      caracteristicas: data["caracteristicas"] == null
           ? ''
-          : data["carcateristicas"] as String,
+          : data["caracteristicas"] as String,
       construccionM2:
           data["construccion_m2"] == null ? 0 : data["construccion_m2"] as int,
       amenidades:

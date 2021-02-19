@@ -10,15 +10,14 @@ import 'package:safesale/models/property.dart';
 import 'package:safesale/painters/softpaint.dart';
 import 'package:safesale/widgets/listItem.dart';
 
-class LocationPage extends StatefulWidget {
+class InfoPage extends StatefulWidget {
   final Property property;
-  LocationPage(this.property);
+  InfoPage(this.property);
   @override
-  _LocationPageState createState() => _LocationPageState();
+  _InfoPageState createState() => _InfoPageState();
 }
 
-class _LocationPageState extends State<LocationPage> {
-  final _formKey = GlobalKey<FormState>();
+class _InfoPageState extends State<InfoPage> {
   GoogleMapController mapController;
 
   LatLng _center;
@@ -50,7 +49,7 @@ class _LocationPageState extends State<LocationPage> {
 
   @override
   Widget build(BuildContext context) {
-    double _fontsize = MediaQuery.of(context).size.height < 800 ? 12 : 16;
+    double _fontsize = MediaQuery.of(context).size.height < 800 ? 10 : 14;
     return ClipRRect(
         borderRadius: BorderRadius.only(
             topLeft: Radius.circular(10), topRight: Radius.circular(10)),
@@ -78,11 +77,11 @@ class _LocationPageState extends State<LocationPage> {
                           children: [
                             CustomPaint(
                               painter: PainterSoft(
-                                  Color(0xff003b8b),
                                   Color.fromRGBO(58, 184, 234, 1),
+                                  Color(0xff003b8b),
                                   Colors.white,
-                                  5,
-                                  10),
+                                  9,
+                                  13),
                               child: Container(
                                 width: MediaQuery.of(context).size.width * .9,
                                 height: MediaQuery.of(context).size.height * .8,
@@ -94,7 +93,7 @@ class _LocationPageState extends State<LocationPage> {
                                                   .size
                                                   .height /
                                               10 *
-                                              3.5,
+                                              4.5,
                                           width: MediaQuery.of(context)
                                                   .size
                                                   .width *
@@ -104,12 +103,133 @@ class _LocationPageState extends State<LocationPage> {
                                             children: [
                                               Container(
                                                   width: 80,
-                                                  height: 90,
+                                                  height: 60,
                                                   child: Center(
                                                     child: Builder(
                                                       builder: (context) {
                                                         return SvgPicture.asset(
-                                                          'images/LOCATION_ICON.svg',
+                                                          'images/INFO_CASA.svg',
+                                                          width: 50,
+                                                          height: 50,
+                                                          color:
+                                                              Color(0xff003b8b),
+                                                        );
+                                                      },
+                                                    ),
+                                                  )),
+                                              Container(
+                                                child: Padding(
+                                                  padding:
+                                                      const EdgeInsets.all(8.0),
+                                                  child: Column(children: [
+                                                    Container(
+                                                        child: ListItem(
+                                                      parametro: "Terreno-m2:",
+                                                      texto: widget
+                                                          .property.terrenoM2
+                                                          .toString(),
+                                                      bulletcolor:
+                                                          Color(0xff003b8b),
+                                                      textcolor: Colors.white,
+                                                      fontsize: _fontsize,
+                                                    )),
+                                                    ListItem(
+                                                      parametro:
+                                                          "Construccion-m2:",
+                                                      texto: widget.property
+                                                          .construccionM2
+                                                          .toString(),
+                                                      bulletcolor:
+                                                          Color(0xff003b8b),
+                                                      textcolor: Colors.white,
+                                                      fontsize: _fontsize,
+                                                    ),
+                                                    ListItem(
+                                                      parametro: "Antigüedad:",
+                                                      texto: widget
+                                                          .property.edad
+                                                          .toString(),
+                                                      bulletcolor:
+                                                          Color(0xff003b8b),
+                                                      textcolor: Colors.white,
+                                                      fontsize: _fontsize,
+                                                    ),
+                                                    ListItem(
+                                                      parametro:
+                                                          "Estacionamientos:",
+                                                      texto: widget.property
+                                                          .estacionamientos
+                                                          .toString(),
+                                                      bulletcolor:
+                                                          Color(0xff003b8b),
+                                                      textcolor: Colors.white,
+                                                      fontsize: _fontsize,
+                                                    ),
+                                                    ListItem(
+                                                      parametro: "Recamaras:",
+                                                      texto: widget
+                                                          .property.recamaras
+                                                          .toString(),
+                                                      bulletcolor:
+                                                          Color(0xff003b8b),
+                                                      textcolor: Colors.white,
+                                                      fontsize: _fontsize,
+                                                    ),
+                                                    ListItem(
+                                                      parametro:
+                                                          "Caracteristicas:",
+                                                      texto: widget.property
+                                                          .caracteristicas,
+                                                      bulletcolor:
+                                                          Color(0xff003b8b),
+                                                      textcolor: Colors.white,
+                                                      fontsize: _fontsize,
+                                                    ),
+                                                    ListItem(
+                                                      parametro: "Amenidades:",
+                                                      texto: widget
+                                                          .property.amenidades,
+                                                      bulletcolor:
+                                                          Color(0xff003b8b),
+                                                      textcolor: Colors.white,
+                                                      fontsize: _fontsize,
+                                                    ),
+                                                    ListItem(
+                                                      parametro: "Tipo:",
+                                                      texto:
+                                                          widget.property.tipo,
+                                                      bulletcolor:
+                                                          Color(0xff003b8b),
+                                                      textcolor: Colors.white,
+                                                      fontsize: _fontsize,
+                                                    ),
+                                                  ]),
+                                                ),
+                                              )
+                                            ],
+                                          )),
+                                    ),
+                                    ClipRRect(
+                                      borderRadius:
+                                          BorderRadius.all(Radius.circular(10)),
+                                      child: Container(
+                                          alignment: Alignment.topCenter,
+                                          height: MediaQuery.of(context)
+                                                  .size
+                                                  .width /
+                                              10 *
+                                              5.0,
+                                          child: Column(
+                                            mainAxisSize: MainAxisSize.min,
+                                            children: [
+                                              Container(
+                                                  width: 80,
+                                                  height: 80,
+                                                  child: Center(
+                                                    child: Builder(
+                                                      builder: (context) {
+                                                        return SvgPicture.asset(
+                                                          'images/INFO_SALE.svg',
                                                           width: 50,
                                                           height: 50,
                                                           color: Color.fromRGBO(
@@ -125,9 +245,9 @@ class _LocationPageState extends State<LocationPage> {
                                                   child: Column(children: [
                                                     Container(
                                                         child: ListItem(
-                                                      parametro: "Pais:",
-                                                      texto:
-                                                          widget.property.pais,
+                                                      parametro: "Nombre:",
+                                                      texto: widget
+                                                          .property.nombre,
                                                       bulletcolor:
                                                           Color.fromRGBO(
                                                               58, 184, 234, 1),
@@ -135,62 +255,20 @@ class _LocationPageState extends State<LocationPage> {
                                                       fontsize: _fontsize,
                                                     )),
                                                     ListItem(
-                                                      parametro: "Entidad:",
+                                                      parametro: "Descripción:",
                                                       texto: widget
-                                                          .property.entidad,
+                                                          .property.descripcion,
                                                       bulletcolor:
                                                           Color.fromRGBO(
                                                               58, 184, 234, 1),
                                                       textcolor: Colors.white,
                                                       fontsize: _fontsize,
-                                                    ),
-                                                    ListItem(
-                                                      parametro: "Localidad:",
-                                                      texto: widget
-                                                          .property.localidad,
-                                                      bulletcolor:
-                                                          Color.fromRGBO(
-                                                              58, 184, 234, 1),
-                                                      textcolor: Colors.white,
-                                                      fontsize: _fontsize,
-                                                    ),
-                                                    ListItem(
-                                                      parametro: "Dirección:",
-                                                      texto: widget
-                                                          .property.direccion,
-                                                      bulletcolor:
-                                                          Color.fromRGBO(
-                                                              58, 184, 234, 1),
-                                                      textcolor: Colors.white,
-                                                      fontsize: _fontsize,
-                                                    ),
+                                                    )
                                                   ]),
                                                 ),
                                               )
                                             ],
                                           )),
-                                    ),
-                                    ClipRRect(
-                                      borderRadius:
-                                          BorderRadius.all(Radius.circular(10)),
-                                      child: Container(
-                                        height:
-                                            MediaQuery.of(context).size.height /
-                                                10 *
-                                                4,
-                                        width:
-                                            MediaQuery.of(context).size.width /
-                                                10 *
-                                                7,
-                                        child: GoogleMap(
-                                          onMapCreated: _onMapCreated,
-                                          initialCameraPosition: CameraPosition(
-                                            target: _center,
-                                            zoom: 13.0,
-                                          ),
-                                          markers: _markers.values.toSet(),
-                                        ),
-                                      ),
                                     ),
                                   ],
                                 ),

@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:orientation/orientation.dart';
 import 'package:path_provider/path_provider.dart';
+import 'package:safesale/widgets/loading.dart';
 import 'package:screen/screen.dart';
 import 'package:video_player/video_player.dart';
 import 'package:wakelock/wakelock.dart';
@@ -154,22 +155,7 @@ class _SafeSalePlayerState extends State<SafeSalePlayer>
         aspectRatio: 16 / 9,
         child: controller.value.initialized
             ? Stack(children: videoChildrens)
-            : Center(
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  children: [
-                    Center(
-                        child: Container(
-                      width: 70,
-                      height: 70,
-                      child: Image.asset(
-                        "images/loading.gif",
-                      ),
-                    ))
-                  ],
-                ),
-              ));
+            : LoadingPage());
   }
 
   /// Vieo Player ActionBar

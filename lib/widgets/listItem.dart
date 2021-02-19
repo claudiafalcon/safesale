@@ -44,7 +44,7 @@ class _ListItemState extends State<ListItem> {
         Flexible(
           fit: FlexFit.loose,
           child: Padding(
-            padding: const EdgeInsets.only(left: 8.0, right: 8.0),
+            padding: const EdgeInsets.only(left: 8.0, right: 8.0, top: 4.0),
             child: Text(widget.texto,
                 textAlign: TextAlign.left,
                 style: GoogleFonts.raleway(

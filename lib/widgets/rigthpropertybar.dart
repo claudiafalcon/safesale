@@ -3,6 +3,7 @@ import 'package:flutter_svg/svg.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:safesale/models/property.dart';
 import 'package:safesale/services/search_service.dart';
+import 'package:safesale/videopages/infopage.dart';
 import 'package:safesale/videopages/locationview.dart';
 import 'package:safesale/videopages/searchview.dart';
 import 'package:location/location.dart' show Location, LocationData;
@@ -249,11 +250,22 @@ class _RightPropertyBarState extends State<RightPropertyBar> {
                       widget.total != 0
                           ? Column(
                               children: [
-                                SvgPicture.asset(
-                                  'images/INFORMACION.svg',
-                                  width: 30,
-                                  height: 30,
-                                  color: Colors.white,
+                                InkWell(
+                                  onTap: () => showModalBottomSheet<void>(
+                                    isScrollControlled: true,
+                                    context: context,
+                                    shape: RoundedRectangleBorder(
+                                        borderRadius: BorderRadius.vertical(
+                                            top: Radius.circular(10.0))),
+                                    builder: (context) =>
+                                        InfoPage(widget.property),
+                                  ),
+                                  child: SvgPicture.asset(
+                                    'images/INFORMACION.svg',
+                                    width: 30,
+                                    height: 30,
+                                    color: Colors.white,
+                                  ),
                                 ),
                                 SizedBox(
                                   height: 20,

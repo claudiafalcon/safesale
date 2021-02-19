@@ -2,44 +2,72 @@ import 'package:flutter/material.dart';
 import 'dart:ui';
 
 class PainterSoft extends CustomPainter {
-  final Color color;
+  final Color colorUp;
+  final Color colorDown;
+  final Color borderColor;
+  final int index1;
+  final int index2;
 
-  PainterSoft(this.color);
+  PainterSoft(
+      this.colorUp, this.colorDown, this.borderColor, this.index1, this.index2);
   @override
   void paint(Canvas canvas, Size size) {
+    Paint paintback = Paint()..color = this.colorDown;
+
+    Path pathback = Path();
+    pathback.addRRect(RRect.fromRectAndRadius(
+        Rect.fromLTWH(0, 0, size.width, size.height), Radius.circular(20)));
+    canvas.drawPath(pathback, paintback);
+
     Paint paint = Paint();
     Path path = Path();
-    Path pathborder = Path();
-
-    Paint borderPaint = Paint()..strokeWidth = 3;
-    borderPaint.style = PaintingStyle.stroke;
-
-    borderPaint.color = Colors.white;
-
+    int index1 = this.index1;
+    int index2 = this.index2;
     // Path number 1
     //paint.style = PaintingStyle.stroke;
 
-    paint.color = this.color;
+    paint.color = this.colorUp;
     path = Path();
-    path.lineTo(size.width, size.height);
-    path.cubicTo(size.width, size.height * 0.88, size.width * 0.44,
-        size.height * 0.84, size.width * 0.19, size.height * 0.81);
-    path.cubicTo(size.width * 0.12, size.height * 0.8, size.width * 0.07,
-        size.height * 0.8, size.width * 0.05, size.height * 0.79);
-    path.cubicTo(-0.01, size.height * 0.78, 0, size.height * 0.71, 0,
-        size.height * 0.71);
+    path.lineTo(0, size.height / 20 * index1 + 20);
     path.cubicTo(
-        0, size.height * 0.71, 0, size.height * 0.08, 0, size.height * 0.08);
-    path.cubicTo(
-        0, size.height * 0.03, size.width * 0.03, 0, size.width * 0.06, 0);
-    path.cubicTo(
-        size.width * 0.06, 0, size.width * 0.95, 0, size.width * 0.95, 0);
-    path.cubicTo(size.width * 0.98, 0, size.width, size.height * 0.03,
-        size.width, size.height * 0.08);
-    path.cubicTo(size.width, size.height * 0.08, size.width, size.height,
-        size.width, size.height);
+        size.width / 30 * 1,
+        (index1 * size.height / 20) + size.height * (index2 - index1) / 20 / 2,
+        size.width / 30 * 25,
+        (index2 * size.height / 20) - size.height * (index2 - index1) / 20 / 2,
+        size.width,
+        (size.height / 20 * index2) - 20);
+    path.lineTo(size.width, 20);
+    path.quadraticBezierTo(size.width, 0, size.width - 20, 0);
+    path.lineTo(20, 0);
+    path.quadraticBezierTo(0, 0, 0, 20);
 
     canvas.drawPath(path, paint);
+    Paint paintborder = Paint()
+      ..color = this.borderColor
+      ..style = PaintingStyle.stroke
+      ..strokeWidth = 1.0;
+
+    Path pathborder = Path();
+    pathborder.addRRect(RRect.fromRectAndRadius(
+        Rect.fromLTWH(0, 0, size.width, size.height), Radius.circular(20)));
+    canvas.drawPath(pathborder, paintborder);
+
+    Paint paintmiddle = Paint()
+      ..color = this.borderColor
+      ..style = PaintingStyle.stroke
+      ..strokeWidth = 1.0;
+
+    Path pathmiddle = Path();
+    pathmiddle.moveTo(0, (index1 * size.height / 20) + 20);
+    //path.lineTo(0, (index1 * size.height / 20) + 20);
+    pathmiddle.cubicTo(
+        size.width / 30 * 1,
+        (index1 * size.height / 20) + size.height * (index2 - index1) / 20 / 2,
+        size.width / 30 * 25,
+        (index2 * size.height / 20) - size.height * (index2 - index1) / 20 / 2,
+        size.width,
+        (size.height / 20 * index2) - 20);
+    canvas.drawPath(pathmiddle, paintmiddle);
   }
 
   @override
