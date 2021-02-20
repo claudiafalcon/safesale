@@ -271,7 +271,6 @@ class _VideoPlayerItemState extends State<VideoPlayerItem> {
   Widget build(BuildContext context) {
     return Stack(fit: StackFit.expand, children: [
       SafeSalePlayer(
-        aspectRatio: 16 / 9,
         url: "https://didsugvpn60.cloudfront.net/public/" +
             widget.video +
             "/" +

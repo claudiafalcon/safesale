@@ -22,8 +22,6 @@ typedef VideoCallback<T> = void Function(T t);
 class SafeSalePlayer extends StatefulWidget {
   final String url;
 
-  final double aspectRatio;
-
   final VideoCallback<bool> onfullscreen;
 
   final VideoCallback<String> onpeningvideo;
@@ -31,7 +29,6 @@ class SafeSalePlayer extends StatefulWidget {
   SafeSalePlayer({
     Key key,
     @required this.url,
-    @required this.aspectRatio,
     this.onfullscreen,
     this.onpeningvideo,
   }) : super(key: key);
@@ -70,7 +67,7 @@ class _SafeSalePlayerState extends State<SafeSalePlayer>
 
   bool offline;
 
-  String m3u8quality = "Auto";
+  String m3u8quality = "";
 
   Timer showTime;
 
@@ -83,6 +80,7 @@ class _SafeSalePlayerState extends State<SafeSalePlayer>
     var widgetsBinding = WidgetsBinding.instance;
 
     widgetsBinding.addPostFrameCallback((callback) {
+      /*
       widgetsBinding.addPersistentFrameCallback((callback) {
         if (context == null) return;
         var orientation = MediaQuery.of(context).orientation;
@@ -106,7 +104,7 @@ class _SafeSalePlayerState extends State<SafeSalePlayer>
         }
         //
         widgetsBinding.scheduleFrame();
-      });
+      }); */
     });
     SystemChrome.setPreferredOrientations([
       DeviceOrientation.portraitUp,
@@ -141,21 +139,23 @@ class _SafeSalePlayerState extends State<SafeSalePlayer>
             child: Center(
                 child: Padding(
               padding: const EdgeInsets.only(top: 70),
-              child: AspectRatio(
-                aspectRatio: controller.value.aspectRatio,
-                child: VideoPlayer(controller),
-              ),
+              child: VideoPlayer(controller),
             )),
           ),
         ),
       ),
     ];
     videoChildrens.addAll(videoBuiltInChildrens());
-    return AspectRatio(
-        aspectRatio: 16 / 9,
-        child: controller.value.initialized
-            ? Stack(children: videoChildrens)
-            : LoadingPage());
+    return //AspectRatio(
+        // aspectRatio: 16 / 9,
+        //child:
+        controller.value.initialized
+            ? AspectRatio(
+                aspectRatio: controller.value.aspectRatio,
+                child: Stack(children: videoChildrens))
+            : LoadingPage()
+        // )
+        ;
   }
 
   /// Vieo Player ActionBar
@@ -286,6 +286,7 @@ class _SafeSalePlayerState extends State<SafeSalePlayer>
         m3u8Content = utf8.decode(response.bodyBytes);
       }
     }
+    /*
     List<RegExpMatch> matches = regExp.allMatches(m3u8Content).toList();
     List<RegExpMatch> audioMatches =
         regExpAudio.allMatches(m3u8Content).toList();
@@ -345,7 +346,7 @@ class _SafeSalePlayerState extends State<SafeSalePlayer>
         }
         safesale.add(M3U8pass(dataquality: quality, dataurl: url));
       },
-    );
+    );*/
     M3U8s m3u8s = M3U8s(m3u8s: safesale);
     print(
         "--- m3u8 file write ---\n${safesale.map((e) => e.dataquality == e.dataurl).toList()}\nlength : ${safesale.length}\nSuccess");
