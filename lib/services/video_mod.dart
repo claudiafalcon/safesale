@@ -150,9 +150,7 @@ class _SafeSalePlayerState extends State<SafeSalePlayer>
         // aspectRatio: 16 / 9,
         //child:
         controller.value.initialized
-            ? AspectRatio(
-                aspectRatio: controller.value.aspectRatio,
-                child: Stack(children: videoChildrens))
+            ? Stack(children: videoChildrens)
             : LoadingPage()
         // )
         ;
