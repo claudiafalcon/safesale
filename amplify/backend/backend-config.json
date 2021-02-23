@@ -61,6 +61,20 @@
           "category": "auth",
           "resourceName": "userPoolGroups",
           "attributes": [
+            "UserGroupFinalUsersGroupRole"
+          ]
+        },
+        {
+          "category": "auth",
+          "resourceName": "userPoolGroups",
+          "attributes": [
+            "UserGroupCustomersGroupRole"
+          ]
+        },
+        {
+          "category": "auth",
+          "resourceName": "userPoolGroups",
+          "attributes": [
             "UserGroupSaleForceGroupRole"
           ]
         }

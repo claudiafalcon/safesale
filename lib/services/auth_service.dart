@@ -1,6 +1,7 @@
 import 'dart:async' show StreamController;
 
 import 'package:amplify_auth_cognito/amplify_auth_cognito.dart';
+
 import 'package:amplify_flutter/amplify.dart';
 
 import 'package:safesale/auth_credentials.dart';
@@ -53,7 +54,7 @@ class AuthService {
         // 4
         print('User could not be signed in');
       }
-    } on AuthError catch (authError) {
+    } catch (authError) {
       print('Could not login - ${authError.cause}');
       var message = '';
       authError.exceptionList
@@ -89,7 +90,7 @@ class AuthService {
       }
 
       // 7
-    } on AuthError catch (authError) {
+    } catch (authError) {
       print('Failed to sign up - ${authError.cause}');
     }
   }
@@ -107,7 +108,7 @@ class AuthService {
         // 4
         // Follow more steps
       }
-    } on AuthError catch (authError) {
+    } catch (authError) {
       print('Could not verify code - ${authError.cause}');
     }
   }
@@ -119,7 +120,7 @@ class AuthService {
 
       // 2
       showLogin();
-    } on AuthError catch (authError) {
+    } catch (authError) {
       print('Could not log out - ${authError.cause}');
     }
   }

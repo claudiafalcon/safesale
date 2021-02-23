@@ -8,6 +8,8 @@ final double factorBottonHeigh = 0.1;
 final double factorPropertyTitle = 0.15;
 final double factorVerticalSpace = 0.05;
 
+final String cloudfronturl = 'https://didsugvpn60.cloudfront.net/public/';
+
 farsiSimpleStyle(double size, [Color color, FontWeight fw = FontWeight.w400]) {
   return TextStyle(
       fontFamily: 'Farsi', fontSize: size, color: color, fontWeight: fw);

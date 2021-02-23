@@ -1,5 +1,11 @@
 {
     "groupPermissionMap": {
+        "UserGroupFinalUsers": [
+            "read"
+        ],
+        "UserGroupCustomers": [
+            "read"
+        ],
         "UserGroupSaleForce": [
             "create/update",
             "read",

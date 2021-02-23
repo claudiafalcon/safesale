@@ -6,6 +6,7 @@ import 'package:safesale/services/search_service.dart';
 import 'package:safesale/variables.dart';
 import 'package:safesale/videopages/infopage.dart';
 import 'package:safesale/videopages/locationview.dart';
+import 'package:safesale/videopages/photopage.dart';
 import 'package:safesale/videopages/searchview.dart';
 import 'package:location/location.dart' show Location, LocationData;
 
@@ -224,11 +225,22 @@ class _RightPropertyBarState extends State<RightPropertyBar> {
                 widget.total != 0
                     ? Column(
                         children: [
-                          SvgPicture.asset(
-                            'images/FOTOS.svg',
-                            width: _propertyIconSize,
-                            height: _propertyIconSize,
-                            color: Colors.white,
+                          InkWell(
+                            onTap: () => showModalBottomSheet<void>(
+                              isScrollControlled: true,
+                              context: context,
+                              shape: RoundedRectangleBorder(
+                                  borderRadius:
+                                      BorderRadius.all(Radius.circular(10.0))),
+                              builder: (context) =>
+                                  PhotoPage(widget.property.id),
+                            ),
+                            child: SvgPicture.asset(
+                              'images/FOTOS.svg',
+                              width: _propertyIconSize,
+                              height: _propertyIconSize,
+                              color: Colors.white,
+                            ),
                           ),
                           SizedBox(
                             height: _propertyIconSize,

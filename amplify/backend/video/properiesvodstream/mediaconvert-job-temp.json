@@ -152,9 +152,7 @@
               }
             },
             "VideoDescription": {
-              "Width": 960,
               "ScalingBehavior": "DEFAULT",
-              "Height": 540,
               "TimecodeInsertion": "DISABLED",
               "AntiAlias": "ENABLED",
               "Sharpness": 50,
@@ -268,9 +266,7 @@
               }
             },
             "VideoDescription": {
-              "Width": 768,
               "ScalingBehavior": "DEFAULT",
-              "Height": 432,
               "TimecodeInsertion": "DISABLED",
               "AntiAlias": "ENABLED",
               "Sharpness": 50,

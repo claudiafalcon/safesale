@@ -4,6 +4,9 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:safesale/painters/softpaint.dart';
 
 class LoadingPage extends StatefulWidget {
+  final double opacity;
+
+  const LoadingPage({this.opacity = 1});
   @override
   _LoadingPageState createState() => _LoadingPageState();
 }
@@ -13,7 +16,11 @@ class _LoadingPageState extends State<LoadingPage> {
   Widget build(BuildContext context) {
     return CustomPaint(
       painter: PainterSoft(
-          Color.fromRGBO(58, 184, 234, 1), Colors.white, Colors.white, 0, 20),
+          Color.fromRGBO(58, 184, 234, widget.opacity),
+          Color.fromRGBO(255, 255, 255, widget.opacity),
+          Color.fromRGBO(255, 255, 255, widget.opacity),
+          0,
+          20),
       child: Container(
         child: Container(
           height: double.infinity,
