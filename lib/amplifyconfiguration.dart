@@ -9,12 +9,6 @@ const amplifyconfig = ''' {
                     "endpoint": "https://m5rpvgvc5rh6dlwbqlrxg5s3fi.appsync-api.us-east-1.amazonaws.com/graphql",
                     "region": "us-east-1",
                     "authorizationType": "AMAZON_COGNITO_USER_POOLS"
-                },
-                "safesalesearch-dev": {
-                    "endpointType": "GraphQL",
-                    "endpoint": "https://m5rpvgvc5rh6dlwbqlrxg5s3fi.appsync-api.us-east-1.amazonaws.com/graphql",
-                    "region": "us-east-1",
-                    "authorizationType": "AMAZON_COGNITO_USER_POOLS"
                 }
             }
         }

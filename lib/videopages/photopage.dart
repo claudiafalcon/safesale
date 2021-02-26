@@ -83,40 +83,37 @@ class _PhotoPageState extends State<PhotoPage> {
                     ),
                     Container(
                       height: MediaQuery.of(context).size.height / 10 * 8.5,
-                      child: Expanded(
-                        child: FutureBuilder<String>(
-                            future: getPhotos(),
-                            builder: (BuildContext context,
-                                AsyncSnapshot<String> snapshot) {
-                              if (snapshot.hasData) {
-                                return StaggeredGridView.countBuilder(
-                                    padding: const EdgeInsets.all(12.0),
-                                    crossAxisCount: 2,
-                                    mainAxisSpacing: 24,
-                                    crossAxisSpacing: 12,
-                                    itemCount: _keys.length,
-                                    itemBuilder:
-                                        (BuildContext context, int index) =>
-                                            ClipRRect(
-                                              borderRadius:
-                                                  BorderRadius.circular(20),
-                                              child: Image.network(
-                                                cloudfronturl + _keys[index],
-                                              ),
-                                            ),
-                                    staggeredTileBuilder: (int index) =>
-                                        index == 0
-                                            ? StaggeredTile.fit(2)
-                                            : StaggeredTile.fit(1));
-                              } else if (snapshot.hasError) {
-                                return Text('Error: ${snapshot.error}');
-                              } else {
-                                return LoadingPage(
-                                  opacity: 0.2,
-                                );
-                              }
-                            }),
-                      ),
+                      child: FutureBuilder<String>(
+                          future: getPhotos(),
+                          builder: (BuildContext context,
+                              AsyncSnapshot<String> snapshot) {
+                            if (snapshot.hasData) {
+                              return StaggeredGridView.countBuilder(
+                                  padding: const EdgeInsets.all(12.0),
+                                  crossAxisCount: 2,
+                                  mainAxisSpacing: 24,
+                                  crossAxisSpacing: 12,
+                                  itemCount: _keys.length,
+                                  itemBuilder: (BuildContext context,
+                                          int index) =>
+                                      ClipRRect(
+                                        borderRadius: BorderRadius.circular(20),
+                                        child: Image.network(
+                                          cloudfronturl + _keys[index],
+                                        ),
+                                      ),
+                                  staggeredTileBuilder: (int index) =>
+                                      index == 0
+                                          ? StaggeredTile.fit(2)
+                                          : StaggeredTile.fit(1));
+                            } else if (snapshot.hasError) {
+                              return Text('Error: ${snapshot.error}');
+                            } else {
+                              return LoadingPage(
+                                opacity: 0.2,
+                              );
+                            }
+                          }),
                     ),
                     Center(
                       child: Padding(

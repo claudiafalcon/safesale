@@ -7,7 +7,16 @@ import 'package:amplify_flutter/amplify.dart';
 import 'package:safesale/auth_credentials.dart';
 
 // 1
-enum AuthFlowStatus { guess, login, signUp, verification, session }
+enum AuthFlowStatus {
+  guess,
+  login,
+  signUp,
+  verification,
+  session,
+  login_error,
+  signUp_error,
+  verification_error
+}
 
 // 2
 class AuthState {
@@ -22,6 +31,8 @@ class AuthService {
   final authStateController = StreamController<AuthState>();
 
   AuthCredentials _credentials;
+
+  String error;
 
   // 5
   void showSignUp() {
@@ -40,6 +51,10 @@ class AuthService {
     authStateController.add(state);
   }
 
+  AuthCredentials getCredentials() {
+    return _credentials;
+  }
+
   void loginWithCredentials(AuthCredentials credentials) async {
     try {
       // 2
@@ -51,19 +66,18 @@ class AuthService {
         final state = AuthState(authFlowStatus: AuthFlowStatus.session);
         authStateController.add(state);
       } else {
+        error = "El usuario no se pudo loguear. Intenta mas tarde.";
+        final state = AuthState(authFlowStatus: AuthFlowStatus.login_error);
+        authStateController.add(state);
         // 4
-        print('User could not be signed in');
       }
     } catch (authError) {
-      print('Could not login - ${authError.cause}');
-      var message = '';
-      authError.exceptionList
-          .where((authException) =>
-              authException.exception != 'PLATFORM_EXCEPTIONS')
-          .forEach((authException) {
-        message += authException.detail;
-      });
-      print(message);
+      error = "Usuario o contraseña incorrectos.";
+
+      print('Could not login - ${authError.message}');
+
+      final state = AuthState(authFlowStatus: AuthFlowStatus.login_error);
+      authStateController.add(state);
     }
   }
 
@@ -126,6 +140,7 @@ class AuthService {
   }
 
   void checkAuthStatus() async {
+    //logOut();
     try {
       CognitoAuthSession res = await Amplify.Auth.fetchAuthSession(
           options: CognitoSessionOptions(getAWSCredentials: true));

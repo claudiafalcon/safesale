@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:safesale/auth/authnavigator.dart';
 
 import 'package:safesale/pages/alerts.dart';
 import 'package:safesale/pages/favs.dart';
@@ -13,14 +14,19 @@ class HomePage extends StatefulWidget {
   _HomePageState createState() => _HomePageState();
 }
 
+class Page {
+  final String page;
+  final bool isGuestAllowed;
+  Page({@required this.page, this.isGuestAllowed = false});
+}
+
 class _HomePageState extends State<HomePage> {
-  List pageoptions = [
-    VideoPage(),
-    AlertsPage(),
-    FavsPage(),
-    ProfilePage(),
-    //AddVideoPage(),
-    MessagesPage()
+  List<Page> pageoptions = [
+    Page(page: "VideoPage", isGuestAllowed: true),
+    Page(page: "AlertsPage"),
+    Page(page: "FavsPage"),
+    Page(page: "ProfilePage"),
+    Page(page: "MessagesPage"),
   ];
 
   int page = 0;
@@ -29,7 +35,9 @@ class _HomePageState extends State<HomePage> {
     final double _footerIconSize =
         MediaQuery.of(context).size.height * factorFooterIconSize;
     return Scaffold(
-      body: pageoptions[page],
+      body: NavigatorPage(
+          pagename: pageoptions[page].page,
+          guestallowed: pageoptions[page].isGuestAllowed),
       bottomNavigationBar: new Theme(
         data: Theme.of(context)
             .copyWith(canvasColor: Color.fromRGBO(42, 180, 233, 300)),

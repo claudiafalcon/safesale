@@ -1,12 +1,18 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/svg.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:safesale/auth_credentials.dart';
+import 'package:safesale/painters/softpaint.dart';
+
 import 'variables.dart';
 
 class LoginPage extends StatefulWidget {
   final ValueChanged<LoginCredentials> didProvideCredentials;
   final VoidCallback shouldShowsSingUp;
+  final String error;
 
-  LoginPage({Key key, this.didProvideCredentials, this.shouldShowsSingUp})
+  LoginPage(
+      {Key key, this.didProvideCredentials, this.shouldShowsSingUp, this.error})
       : super(key: key);
 
   @override
@@ -14,13 +20,13 @@ class LoginPage extends StatefulWidget {
 }
 
 class _LoginPageState extends State<LoginPage> {
+  bool _isObscure = true;
   TextEditingController emailcontroller = TextEditingController();
   TextEditingController passwordcontroller = TextEditingController();
 
   void _login() {
-    final username = emailcontroller.text.trim();
+    final username = emailcontroller.text.trim().toLowerCase();
     final password = passwordcontroller.text.trim();
-    print('Successfully configured Amplify2 🎉');
 
     final credentials =
         LoginCredentials(username: username, password: password);
@@ -29,87 +35,131 @@ class _LoginPageState extends State<LoginPage> {
 
   @override
   Widget build(BuildContext context) {
+    var padding = MediaQuery.of(context).size.height * 0.04;
     return Scaffold(
-      backgroundColor: Color.fromRGBO(0, 180, 233, 300),
-      body: Container(
-        alignment: Alignment.center,
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Text("Bienvenido a Safe Sale",
-                style: farsiSimpleStyle(25, Colors.white, FontWeight.w600)),
-            SizedBox(
-              height: 10,
-            ),
-            Container(
-              width: MediaQuery.of(context).size.width,
-              margin: EdgeInsets.only(left: 20, right: 20),
-              child: TextField(
-                controller: emailcontroller,
-                decoration: InputDecoration(
-                    fillColor: Colors.white,
-                    filled: true,
-                    labelText: 'Email',
-                    prefixIcon: Icon(Icons.email),
-                    labelStyle: farsiSimpleStyle(16),
-                    border: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(20))),
-              ),
-            ),
-            SizedBox(
-              height: 10,
-            ),
-            Container(
-              width: MediaQuery.of(context).size.width,
-              margin: EdgeInsets.only(left: 20, right: 20),
-              child: TextField(
-                controller: passwordcontroller,
-                decoration: InputDecoration(
-                    fillColor: Colors.white,
-                    filled: true,
-                    labelText: 'Password',
-                    prefixIcon: Icon(Icons.lock),
-                    labelStyle: farsiSimpleStyle(16),
-                    border: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(20))),
-              ),
-            ),
-            SizedBox(
-              height: 10,
-            ),
-            InkWell(
-              onTap: () => _login(),
+      resizeToAvoidBottomInset: false,
+      backgroundColor: Color.fromRGBO(67, 73, 75, 0.8),
+      body: Center(
+        child: SingleChildScrollView(
+          child: Container(
+            color: Color.fromRGBO(67, 73, 75, 0.0),
+            child: CustomPaint(
+              painter: PainterSoft(Color.fromRGBO(58, 184, 234, 1),
+                  Color(0xff003b8b), Colors.white, 0, 20),
               child: Container(
-                width: MediaQuery.of(context).size.width / 2,
-                height: 50,
-                decoration: BoxDecoration(
-                  color: Color.fromRGBO(0, 59, 139, 100),
-                  borderRadius: BorderRadius.circular(20),
-                ),
-                child: Center(
-                  child: Text("Login",
-                      style:
-                          farsiSimpleStyle(20, Colors.white, FontWeight.w900)),
+                width: MediaQuery.of(context).size.width / 10 * 9,
+                height: MediaQuery.of(context).size.height / 10 * 7.5,
+                alignment: Alignment.center,
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    Padding(
+                      padding: EdgeInsets.all(padding),
+                      child: SvgPicture.asset(
+                        'images/LoadingImage.svg',
+                        width: MediaQuery.of(context).size.height *
+                            factorAuthLogoWd,
+                        height: MediaQuery.of(context).size.height *
+                            factorAuthLogoWd,
+                      ),
+                    ),
+                    Text("Bienvenido a Safe Sale",
+                        textAlign: TextAlign.center,
+                        style: GoogleFonts.raleway(
+                          textStyle: TextStyle(
+                            color: Colors.white,
+                            fontSize: 25,
+                            fontWeight: FontWeight.w600,
+                          ),
+                        )),
+                    SizedBox(
+                      height: 2 * padding,
+                    ),
+                    Container(
+                      alignment: Alignment.center,
+                      width: MediaQuery.of(context).size.width,
+                      margin: EdgeInsets.only(left: 20, right: 20),
+                      child: InputDecorationPass(
+                          controller: emailcontroller, text: "E-mail"),
+                    ),
+                    SizedBox(
+                      height: 10,
+                    ),
+                    Container(
+                        width: MediaQuery.of(context).size.width,
+                        margin: EdgeInsets.only(left: 20, right: 20),
+                        child: InputDecorationPass(
+                            controller: passwordcontroller,
+                            text: "Password",
+                            isPassword: true)),
+                    widget.error != null
+                        ? Padding(
+                            padding: const EdgeInsets.all(6.0),
+                            child: Text(widget.error,
+                                textAlign: TextAlign.center,
+                                style: GoogleFonts.raleway(
+                                  textStyle: TextStyle(
+                                    color: Colors.red,
+                                    fontSize: 18,
+                                    fontWeight: FontWeight.w600,
+                                  ),
+                                )),
+                          )
+                        : SizedBox(
+                            height: 30,
+                          ),
+                    InkWell(
+                      onTap: () => _login(),
+                      child: Container(
+                        width: MediaQuery.of(context).size.width / 2,
+                        height: 50,
+                        decoration: BoxDecoration(
+                          color: Color.fromRGBO(58, 184, 234, 1),
+                          borderRadius: BorderRadius.circular(20),
+                        ),
+                        child: Center(
+                          child: Text("Login",
+                              style: GoogleFonts.raleway(
+                                  textStyle: TextStyle(
+                                color: Colors.white,
+                                fontSize: 22,
+                                fontWeight: FontWeight.w600,
+                              ))),
+                        ),
+                      ),
+                    ),
+                    SizedBox(
+                      height: 10,
+                    ),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Text("¿No tienes cuenta?",
+                            style: GoogleFonts.raleway(
+                                textStyle: TextStyle(
+                              color: Colors.white,
+                              fontSize: 15,
+                              fontWeight: FontWeight.normal,
+                            ))),
+                        SizedBox(width: 10),
+                        InkWell(
+                          onTap: widget.shouldShowsSingUp,
+                          child: Text("Registrate",
+                              style: GoogleFonts.raleway(
+                                  textStyle: TextStyle(
+                                color: Color.fromRGBO(58, 184, 234, 1),
+                                fontSize: 15,
+                                fontWeight: FontWeight.normal,
+                              ))),
+                        )
+                      ],
+                    )
+                  ],
                 ),
               ),
             ),
-            SizedBox(
-              height: 10,
-            ),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Text("¿No tienes cuenta?", style: farsiSimpleStyle(16)),
-                SizedBox(width: 10),
-                InkWell(
-                  onTap: widget.shouldShowsSingUp,
-                  child: Text("Registrate",
-                      style: farsiSimpleStyle(16,
-                          Color.fromRGBO(0, 59, 139, 100), FontWeight.bold)),
-                )
-              ],
-            )
-          ],
+          ),
         ),
       ),
     );

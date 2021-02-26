@@ -101,7 +101,10 @@ class SearchService {
         var response = await operation.response;
         var data = response.data;
         final List parsedList = json.decode(data)["nearbyProperties"]["items"];
-        return compute(parseProperties, parsedList);
+        _properties = parseProperties(parsedList);
+        final state = SearchState(searchFlowStatus: SearchFlowStatus.finalized);
+        searchStateController.add(state);
+        return;
       }
     } catch (e) {
       print(e);
@@ -162,7 +165,14 @@ class SearchService {
         var response = await operation.response;
         var data = response.data;
         final List parsedList = json.decode(data)["searchProperties"]["items"];
-        return compute(parseProperties, parsedList);
+        if (parsedList.isEmpty) {
+          final state = SearchState(searchFlowStatus: SearchFlowStatus.empty);
+          searchStateController.add(state);
+          return;
+        }
+        _properties = parseProperties(parsedList);
+        final state = SearchState(searchFlowStatus: SearchFlowStatus.finalized);
+        searchStateController.add(state);
       }
     } catch (e) {
       print(e);

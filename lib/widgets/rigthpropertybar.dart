@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:safesale/models/property.dart';
+import 'package:safesale/services/auth_service.dart';
 import 'package:safesale/services/search_service.dart';
 import 'package:safesale/variables.dart';
 import 'package:safesale/videopages/infopage.dart';
@@ -15,10 +16,16 @@ class RightPropertyBar extends StatefulWidget {
 
   final String headText;
 
+  final AuthFlowStatus status;
+
   final Property property;
 
   const RightPropertyBar(
-      {Key key, @required this.total, this.property, @required this.headText})
+      {Key key,
+      @required this.total,
+      this.property,
+      @required this.headText,
+      @required this.status})
       : super(key: key);
   @override
   _RightPropertyBarState createState() => _RightPropertyBarState();
@@ -168,9 +175,9 @@ class _RightPropertyBarState extends State<RightPropertyBar> {
             width: MediaQuery.of(context).size.height *
                 factorRighBarFilterIconSize *
                 1.5,
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.start,
-              crossAxisAlignment: CrossAxisAlignment.center,
+            child: ListView(
+              //  mainAxisAlignment: MainAxisAlignment.start,
+              //crossAxisAlignment: CrossAxisAlignment.center,
               children: [
                 Column(
                   mainAxisAlignment: MainAxisAlignment.start,
@@ -178,11 +185,12 @@ class _RightPropertyBarState extends State<RightPropertyBar> {
                     InkWell(
                       onTap: () => showModalBottomSheet<void>(
                         isScrollControlled: true,
+                        useRootNavigator: true,
                         context: context,
                         shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.vertical(
                                 top: Radius.circular(10.0))),
-                        builder: (context) => SearchPage("22"),
+                        builder: (context) => SearchPage(widget.status),
                       ),
                       child: buildprofile(
                           widget.total, _filterIconSize + _filterIconSize / 5),
@@ -227,6 +235,7 @@ class _RightPropertyBarState extends State<RightPropertyBar> {
                         children: [
                           InkWell(
                             onTap: () => showModalBottomSheet<void>(
+                              useRootNavigator: true,
                               isScrollControlled: true,
                               context: context,
                               shape: RoundedRectangleBorder(
@@ -253,6 +262,7 @@ class _RightPropertyBarState extends State<RightPropertyBar> {
                         children: [
                           InkWell(
                             onTap: () => showModalBottomSheet<void>(
+                              useRootNavigator: true,
                               isScrollControlled: true,
                               context: context,
                               shape: RoundedRectangleBorder(
@@ -279,6 +289,7 @@ class _RightPropertyBarState extends State<RightPropertyBar> {
                         children: [
                           InkWell(
                             onTap: () => showModalBottomSheet<void>(
+                              useRootNavigator: true,
                               isScrollControlled: true,
                               context: context,
                               shape: RoundedRectangleBorder(

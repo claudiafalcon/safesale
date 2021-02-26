@@ -5,12 +5,8 @@ import 'package:flutter/material.dart';
 import 'package:safesale/services/auth_service.dart';
 import 'package:safesale/amplifyconfiguration.dart';
 import 'package:safesale/home.dart';
-import 'package:safesale/login.dart';
-import 'package:amplify_api/amplify_api.dart';
 
-import 'package:safesale/signup.dart';
-import 'package:safesale/verification.dart';
-import 'package:safesale/widgets/loading.dart';
+import 'package:amplify_api/amplify_api.dart';
 
 void main() {
   runApp(MyApp());
@@ -59,54 +55,14 @@ class _MyAppState extends State<MyApp> {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Safe Sale',
-      theme: ThemeData(
-          visualDensity: VisualDensity.adaptivePlatformDensity,
-          bottomSheetTheme: BottomSheetThemeData(
-              backgroundColor: Colors.white.withOpacity(0))),
-      // 2
+        title: 'Safe Sale',
+        theme: ThemeData(
+            visualDensity: VisualDensity.adaptivePlatformDensity,
+            primaryColor: Color(0xff003b8b),
+            bottomSheetTheme: BottomSheetThemeData(
+                backgroundColor: Colors.white.withOpacity(0))),
+        // 2
 
-      home: StreamBuilder<AuthState>(
-          // 2
-          stream: _authService.authStateController.stream,
-          builder: (context, snapshot) {
-            // 3
-            if (snapshot.hasData) {
-              return Navigator(
-                pages: [
-                  // 4
-                  // Show Login Page
-                  if (snapshot.data.authFlowStatus == AuthFlowStatus.login)
-                    MaterialPage(
-                        child: LoginPage(
-                      didProvideCredentials: _authService.loginWithCredentials,
-                      shouldShowsSingUp: _authService.showSignUp,
-                    )),
-
-                  // 5
-                  // Show Sign Up Page
-                  if (snapshot.data.authFlowStatus == AuthFlowStatus.signUp)
-                    MaterialPage(
-                        child: SignUp(
-                      didProvideCredentials: _authService.signUpWithCredentials,
-                    )),
-
-                  if (snapshot.data.authFlowStatus == AuthFlowStatus.guess ||
-                      snapshot.data.authFlowStatus == AuthFlowStatus.session)
-                    MaterialPage(child: HomePage()),
-                  if (snapshot.data.authFlowStatus ==
-                      AuthFlowStatus.verification)
-                    MaterialPage(
-                        child: VerificationPage(
-                      didProvideVerificationCode: _authService.verifyCode,
-                    )),
-                ],
-                onPopPage: (route, result) => route.didPop(result),
-              );
-            } else {
-              return LoadingPage();
-            }
-          }),
-    );
+        home: HomePage());
   }
 }

@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:location/location.dart' show Location, LocationData;
 
 import 'package:safesale/models/property.dart';
+import 'package:safesale/services/auth_service.dart';
 import 'package:safesale/services/video_mod.dart';
 import 'package:safesale/variables.dart';
 
@@ -22,6 +23,10 @@ import 'package:video_player/video_player.dart';
 //import 'package:location_permissions/location_permissions.dart';
 
 class VideoPage extends StatefulWidget {
+  final AuthFlowStatus authstatus;
+
+  const VideoPage({Key key, this.authstatus}) : super(key: key);
+
   @override
   _VideoPageState createState() => _VideoPageState();
 }
@@ -173,8 +178,6 @@ class _VideoPageState extends State<VideoPage> {
 
   @override
   Widget build(BuildContext context) {
-    //  _searchService.getSearcgStateController().close();
-
     return Scaffold(
       backgroundColor: Colors.white,
       body: StreamBuilder<SearchState>(
@@ -189,9 +192,7 @@ class _VideoPageState extends State<VideoPage> {
                 children: [
                   EmptyPage(),
                   RightPropertyBar(
-                    total: 0,
-                    headText: "",
-                  )
+                      total: 0, headText: "", status: widget.authstatus)
                 ],
               );
             } else {
@@ -208,10 +209,10 @@ class _VideoPageState extends State<VideoPage> {
                       //video
                       ,
                       RightPropertyBar(
-                        total: result.length,
-                        property: property,
-                        headText: property.nombre,
-                      )
+                          total: result.length,
+                          property: property,
+                          headText: property.nombre,
+                          status: widget.authstatus)
                     ]);
                   });
             }
