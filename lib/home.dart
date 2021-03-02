@@ -29,6 +29,12 @@ class _HomePageState extends State<HomePage> {
     Page(page: "MessagesPage"),
   ];
 
+  updatePage(int i) {
+    setState(() {
+      page = i;
+    });
+  }
+
   int page = 0;
   @override
   Widget build(BuildContext context) {
@@ -37,7 +43,8 @@ class _HomePageState extends State<HomePage> {
     return Scaffold(
       body: NavigatorPage(
           pagename: pageoptions[page].page,
-          guestallowed: pageoptions[page].isGuestAllowed),
+          guestallowed: pageoptions[page].isGuestAllowed,
+          call: updatePage),
       bottomNavigationBar: new Theme(
         data: Theme.of(context)
             .copyWith(canvasColor: Color.fromRGBO(42, 180, 233, 300)),

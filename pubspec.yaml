@@ -38,7 +38,6 @@ dependencies:
   screen: ^0.0.5
   orientation: ^1.2.0
   wakelock: ^0.2.1+1
-  chewie: ^0.12.2
   flutter_staggered_grid_view:
 
   # The following adds the Cupertino Icons font to your application.

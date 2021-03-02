@@ -29,6 +29,16 @@ class SearchService {
 
   SearchService._internal();
 
+  bool _fromASearch = false;
+
+  void turnOffExternalSearch() {
+    _fromASearch = false;
+  }
+
+  bool isAExternalSearch() {
+    return _fromASearch;
+  }
+
   List<Property> _properties;
 
   List<Property> getProperties() {
@@ -43,8 +53,9 @@ class SearchService {
 
   StreamController<SearchState> getSearchStreamController() {
     if (searchStateController != null) searchStateController.close();
-    if (searchStateController == null || searchStateController.isClosed)
+    if (searchStateController == null || searchStateController.isClosed) {
       searchStateController = StreamController<SearchState>();
+    }
     return searchStateController;
   }
 
@@ -114,6 +125,7 @@ class SearchService {
 
   void searchProperties(SearchCriterio criterio) async {
     try {
+      _fromASearch = true;
       final state = SearchState(searchFlowStatus: SearchFlowStatus.started);
       searchStateController.add(state);
 

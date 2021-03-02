@@ -8,6 +8,7 @@ import 'package:safesale/models/searchcriterio.dart';
 import 'package:safesale/painters/softpaint.dart';
 import 'package:safesale/services/auth_service.dart';
 import 'package:safesale/services/search_service.dart';
+import 'package:safesale/services/user_service.dart';
 
 class SearchPage extends StatefulWidget {
   final AuthFlowStatus status;
@@ -1386,6 +1387,9 @@ class _SearchPageState extends State<SearchPage> {
                                                       2,
                                                   height: 30,
                                                   child: TextFormField(
+                                                    onChanged: (val) =>
+                                                        _criterio.terrenom2 =
+                                                            int.parse(val),
                                                     onSaved: (val) =>
                                                         _criterio.terrenom2 =
                                                             int.parse(val),
@@ -1434,6 +1438,9 @@ class _SearchPageState extends State<SearchPage> {
                                                       2,
                                                   height: 30,
                                                   child: TextFormField(
+                                                    onChanged: (val) => _criterio
+                                                            .construccionm2 =
+                                                        int.parse(val),
                                                     onSaved: (val) => _criterio
                                                             .construccionm2 =
                                                         int.parse(val),
@@ -1523,6 +1530,9 @@ class _SearchPageState extends State<SearchPage> {
                                                     onSaved: (val) =>
                                                         _criterio.preciofrom =
                                                             int.parse(val),
+                                                    onChanged: (val) =>
+                                                        _criterio.preciofrom =
+                                                            int.parse(val),
                                                     inputFormatters: <
                                                         TextInputFormatter>[
                                                       FilteringTextInputFormatter
@@ -1568,6 +1578,9 @@ class _SearchPageState extends State<SearchPage> {
                                                       3,
                                                   height: 30,
                                                   child: TextFormField(
+                                                    onChanged: (val) =>
+                                                        _criterio.precioto =
+                                                            int.parse(val),
                                                     onSaved: (val) =>
                                                         _criterio.precioto =
                                                             int.parse(val),
@@ -1821,8 +1834,9 @@ class _SearchPageState extends State<SearchPage> {
                                                 _amenidades.join(" OR ");
 
                                           // If the form is valid, display a Snackbar.
-                                          _searchService
-                                              .searchProperties(_criterio);
+                                          UserService _userservice =
+                                              new UserService();
+                                          _userservice.addAlert(_criterio);
                                           Navigator.of(context).pop();
                                         }
                                       },

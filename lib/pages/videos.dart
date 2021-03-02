@@ -70,9 +70,10 @@ class _VideoPageState extends State<VideoPage> {
     // establece la ubicación inicial tirando del usuario
     // ubicación actual de getLocation () de la ubicación
     currentLocation = await location.getLocation();
-    _searchService.fetchProperties(
-        currentLocation.latitude, currentLocation.longitude);
-
+    if (!_searchService.isAExternalSearch())
+      _searchService.fetchProperties(
+          currentLocation.latitude, currentLocation.longitude);
+    _searchService.turnOffExternalSearch();
     // destino codificado para este ejemplo
   }
 

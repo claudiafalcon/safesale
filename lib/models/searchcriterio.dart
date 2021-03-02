@@ -1,8 +1,3 @@
-import 'dart:ffi';
-
-import 'package:safesale/models/media.dart';
-import 'package:safesale/models/location.dart';
-
 class SearchCriterio {
   String criteria;
   String amenidades;
@@ -16,6 +11,40 @@ class SearchCriterio {
   String tipo;
 
   SearchCriterio();
+  SearchCriterio.fill(
+      {this.criteria,
+      this.amenidades,
+      this.baths,
+      this.construccionm2,
+      this.terrenom2,
+      this.estacionamientos,
+      this.preciofrom,
+      this.precioto,
+      this.recamaras,
+      this.tipo});
+
+  factory SearchCriterio.fromJson(Map<String, dynamic> data) {
+    return SearchCriterio.fill(
+      criteria: data["searchCriteria"] == null
+          ? ""
+          : data["searchCriteria"] as String,
+      amenidades:
+          data["amenidades"] == null ? null : data["amenidades"] as String,
+      baths: data["baths"] == null ? null : data["baths"] as int,
+      construccionm2: data["construccion_m2"] == null
+          ? null
+          : data["construccion_m2"] as int,
+      terrenom2: data["terreno_m2"] == null ? null : data["terreno_m2"] as int,
+      estacionamientos: data["estacionamientos"] == null
+          ? null
+          : data["estacionamientos"] as int,
+      preciofrom:
+          data["precio_from"] == null ? null : data["precio_from"] as int,
+      precioto: data["precio_to"] == null ? null : data["precio_to"] as int,
+      recamaras: data["recamaras"] == null ? null : data["recamaras"] as int,
+      tipo: data["tipo"] == null ? null : data["tipo"] as String,
+    );
+  }
 
   Map toJson() {
     var json = new Map();

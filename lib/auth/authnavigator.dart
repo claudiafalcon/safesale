@@ -13,9 +13,10 @@ import 'package:safesale/widgets/loading.dart';
 class NavigatorPage extends StatefulWidget {
   final String pagename;
   final bool guestallowed;
+  final void Function(int) call;
 
   const NavigatorPage(
-      {Key key, @required this.pagename, this.guestallowed: false})
+      {Key key, @required this.pagename, this.guestallowed: false, this.call})
       : super(key: key);
   @override
   _NavigatorPageState createState() => _NavigatorPageState();
@@ -35,7 +36,7 @@ class _NavigatorPageState extends State<NavigatorPage> {
       case "VideoPage":
         return VideoPage(authstatus: status);
       case "AlertsPage":
-        return AlertsPage(authstatus: status);
+        return AlertsPage(authstatus: status, call: widget.call);
       case "FavsPage":
         return FavsPage(authstatus: status);
       case "ProfilePage":

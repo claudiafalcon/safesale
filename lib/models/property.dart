@@ -1,5 +1,3 @@
-import 'dart:ffi';
-
 import 'package:safesale/models/media.dart';
 import 'package:safesale/models/location.dart';
 
@@ -105,7 +103,7 @@ class Property {
           data["propietario"] == null ? "" : data["propietario"] as String,
       recamaras: data["recamaras"] == null ? 0 : data["recamaras"] as int,
       terrenoM2: data["terreno_m2"] == null ? 0 : data["terreno_m2"] as int,
-      updatedAt: data["createdAt"] == null ? null : data["createdAt"] as String,
+      updatedAt: data["updatedAt"] == null ? null : data["updatedAt"] as String,
       wc: data["wc"] == null ? 0 : data["wc"] as int,
       baths: data["baths"] == null ? 0 : data["baths"] as int,
     );

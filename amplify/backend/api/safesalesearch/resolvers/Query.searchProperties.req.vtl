@@ -33,7 +33,7 @@
                             #if( $context.args.criteria.terreno_m2 ){ "range":  { "terreno_m2":{"gte": "$context.args.criteria.terreno_m2"}}}, #end  
                             #if( $context.args.criteria.construccion_m2 ){ "range":  { "construccion_m2":{"gte": "$context.args.criteria.construccion_m2"}}}, #end   
                             #if( $context.args.criteria.precio_from || $context.args.criteria.precio_to )
-                                {  "range": {"precio": { #if( $context.args.criteria.precio_from) "gte" : "$context.args.criteria.precio_from" #if( $context.args.criteria.precio_to) "," #end #end
+                                {  "range": {"precio": { #if( $context.args.criteria.precio_from) "gte" : "$context.args.criteria.precio_from" #if( $context.args.criteria.precio_to) , #end #end
                                         #if( $context.args.criteria.precio_to) "lte" : "$context.args.criteria.precio_to" #end }}}  
                             #end           
                             ]

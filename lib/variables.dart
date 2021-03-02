@@ -10,6 +10,7 @@ final double factorAuthLogoWd = 0.16;
 
 final double factorPropertyTitle = 0.15;
 final double factorVerticalSpace = 0.05;
+final double factorPaddingSpace = 0.08;
 
 final String cloudfronturl = 'https://didsugvpn60.cloudfront.net/public/';
 

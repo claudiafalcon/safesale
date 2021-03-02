@@ -88,3 +88,93 @@ String q_preffix_search(SearchCriterio criterio) =>
                                       }
                                     }
                                   }''';
+
+const q_getUser = '''query GetUser(\$id:ID!) {
+                                      getUser(id: \$id) {
+                                        id
+                                           alerts(limit: 10) {
+                                            items {
+                                              amenidades
+                                              baths
+                                              construccion_m2
+                                              createdAt
+                                              estacionamientos
+                                              id
+                                              precio_from
+                                              precio_to
+                                              recamaras
+                                              searchCriteria
+                                              terreno_m2
+                                              tipo
+                                              updatedAt
+                                            }
+                                            nextToken
+                                          }
+                                          favs(limit: 10) {
+                                            items {
+                                              property {
+                                                amenidades
+                                                asesor
+                                                baths
+                                                caracteristicas
+                                                construccion_m2
+                                                cp
+                                                creacion
+                                                createdAt
+                                                descripcion
+                                                direccion
+                                                edad
+                                                entidad
+                                                estacionamientos
+                                                id
+                                                inventario
+                                                localidad
+                                                location {
+                                                  lat
+                                                  lon
+                                                }
+                                                nombre
+                                                pais
+                                                precio
+                                                propertyGeohash
+                                                propertyHashKey
+                                                propietario
+                                                recamaras
+                                                status
+                                                terreno_m2
+                                                tipo
+                                                updatedAt
+                                                wc
+                                              }
+                                              createdAt
+                                              id
+                                              updatedAt
+                                            }
+                                            nextToken
+                                          }
+                                        }
+                                      }''';
+
+const m_createUser = '''mutation CreateUser(\$id:ID!) {
+                                     createUser(input: {id: \$id}){
+                                        id
+                                      }
+                                   }''';
+
+String m_create_alert(SearchCriterio criterio) =>
+    '''mutation CreateAlert(\$alertUserId:ID!) {
+                                     createAlert(input: {
+                                        alertUserId:\$alertUserId ''' +
+    criterio.toGrapql() +
+    '''
+                                        }){
+                                          id
+                                        
+                                      }
+                                   }''';
+
+const m_deleteAlert = '''mutation DeleteAlert(\$id:ID!) {
+                                     deleteAlert(input: {id: \$id}){
+                                        id
+                                      }
+                                   }''';
