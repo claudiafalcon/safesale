@@ -2,6 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:safesale/auth/formvalidator.dart';
 import 'package:safesale/auth_credentials.dart';
 import 'package:safesale/painters/softpaint.dart';
 import 'package:safesale/policy.dart';
@@ -10,7 +11,15 @@ import 'package:safesale/variables.dart';
 class SignUp extends StatefulWidget {
   final ValueChanged<SignUpCredentials> didProvideCredentials;
   final VoidCallback shouldShowLogin;
-  SignUp({Key key, this.didProvideCredentials, this.shouldShowLogin})
+
+  final VoidCallback shouldShowVerification;
+  final String error;
+  SignUp(
+      {Key key,
+      this.didProvideCredentials,
+      this.shouldShowLogin,
+      this.shouldShowVerification,
+      this.error})
       : super(key: key);
 
   @override
@@ -22,23 +31,32 @@ class _SignUpState extends State<SignUp> {
   TextEditingController passwordcontroller = TextEditingController();
   TextEditingController namecontroller = TextEditingController();
 
+  GlobalKey<FormState> _key = new GlobalKey();
+
   registeruser() {
-    final name = namecontroller.text.trim().toUpperCase();
-    final username = emailcontroller.text.trim().toLowerCase();
-    final password = passwordcontroller.text.trim();
-    print('Successfully configured Amplify  222🎉');
-    final credentials =
-        SignUpCredentials(name: name, username: username, password: password);
+    if (_key.currentState.validate()) {
+      final name = namecontroller.text.trim().toUpperCase();
+      final username = emailcontroller.text.trim().toLowerCase();
+      final password = passwordcontroller.text.trim();
+      print('Successfully configured Amplify  222🎉');
+      final credentials =
+          SignUpCredentials(name: name, username: username, password: password);
 
-    print('Successfully configured Amplify  333🎉');
+      print('Successfully configured Amplify  333🎉');
 
-    widget.didProvideCredentials(credentials);
-    print('AAA ${credentials.username}');
+      widget.didProvideCredentials(credentials);
+      print('AAA ${credentials.username}');
+    } else {
+      setState(() {
+        _validate = true;
+      });
+    }
     return;
   }
 
   bool _lights = false;
   bool isVisible = true;
+  bool _validate = false;
   @override
   Widget build(BuildContext context) {
     var padding = MediaQuery.of(context).size.height * 0.04;
@@ -56,134 +74,202 @@ class _SignUpState extends State<SignUp> {
                 width: MediaQuery.of(context).size.width / 10 * 9,
                 height: MediaQuery.of(context).size.height / 10 * 7.5,
                 alignment: Alignment.center,
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.start,
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  children: [
-                    Padding(
-                      padding: EdgeInsets.all(padding),
-                      child: SvgPicture.asset(
-                        'images/LoadingImage.svg',
-                        width: MediaQuery.of(context).size.height *
-                            factorAuthLogoWd,
-                        height: MediaQuery.of(context).size.height *
-                            factorAuthLogoWd,
+                child: Form(
+                  key: _key,
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                      Padding(
+                        padding: EdgeInsets.all(padding),
+                        child: SvgPicture.asset(
+                          'images/LoadingImage.svg',
+                          width: MediaQuery.of(context).size.height *
+                              factorAuthLogoWd,
+                          height: MediaQuery.of(context).size.height *
+                              factorAuthLogoWd,
+                        ),
                       ),
-                    ),
-                    Padding(
-                      padding: EdgeInsets.only(
-                          left: padding, right: padding, bottom: padding),
-                      child: Text(
-                          "Recibe notificaciones y disfruta de la experiencia completa de la aplicación.",
-                          textAlign: TextAlign.justify,
-                          style: GoogleFonts.raleway(
-                            textStyle: TextStyle(
-                              color: Colors.white,
-                              fontSize: 18,
-                              fontWeight: FontWeight.w600,
+                      Padding(
+                        padding: EdgeInsets.only(
+                            left: padding, right: padding, bottom: padding),
+                        child: Text(
+                            "Recibe notificaciones y disfruta de la experiencia completa de la aplicación.",
+                            textAlign: TextAlign.justify,
+                            style: GoogleFonts.raleway(
+                              textStyle: TextStyle(
+                                color: Colors.white,
+                                fontSize: 18,
+                                fontWeight: FontWeight.w600,
+                              ),
+                            )),
+                      ),
+                      Container(
+                        width: MediaQuery.of(context).size.width,
+                        margin: EdgeInsets.only(left: 20, right: 20),
+                        child: InputDecorationPass(
+                            controller: namecontroller, text: "Nombre"),
+                      ),
+                      SizedBox(
+                        height: 10,
+                      ),
+                      Container(
+                          width: MediaQuery.of(context).size.width,
+                          margin: EdgeInsets.only(left: 20, right: 20),
+                          child: InputDecorationPass(
+                              controller: emailcontroller,
+                              text: "E-mail",
+                              validator: "email")),
+                      SizedBox(
+                        height: 10,
+                      ),
+                      Container(
+                        width: MediaQuery.of(context).size.width,
+                        margin: EdgeInsets.only(left: 20, right: 20),
+                        child: InputDecorationPass(
+                          controller: passwordcontroller,
+                          text: "   Password",
+                          validator: "password",
+                          isPassword: true,
+                        ),
+                      ),
+                      widget.error != null
+                          ? Padding(
+                              padding: const EdgeInsets.all(6.0),
+                              child: widget.error == "NotVerified"
+                                  ? Row(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.center,
+                                      children: [
+                                        Text("Correo ya registrado verificalo",
+                                            style: GoogleFonts.raleway(
+                                                textStyle: TextStyle(
+                                              color: Colors.red,
+                                              fontSize: 15,
+                                              fontWeight: FontWeight.normal,
+                                            ))),
+                                        SizedBox(width: 10),
+                                        InkWell(
+                                          onTap: widget.shouldShowVerification,
+                                          child: Text("aquí",
+                                              style: GoogleFonts.raleway(
+                                                  textStyle: TextStyle(
+                                                color: Color.fromRGBO(
+                                                    58, 184, 234, 1),
+                                                fontSize: 15,
+                                                fontWeight: FontWeight.normal,
+                                              ))),
+                                        )
+                                      ],
+                                    )
+                                  : Text(widget.error,
+                                      textAlign: TextAlign.center,
+                                      style: GoogleFonts.raleway(
+                                        textStyle: TextStyle(
+                                          color: Colors.red,
+                                          fontSize: 18,
+                                          fontWeight: FontWeight.w600,
+                                        ),
+                                      )),
+                            )
+                          : SizedBox(
+                              height: 10,
                             ),
-                          )),
-                    ),
-                    Container(
-                      width: MediaQuery.of(context).size.width,
-                      margin: EdgeInsets.only(left: 20, right: 20),
-                      child: InputDecorationPass(
-                          controller: namecontroller, text: "Nombre"),
-                    ),
-                    SizedBox(
-                      height: 10,
-                    ),
-                    Container(
-                      width: MediaQuery.of(context).size.width,
-                      margin: EdgeInsets.only(left: 20, right: 20),
-                      child: InputDecorationPass(
-                          controller: emailcontroller, text: "E-mail"),
-                    ),
-                    SizedBox(
-                      height: 10,
-                    ),
-                    Container(
-                      width: MediaQuery.of(context).size.width,
-                      margin: EdgeInsets.only(left: 20, right: 20),
-                      child: InputDecorationPass(
-                        controller: passwordcontroller,
-                        text: "Password",
-                        isPassword: true,
-                      ),
-                    ),
-                    SizedBox(
-                      height: 10,
-                    ),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        SizedBox(
-                          width: MediaQuery.of(context).size.width * 0.05,
-                        ),
-                        InkWell(
-                          onTap: () => Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                  builder: (context) => TermsofPolicy())),
-                          child: Text("Acepto el aviso de privacidad",
-                              textAlign: TextAlign.center,
-                              style: GoogleFonts.raleway(
-                                textStyle: TextStyle(
-                                  color: Colors.white,
-                                  fontSize: 14,
-                                  fontWeight: FontWeight.w600,
-                                ),
-                              )),
-                        ),
-                        Container(
-                          width: MediaQuery.of(context).size.width * 0.25,
-                          child: MergeSemantics(
-                            child: Visibility(
-                              maintainSize: true,
-                              maintainAnimation: true,
-                              maintainState: true,
-                              visible: isVisible,
-                              child: ListTile(
-                                title: Text(""),
-                                leading: Switch(
-                                  value: _lights,
-                                  activeColor: Color.fromRGBO(58, 184, 234, 1),
-                                  onChanged: (bool value) {
-                                    setState(() {
-                                      _lights = !_lights;
-                                    });
-                                  },
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          SizedBox(
+                            width: MediaQuery.of(context).size.width * 0.05,
+                          ),
+                          InkWell(
+                            onTap: () => Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (context) => TermsofPolicy())),
+                            child: Text("Acepto el aviso de privacidad",
+                                textAlign: TextAlign.center,
+                                style: GoogleFonts.raleway(
+                                  textStyle: TextStyle(
+                                    color: Colors.white,
+                                    fontSize: 14,
+                                    fontWeight: FontWeight.w600,
+                                  ),
+                                )),
+                          ),
+                          Container(
+                            width: MediaQuery.of(context).size.width * 0.25,
+                            child: MergeSemantics(
+                              child: Visibility(
+                                maintainSize: true,
+                                maintainAnimation: true,
+                                maintainState: true,
+                                visible: isVisible,
+                                child: ListTile(
+                                  title: Text(""),
+                                  leading: Switch(
+                                    value: _lights,
+                                    activeColor:
+                                        Color.fromRGBO(58, 184, 234, 1),
+                                    onChanged: (bool value) {
+                                      setState(() {
+                                        _lights = !_lights;
+                                      });
+                                    },
+                                  ),
                                 ),
                               ),
                             ),
+                          )
+                        ],
+                      ),
+                      InkWell(
+                        onTap: () => registeruser(),
+                        child: Container(
+                          width: MediaQuery.of(context).size.width / 2,
+                          height: 50,
+                          decoration: BoxDecoration(
+                            color: Color.fromRGBO(58, 184, 234, 1),
+                            borderRadius: BorderRadius.circular(20),
                           ),
-                        )
-                      ],
-                    ),
-                    InkWell(
-                      onTap: () => registeruser(),
-                      child: Container(
-                        width: MediaQuery.of(context).size.width / 2,
-                        height: 50,
-                        decoration: BoxDecoration(
-                          color: Color.fromRGBO(58, 184, 234, 1),
-                          borderRadius: BorderRadius.circular(20),
+                          child: Center(
+                            child: Text("Crear mi cuenta",
+                                style: GoogleFonts.raleway(
+                                    textStyle: TextStyle(
+                                  color: Colors.white,
+                                  fontSize: 22,
+                                  fontWeight: FontWeight.w600,
+                                ))),
+                          ),
                         ),
-                        child: Center(
-                          child: Text("Crear mi cuenta",
+                      ),
+                      SizedBox(
+                        height: 10,
+                      ),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Text("Ya tienes cuenta",
                               style: GoogleFonts.raleway(
                                   textStyle: TextStyle(
                                 color: Colors.white,
-                                fontSize: 22,
-                                fontWeight: FontWeight.w600,
+                                fontSize: 15,
+                                fontWeight: FontWeight.normal,
                               ))),
-                        ),
-                      ),
-                    ),
-                    SizedBox(
-                      height: 10,
-                    )
-                  ],
+                          SizedBox(width: 10),
+                          InkWell(
+                            onTap: widget.shouldShowLogin,
+                            child: Text("Inicia sesión",
+                                style: GoogleFonts.raleway(
+                                    textStyle: TextStyle(
+                                  color: Color.fromRGBO(58, 184, 234, 1),
+                                  fontSize: 15,
+                                  fontWeight: FontWeight.normal,
+                                ))),
+                          )
+                        ],
+                      )
+                    ],
+                  ),
                 ),
               ),
             ),

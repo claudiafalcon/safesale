@@ -6,8 +6,16 @@ import 'variables.dart';
 
 class VerificationPage extends StatefulWidget {
   final ValueChanged<String> didProvideVerificationCode;
+  final VoidCallback shouldShowLogin;
+  final String error;
+  final String email;
 
-  VerificationPage({Key key, this.didProvideVerificationCode})
+  VerificationPage(
+      {Key key,
+      this.didProvideVerificationCode,
+      this.error,
+      this.email,
+      this.shouldShowLogin})
       : super(key: key);
 
   @override
@@ -20,6 +28,20 @@ class _VerificationPageState extends State<VerificationPage> {
   void _verify() {
     final verificationCode = _verificationcodecontroller.text.trim();
     widget.didProvideVerificationCode(verificationCode);
+  }
+
+  String mask(String email) {
+    List str = email.split('@');
+    String maskString = str[1];
+    maskString = str[0].substring(0, 1).padRight(str[0].length, '*');
+    str = str[1].split('.');
+    maskString = maskString +
+        '@' +
+        str[0].substring(0, 1).padRight(str[0].length, '*') +
+        "." +
+        str[1];
+
+    return maskString;
   }
 
   @override
@@ -71,7 +93,8 @@ class _VerificationPageState extends State<VerificationPage> {
                       padding: EdgeInsets.only(
                           left: padding, right: padding, bottom: padding),
                       child: Text(
-                          "Se ha enviado un código de verifación a tu correo.",
+                          "Se ha enviado un código de verifación a tu correo: " +
+                              mask(widget.email),
                           textAlign: TextAlign.justify,
                           style: GoogleFonts.raleway(
                             textStyle: TextStyle(
@@ -88,9 +111,22 @@ class _VerificationPageState extends State<VerificationPage> {
                           controller: _verificationcodecontroller,
                           text: "Código de Verificación"),
                     ),
-                    SizedBox(
-                      height: padding,
-                    ),
+                    widget.error != null
+                        ? Padding(
+                            padding: const EdgeInsets.all(6.0),
+                            child: Text(widget.error,
+                                textAlign: TextAlign.center,
+                                style: GoogleFonts.raleway(
+                                  textStyle: TextStyle(
+                                    color: Colors.red,
+                                    fontSize: 18,
+                                    fontWeight: FontWeight.w600,
+                                  ),
+                                )),
+                          )
+                        : SizedBox(
+                            height: padding,
+                          ),
                     InkWell(
                       onTap: () => _verify(),
                       child: Container(
@@ -110,6 +146,32 @@ class _VerificationPageState extends State<VerificationPage> {
                               ))),
                         ),
                       ),
+                    ),
+                    SizedBox(
+                      height: 10,
+                    ),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Text("Ya has verificado ",
+                            style: GoogleFonts.raleway(
+                                textStyle: TextStyle(
+                              color: Colors.white,
+                              fontSize: 15,
+                              fontWeight: FontWeight.normal,
+                            ))),
+                        SizedBox(width: 10),
+                        InkWell(
+                          onTap: widget.shouldShowLogin,
+                          child: Text("Firmate",
+                              style: GoogleFonts.raleway(
+                                  textStyle: TextStyle(
+                                color: Color.fromRGBO(58, 184, 234, 1),
+                                fontSize: 15,
+                                fontWeight: FontWeight.normal,
+                              ))),
+                        )
+                      ],
                     )
                   ],
                 ),

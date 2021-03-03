@@ -178,3 +178,16 @@ const m_deleteAlert = '''mutation DeleteAlert(\$id:ID!) {
                                         id
                                       }
                                    }''';
+
+const m_createFav =
+    '''mutation CreateUserFavs(\$userFavsPropertyId:ID!, \$userFavsUserId:ID! ) {
+                                     createUserFavs(input: {userFavsPropertyId: \$userFavsPropertyId, userFavsUserId:\$userFavsUserId}){
+                                        id
+                                      }
+                                   }''';
+
+const m_deleteFav = '''mutation DeleteFav(\$id:ID!) {
+                                     deleteUserFavs(input: {id: \$id}){
+                                        id
+                                      }
+                                   }''';

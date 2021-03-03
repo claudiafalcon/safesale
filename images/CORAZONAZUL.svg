@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="232px" height="199px" viewBox="0 0 232 199" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <title>CORAZONFILL</title>
+    <defs>
+        <filter id="filter-1">
+            <feColorMatrix in="SourceGraphic" type="matrix" values="0 0 0 0 0.000000 0 0 0 0 0.231373 0 0 0 0 0.545098 0 0 0 1.000000 0"></feColorMatrix>
+        </filter>
+    </defs>
+    <g id="Page-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g filter="url(#filter-1)" id="CORAZON-LIKE">
+            <g>
+                <path d="M169.45,-1.03679352e-05 C195.345952,-0.014939701 218.504995,16.1169001 227.466884,40.4126839 C236.428773,64.7084678 229.292721,92.0151388 209.59,108.82 L209.59,108.82 L111.59,199 L13.79,101.25 L13.99,101 C-0.746435677,82.9242591 -4.05425736,58.0929479 5.43645766,36.7898665 C14.9271727,15.4867852 35.6004194,1.3392564 58.8944455,0.206429459 C82.1884715,-0.926397485 104.136952,11.1483664 115.65,31.43 C126.592453,12.0073272 147.157009,-0.00650202823 169.45,-1.03679352e-05 Z" id="Shape" fill="#802424" fill-rule="nonzero"></path>
+            </g>
+        </g>
+    </g>
+</svg>

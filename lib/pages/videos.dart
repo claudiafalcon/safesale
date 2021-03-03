@@ -69,11 +69,13 @@ class _VideoPageState extends State<VideoPage> {
     Location location = new Location();
     // establece la ubicación inicial tirando del usuario
     // ubicación actual de getLocation () de la ubicación
+    await _searchService.checkState();
     currentLocation = await location.getLocation();
     if (!_searchService.isAExternalSearch())
       _searchService.fetchProperties(
           currentLocation.latitude, currentLocation.longitude);
-    _searchService.turnOffExternalSearch();
+    else
+      _searchService.turnOffExternalSearch();
     // destino codificado para este ejemplo
   }
 
@@ -182,13 +184,9 @@ class _VideoPageState extends State<VideoPage> {
     return Scaffold(
       backgroundColor: Colors.white,
       body: StreamBuilder<SearchState>(
-          stream: _searchService.getSearchStreamController().stream,
+          stream: _searchService.searchStateController.stream,
           builder: (context, snapshot) {
-            if (!snapshot.hasData ||
-                snapshot.data.searchFlowStatus == SearchFlowStatus.started) {
-              return LoadingPage();
-            } else if (snapshot.data.searchFlowStatus ==
-                SearchFlowStatus.empty) {
+            if (snapshot.hasError) {
               return Stack(
                 children: [
                   EmptyPage(),
@@ -197,25 +195,60 @@ class _VideoPageState extends State<VideoPage> {
                 ],
               );
             } else {
-              result = _searchService.getProperties();
-              return PageView.builder(
-                  itemCount: result.length,
-                  controller:
-                      PageController(initialPage: 0, viewportFraction: 1),
-                  scrollDirection: Axis.vertical,
-                  itemBuilder: (context, index) {
-                    Property property = result[index];
-                    return Stack(children: [
-                      VideoPlayerItem(property.id)
-                      //video
-                      ,
+              switch (snapshot.connectionState) {
+                case ConnectionState.none:
+                  return LoadingPage();
+                  break;
+                case ConnectionState.waiting:
+                  {
+                    if (_searchService.getProperties() != null)
+                      _searchService.checkState();
+
+                    return LoadingPage();
+                    break;
+                  }
+                case ConnectionState.active:
+                  if (snapshot.data.searchFlowStatus ==
+                      SearchFlowStatus.started) return LoadingPage();
+                  if (snapshot.data.searchFlowStatus == SearchFlowStatus.empty)
+                    return Stack(
+                      children: [
+                        EmptyPage(),
+                        RightPropertyBar(
+                            total: 0, headText: "", status: widget.authstatus)
+                      ],
+                    );
+                  else {
+                    result = _searchService.getProperties();
+                    return PageView.builder(
+                        itemCount: result.length,
+                        controller:
+                            PageController(initialPage: 0, viewportFraction: 1),
+                        scrollDirection: Axis.vertical,
+                        itemBuilder: (context, index) {
+                          Property property = result[index];
+                          return Stack(children: [
+                            VideoPlayerItem(property.id)
+                            //video
+                            ,
+                            RightPropertyBar(
+                                total: result.length,
+                                property: property,
+                                headText: property.nombre,
+                                status: widget.authstatus)
+                          ]);
+                        });
+                  }
+                  break;
+                case ConnectionState.done:
+                  return Stack(
+                    children: [
+                      EmptyPage(),
                       RightPropertyBar(
-                          total: result.length,
-                          property: property,
-                          headText: property.nombre,
-                          status: widget.authstatus)
-                    ]);
-                  });
+                          total: 0, headText: "", status: widget.authstatus)
+                    ],
+                  );
+              }
             }
           }),
     );

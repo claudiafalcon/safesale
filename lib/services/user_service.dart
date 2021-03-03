@@ -155,4 +155,50 @@ class UserService {
     }
     return null;
   }
+
+  Future<void> addFav(String propertyId) async {
+    try {
+      // final state = UserState(userFlowStatus: UserFlowStatus.started);
+      //userStateController.add(state);
+
+      if (_user == null) {
+        await initUser();
+      }
+
+      try {
+        var operation = Amplify.API.mutate(
+            request: GraphQLRequest<String>(document: m_createFav, variables: {
+          'userFavsUserId': _user.id,
+          'userFavsPropertyId': propertyId
+        }));
+
+        var response = await operation.response;
+        var data = response.data;
+
+        print('Mutation result: ' + data);
+        await updateUser(_user.id);
+      } on ApiException catch (e) {
+        print('Mutation failed: $e');
+      }
+    } catch (e) {
+      print(e);
+    }
+    return null;
+  }
+
+  Future<void> deleteFav(String id) async {
+    try {
+      var operation = Amplify.API.mutate(
+          request: GraphQLRequest<String>(
+              document: m_deleteFav, variables: {'id': id}));
+
+      var response = await operation.response;
+      var data = response.data;
+      await updateUser(_user.id);
+
+      print('Mutation result: ' + data);
+    } on ApiException catch (e) {
+      print('Mutation failed: $e');
+    }
+  }
 }

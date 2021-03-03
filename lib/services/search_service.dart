@@ -49,22 +49,33 @@ class SearchService {
     return _searchService;
   }
 
-  StreamController<SearchState> searchStateController;
-
-  StreamController<SearchState> getSearchStreamController() {
-    if (searchStateController != null) searchStateController.close();
-    if (searchStateController == null || searchStateController.isClosed) {
-      searchStateController = StreamController<SearchState>();
-    }
-    return searchStateController;
-  }
+  StreamController<SearchState> searchStateController =
+      StreamController<SearchState>.broadcast();
 
   List<Property> parseProperties(List jsonList) {
     return jsonList.map<Property>((json) => Property.fromJson(json)).toList();
   }
 
+  void checkState() async {
+    if (_properties != null) {
+      final state2 = SearchState(searchFlowStatus: SearchFlowStatus.finalized);
+      searchStateController.add(state2);
+    } else {
+      final state2 = SearchState(searchFlowStatus: SearchFlowStatus.started);
+      searchStateController.add(state2);
+    }
+  }
+
+  void setProperty(Property property) {
+    _fromASearch = true;
+    _properties = null;
+    _properties = <Property>[];
+    _properties.add(property);
+  }
+
   void fetchProperties(double lat, double lon) async {
     try {
+      _properties = null;
       final state = SearchState(searchFlowStatus: SearchFlowStatus.started);
       searchStateController.add(state);
 
@@ -125,6 +136,7 @@ class SearchService {
 
   void searchProperties(SearchCriterio criterio) async {
     try {
+      _properties = null;
       _fromASearch = true;
       final state = SearchState(searchFlowStatus: SearchFlowStatus.started);
       searchStateController.add(state);

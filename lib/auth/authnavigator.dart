@@ -38,9 +38,12 @@ class _NavigatorPageState extends State<NavigatorPage> {
       case "AlertsPage":
         return AlertsPage(authstatus: status, call: widget.call);
       case "FavsPage":
-        return FavsPage(authstatus: status);
+        return FavsPage(authstatus: status, call: widget.call);
       case "ProfilePage":
-        return ProfilePage(authstatus: status);
+        return ProfilePage(
+            authstatus: status,
+            credentials: _authService.getCredentials(),
+            shouldLogOut: _authService.logOut);
       case "MessagesPage":
         return MessagesPage(authstatus: status);
       default:
@@ -74,19 +77,34 @@ class _NavigatorPageState extends State<NavigatorPage> {
                                   AuthFlowStatus.login_error
                               ? _authService.error
                               : null)),
-                if (snapshot.data.authFlowStatus == AuthFlowStatus.signUp &&
+                if ((snapshot.data.authFlowStatus == AuthFlowStatus.signUp ||
+                        snapshot.data.authFlowStatus ==
+                            AuthFlowStatus.signUp_error) &&
                     !widget.guestallowed)
                   MaterialPage(
                       child: SignUp(
-                    didProvideCredentials: _authService.signUpWithCredentials,
-                  )),
-                if (snapshot.data.authFlowStatus ==
-                        AuthFlowStatus.verification &&
+                          didProvideCredentials:
+                              _authService.signUpWithCredentials,
+                          shouldShowLogin: _authService.showLogin,
+                          shouldShowVerification: _authService.showVerification,
+                          error: snapshot.data.authFlowStatus ==
+                                  AuthFlowStatus.signUp_error
+                              ? _authService.error
+                              : null)),
+                if ((snapshot.data.authFlowStatus ==
+                            AuthFlowStatus.verification ||
+                        snapshot.data.authFlowStatus ==
+                            AuthFlowStatus.verification_error) &&
                     !widget.guestallowed)
                   MaterialPage(
                       child: VerificationPage(
-                    didProvideVerificationCode: _authService.verifyCode,
-                  )),
+                          didProvideVerificationCode: _authService.verifyCode,
+                          shouldShowLogin: _authService.showLogin,
+                          error: snapshot.data.authFlowStatus ==
+                                  AuthFlowStatus.verification_error
+                              ? _authService.error
+                              : null,
+                          email: _authService.getCredentials().username)),
                 if ((widget.guestallowed) ||
                     snapshot.data.authFlowStatus == AuthFlowStatus.session)
                   MaterialPage(child: getPage(snapshot.data.authFlowStatus)),

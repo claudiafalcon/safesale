@@ -20,3 +20,8 @@ class SignUpCredentials extends AuthCredentials {
   SignUpCredentials({String username, String password, String name})
       : super(username: username, password: password, name: name);
 }
+
+class SignedCredentials extends AuthCredentials {
+  SignedCredentials({String username, String name})
+      : super(username: username, name: name);
+}

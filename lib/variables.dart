@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:safesale/auth/formvalidator.dart';
 
 final double factorFooterIconSize = 0.03;
 final double factorRighBarVideoIconSize = 0.03;
@@ -53,9 +54,14 @@ class InputDecorationPass extends StatefulWidget {
   final controller;
   final text;
   final isPassword;
+  final validator;
 
   const InputDecorationPass(
-      {Key key, this.controller, this.text, this.isPassword = false})
+      {Key key,
+      this.controller,
+      this.text,
+      this.isPassword = false,
+      this.validator})
       : super(key: key);
 
   @override
@@ -84,8 +90,15 @@ class _InputDecorationPassState extends State<InputDecorationPass> {
         fontWeight: FontWeight.w600,
       )),
       controller: widget.controller,
+      validator: (String value) {
+        if (widget.validator == "email")
+          return FormValidator().validateEmail(value);
+        if (widget.validator == "password")
+          return FormValidator().validatePassword(value);
+        return FormValidator().validateNull();
+      },
       decoration: InputDecoration(
-          contentPadding: EdgeInsets.only(left: _padding, top: 15, bottom: 15),
+          contentPadding: EdgeInsets.only(left: 15, top: 15, bottom: 15),
           enabledBorder: OutlineInputBorder(
             borderRadius: BorderRadius.circular(20),
             borderSide: const BorderSide(color: Colors.white, width: 0.0),

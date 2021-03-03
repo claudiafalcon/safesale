@@ -2,8 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:safesale/models/property.dart';
+import 'package:safesale/models/userfav.dart';
 import 'package:safesale/services/auth_service.dart';
 import 'package:safesale/services/search_service.dart';
+import 'package:safesale/services/user_service.dart';
 import 'package:safesale/variables.dart';
 import 'package:safesale/videopages/infopage.dart';
 import 'package:safesale/videopages/locationview.dart';
@@ -33,6 +35,8 @@ class RightPropertyBar extends StatefulWidget {
 
 class _RightPropertyBarState extends State<RightPropertyBar> {
   final _searchService = SearchService();
+  final _userService = UserService();
+
   LocationData currentLocation;
 
   buildprofile(int total, size) {
@@ -96,12 +100,40 @@ class _RightPropertyBarState extends State<RightPropertyBar> {
     // destino codificado para este ejemplo
   }
 
+  Future<bool> isFav(String id) async {
+    if (widget.status != AuthFlowStatus.session) return false;
+    await _userService.initUser();
+    Fav fav = _userService
+        .getUser()
+        .favs
+        .firstWhere((element) => element.property.id == id, orElse: () {
+      return null;
+    });
+    if (fav == null) return false;
+    return true;
+  }
+
+  likevideo(String id) async {
+    await _userService.initUser();
+    Fav fav = _userService
+        .getUser()
+        .favs
+        .firstWhere((element) => element.property.id == id, orElse: () {
+      return null;
+    });
+    if (fav == null)
+      await _userService.addFav(id);
+    else
+      await _userService.deleteFav(fav.id);
+  }
+
   @override
   Widget build(BuildContext context) {
     final double _propertyIconSize =
         MediaQuery.of(context).size.height * factorRighBarVideoIconSize;
     final double _filterIconSize =
         MediaQuery.of(context).size.height * factorRighBarFilterIconSize;
+
     return Column(children: [
       // top section
       Container(
@@ -218,12 +250,52 @@ class _RightPropertyBarState extends State<RightPropertyBar> {
                           SizedBox(
                             height: 60,
                           ),
-                          SvgPicture.asset(
-                            'images/CORAZON LIKE.svg',
-                            width: _propertyIconSize,
-                            height: _propertyIconSize,
-                            color: Colors.white,
-                          ),
+                          FutureBuilder<bool>(
+                              future: isFav(widget.property.id),
+                              builder: (context, snapshot) {
+                                if (snapshot.hasData) {
+                                  return InkWell(
+                                      onTap: () async {
+                                        if (widget.status !=
+                                            AuthFlowStatus.session) {
+                                          await showDialog(
+                                              context: context,
+                                              child: new AlertDialog(
+                                                title: new Text(
+                                                  'Ups! ',
+                                                  style: TextStyle(
+                                                      fontFamily: "Smash"),
+                                                ),
+                                                content: new Text(
+                                                  'La funcionalidad de Favoritos solo esta disponible para nuestros usuarios registrados. Corre Registrate! ...',
+                                                  style: TextStyle(
+                                                      fontFamily: "Smash"),
+                                                ),
+                                              ));
+
+                                          // Doesn't run
+                                          Navigator.of(context).maybePop();
+                                        } else {
+                                          await likevideo(widget.property.id);
+                                          setState(() {});
+                                        }
+                                      },
+                                      child: snapshot.data == true
+                                          ? SvgPicture.asset(
+                                              'images/CORAZONAZUL.svg',
+                                              width: _propertyIconSize,
+                                              height: _propertyIconSize,
+                                              color: Colors.white,
+                                            )
+                                          : SvgPicture.asset(
+                                              'images/CORAZON PERFIL.svg',
+                                              width: _propertyIconSize,
+                                              height: _propertyIconSize,
+                                              color: Colors.white));
+                                } else {
+                                  return Container();
+                                }
+                              }),
                           SizedBox(
                             height: _propertyIconSize,
                           )

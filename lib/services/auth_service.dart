@@ -1,5 +1,6 @@
 import 'dart:async' show StreamController;
 
+import 'package:amazon_cognito_identity_dart_2/cognito.dart';
 import 'package:amplify_auth_cognito/amplify_auth_cognito.dart';
 
 import 'package:amplify_flutter/amplify.dart';
@@ -51,6 +52,11 @@ class AuthService {
     authStateController.add(state);
   }
 
+  void showVerification() {
+    final state = AuthState(authFlowStatus: AuthFlowStatus.verification);
+    authStateController.add(state);
+  }
+
   AuthCredentials getCredentials() {
     return _credentials;
   }
@@ -65,6 +71,19 @@ class AuthService {
       if (result.isSignedIn) {
         final state = AuthState(authFlowStatus: AuthFlowStatus.session);
         authStateController.add(state);
+        var res2 = await Amplify.Auth.fetchUserAttributes();
+        AuthUserAttribute email = res2.firstWhere(
+            (element) => element.userAttributeKey == "email", orElse: () {
+          return null;
+        });
+        AuthUserAttribute name = res2.firstWhere(
+            (element) => element.userAttributeKey == "name", orElse: () {
+          return null;
+        });
+        String emailstr = (email != null ? email.value : null);
+        String namestr = (name != null ? name.value : null);
+        _credentials = new SignedCredentials(username: emailstr, name: namestr);
+        print(email);
       } else {
         error = "El usuario no se pudo loguear. Intenta mas tarde.";
         final state = AuthState(authFlowStatus: AuthFlowStatus.login_error);
@@ -84,7 +103,10 @@ class AuthService {
 // 2
   void signUpWithCredentials(SignUpCredentials credentials) async {
     try {
-      final userAttributes = {'email': credentials.username};
+      final userAttributes = {
+        'email': credentials.username,
+        'name': credentials.name
+      };
       // 3
       final result = await Amplify.Auth.signUp(
           username: credentials.username,
@@ -104,8 +126,16 @@ class AuthService {
       }
 
       // 7
-    } catch (authError) {
-      print('Failed to sign up - ${authError.cause}');
+    } on UsernameExistsException {
+      error = 'NotVerified';
+      final state = AuthState(authFlowStatus: AuthFlowStatus.signUp_error);
+      _credentials = new SignedCredentials(
+          username: credentials.username, name: credentials.name);
+      authStateController.add(state);
+    } catch (e) {
+      error = "Error, intenta más tarde";
+      final state = AuthState(authFlowStatus: AuthFlowStatus.signUp_error);
+      authStateController.add(state);
     }
   }
 
@@ -123,6 +153,10 @@ class AuthService {
         // Follow more steps
       }
     } catch (authError) {
+      error = "El código no es correcto.";
+      final state =
+          AuthState(authFlowStatus: AuthFlowStatus.verification_error);
+      authStateController.add(state);
       print('Could not verify code - ${authError.cause}');
     }
   }
@@ -145,9 +179,23 @@ class AuthService {
       CognitoAuthSession res = await Amplify.Auth.fetchAuthSession(
           options: CognitoSessionOptions(getAWSCredentials: true));
       var state;
-      if (res.isSignedIn)
+      if (res.isSignedIn) {
         state = AuthState(authFlowStatus: AuthFlowStatus.session);
-      else
+
+        var res2 = await Amplify.Auth.fetchUserAttributes();
+        AuthUserAttribute email = res2.firstWhere(
+            (element) => element.userAttributeKey == "email", orElse: () {
+          return null;
+        });
+        AuthUserAttribute name = res2.firstWhere(
+            (element) => element.userAttributeKey == "name", orElse: () {
+          return null;
+        });
+        String emailstr = (email != null ? email.value : null);
+        String namestr = (name != null ? name.value : null);
+        _credentials = new SignedCredentials(username: emailstr, name: namestr);
+        print(email);
+      } else
         state = AuthState(authFlowStatus: AuthFlowStatus.guess);
       authStateController.add(state);
       //final state = AuthState(authFlowStatus: AuthFlowStatus.login);
