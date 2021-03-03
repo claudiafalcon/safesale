@@ -84,7 +84,8 @@ class _VerificationPageState extends State<VerificationPage> {
                           style: GoogleFonts.raleway(
                             textStyle: TextStyle(
                               color: Colors.white,
-                              fontSize: 22,
+                              fontSize: MediaQuery.of(context).size.height *
+                                  factorFontTitle1,
                               fontWeight: FontWeight.w600,
                             ),
                           )),
@@ -99,7 +100,8 @@ class _VerificationPageState extends State<VerificationPage> {
                           style: GoogleFonts.raleway(
                             textStyle: TextStyle(
                               color: Colors.white,
-                              fontSize: 18,
+                              fontSize: MediaQuery.of(context).size.height *
+                                  factorFontSmall,
                               fontWeight: FontWeight.w600,
                             ),
                           )),
@@ -119,7 +121,9 @@ class _VerificationPageState extends State<VerificationPage> {
                                 style: GoogleFonts.raleway(
                                   textStyle: TextStyle(
                                     color: Colors.red,
-                                    fontSize: 18,
+                                    fontSize:
+                                        MediaQuery.of(context).size.height *
+                                            factorFontSmall,
                                     fontWeight: FontWeight.w600,
                                   ),
                                 )),
@@ -141,7 +145,8 @@ class _VerificationPageState extends State<VerificationPage> {
                               style: GoogleFonts.raleway(
                                   textStyle: TextStyle(
                                 color: Colors.white,
-                                fontSize: 22,
+                                fontSize: MediaQuery.of(context).size.height *
+                                    factorFontTitle1,
                                 fontWeight: FontWeight.w600,
                               ))),
                         ),
@@ -157,7 +162,8 @@ class _VerificationPageState extends State<VerificationPage> {
                             style: GoogleFonts.raleway(
                                 textStyle: TextStyle(
                               color: Colors.white,
-                              fontSize: 15,
+                              fontSize: MediaQuery.of(context).size.height *
+                                  factorFontSmall,
                               fontWeight: FontWeight.normal,
                             ))),
                         SizedBox(width: 10),
@@ -167,7 +173,8 @@ class _VerificationPageState extends State<VerificationPage> {
                               style: GoogleFonts.raleway(
                                   textStyle: TextStyle(
                                 color: Color.fromRGBO(58, 184, 234, 1),
-                                fontSize: 15,
+                                fontSize: MediaQuery.of(context).size.height *
+                                    factorFontSmall,
                                 fontWeight: FontWeight.normal,
                               ))),
                         )

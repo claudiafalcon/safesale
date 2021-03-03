@@ -69,7 +69,8 @@ class _LoginPageState extends State<LoginPage> {
                         style: GoogleFonts.raleway(
                           textStyle: TextStyle(
                             color: Colors.white,
-                            fontSize: 25,
+                            fontSize: MediaQuery.of(context).size.height *
+                                factorFontTitle1,
                             fontWeight: FontWeight.w600,
                           ),
                         )),
@@ -123,7 +124,8 @@ class _LoginPageState extends State<LoginPage> {
                               style: GoogleFonts.raleway(
                                   textStyle: TextStyle(
                                 color: Colors.white,
-                                fontSize: 22,
+                                fontSize: MediaQuery.of(context).size.height *
+                                    factorFontTitle1,
                                 fontWeight: FontWeight.w600,
                               ))),
                         ),
@@ -139,7 +141,8 @@ class _LoginPageState extends State<LoginPage> {
                             style: GoogleFonts.raleway(
                                 textStyle: TextStyle(
                               color: Colors.white,
-                              fontSize: 15,
+                              fontSize: MediaQuery.of(context).size.height *
+                                  factorFontInput,
                               fontWeight: FontWeight.normal,
                             ))),
                         SizedBox(width: 10),

@@ -4,6 +4,7 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:safesale/auth_credentials.dart';
 import 'package:safesale/painters/softpaint.dart';
 import 'package:safesale/services/auth_service.dart';
+import 'package:safesale/services/user_service.dart';
 import 'package:safesale/variables.dart';
 
 class ProfilePage extends StatefulWidget {
@@ -19,6 +20,13 @@ class ProfilePage extends StatefulWidget {
 }
 
 class _ProfilePageState extends State<ProfilePage> {
+  final _userService = UserService();
+
+  void logout() {
+    _userService.resetUser();
+    widget.shouldLogOut();
+  }
+
   @override
   Widget build(BuildContext context) {
     //  widget.shouldLogOut();
@@ -60,7 +68,8 @@ class _ProfilePageState extends State<ProfilePage> {
                         style: GoogleFonts.raleway(
                           textStyle: TextStyle(
                             color: Colors.white,
-                            fontSize: 25,
+                            fontSize: MediaQuery.of(context).size.height *
+                                factorFontTitle1,
                             fontWeight: FontWeight.w600,
                           ),
                         )),
@@ -72,7 +81,8 @@ class _ProfilePageState extends State<ProfilePage> {
                         style: GoogleFonts.raleway(
                           textStyle: TextStyle(
                             color: Colors.white,
-                            fontSize: 18,
+                            fontSize: MediaQuery.of(context).size.height *
+                                factorFontInput,
                             fontWeight: FontWeight.w600,
                           ),
                         )),
@@ -80,7 +90,7 @@ class _ProfilePageState extends State<ProfilePage> {
                       height: 10,
                     ),
                     InkWell(
-                      onTap: widget.shouldLogOut,
+                      onTap: logout,
                       child: Container(
                         width: MediaQuery.of(context).size.width / 2,
                         height: 50,
@@ -93,7 +103,8 @@ class _ProfilePageState extends State<ProfilePage> {
                               style: GoogleFonts.raleway(
                                   textStyle: TextStyle(
                                 color: Colors.white,
-                                fontSize: 22,
+                                fontSize: MediaQuery.of(context).size.height *
+                                    factorFontTitle1,
                                 fontWeight: FontWeight.w600,
                               ))),
                         ),

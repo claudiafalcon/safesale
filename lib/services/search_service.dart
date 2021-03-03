@@ -57,11 +57,8 @@ class SearchService {
   }
 
   void checkState() async {
-    if (_properties != null) {
+    if (_properties != null && isAExternalSearch()) {
       final state2 = SearchState(searchFlowStatus: SearchFlowStatus.finalized);
-      searchStateController.add(state2);
-    } else {
-      final state2 = SearchState(searchFlowStatus: SearchFlowStatus.started);
       searchStateController.add(state2);
     }
   }

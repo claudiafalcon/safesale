@@ -13,6 +13,10 @@ final double factorPropertyTitle = 0.15;
 final double factorVerticalSpace = 0.05;
 final double factorPaddingSpace = 0.08;
 
+final double factorFontTitle1 = 0.025;
+final double factorFontInput = 0.02;
+final double factorFontSmall = 0.015;
+
 final String cloudfronturl = 'https://didsugvpn60.cloudfront.net/public/';
 
 farsiSimpleStyle(double size, [Color color, FontWeight fw = FontWeight.w400]) {
@@ -86,7 +90,7 @@ class _InputDecorationPassState extends State<InputDecorationPass> {
       style: GoogleFonts.raleway(
           textStyle: TextStyle(
         color: Color(0xff003b8b),
-        fontSize: 22,
+        fontSize: MediaQuery.of(context).size.height * factorFontInput,
         fontWeight: FontWeight.w600,
       )),
       controller: widget.controller,
@@ -98,7 +102,8 @@ class _InputDecorationPassState extends State<InputDecorationPass> {
         return FormValidator().validateNull();
       },
       decoration: InputDecoration(
-          contentPadding: EdgeInsets.only(left: 15, top: 15, bottom: 15),
+          contentPadding:
+              EdgeInsets.only(left: 15, top: 15, bottom: 15, right: 15),
           enabledBorder: OutlineInputBorder(
             borderRadius: BorderRadius.circular(20),
             borderSide: const BorderSide(color: Colors.white, width: 0.0),
@@ -109,16 +114,24 @@ class _InputDecorationPassState extends State<InputDecorationPass> {
           hintStyle: GoogleFonts.raleway(
               textStyle: TextStyle(
             color: Color(0xff003b8b),
-            fontSize: 22,
+            fontSize: MediaQuery.of(context).size.height * factorFontInput,
             fontWeight: FontWeight.w600,
           )),
           border: OutlineInputBorder(
             borderRadius: BorderRadius.circular(20),
           ),
+          prefix: widget.isPassword == true
+              ? Container(
+                  width: 45,
+                  child: Container(),
+                )
+              : null,
           suffixIcon: widget.isPassword == true
               ? IconButton(
-                  icon: Icon(
-                      _isObscure ? Icons.visibility : Icons.visibility_off),
+                  icon: Container(
+                    child: Icon(
+                        _isObscure ? Icons.visibility : Icons.visibility_off),
+                  ),
                   onPressed: () {
                     setState(() {
                       _isObscure = !_isObscure;

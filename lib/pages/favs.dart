@@ -44,7 +44,8 @@ class _FavsPageState extends State<FavsPage> {
           child: Column(children: [
             Container(
                 padding: EdgeInsets.all(factorPaddingSpace * 100),
-                height: 160,
+                height:
+                    MediaQuery.of(context).size.height * factorPropertyTitle,
                 child: Row(
                   crossAxisAlignment: CrossAxisAlignment.end,
                   mainAxisSize: MainAxisSize.min,
@@ -147,25 +148,31 @@ class _FavsPageState extends State<FavsPage> {
                           padding: const EdgeInsets.all(8.0),
                           //color: Colors.green,
                           width: MediaQuery.of(context).size.width * 0.9 * 0.7,
-                          child: Column(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Text(
-                                  list[index].property.nombre,
-                                  style: GoogleFonts.raleway(
-                                      color: Color.fromRGBO(0, 59, 139, 1),
-                                      fontSize: 13,
-                                      fontWeight: FontWeight.w300),
-                                ),
-                                Text(
-                                  list[index].property.descripcion,
-                                  style: GoogleFonts.raleway(
-                                      color: Color.fromRGBO(0, 59, 139, 1),
-                                      fontSize: 13,
-                                      fontWeight: FontWeight.w300),
-                                ),
-                              ])),
+                          child: SingleChildScrollView(
+                            child: Column(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Text(
+                                    list[index].property.nombre,
+                                    style: GoogleFonts.raleway(
+                                        color: Color.fromRGBO(0, 59, 139, 1),
+                                        fontSize:
+                                            MediaQuery.of(context).size.height *
+                                                factorFontSmall,
+                                        fontWeight: FontWeight.w300),
+                                  ),
+                                  Text(
+                                    list[index].property.descripcion,
+                                    style: GoogleFonts.raleway(
+                                        color: Color.fromRGBO(0, 59, 139, 1),
+                                        fontSize:
+                                            MediaQuery.of(context).size.height *
+                                                factorFontSmall,
+                                        fontWeight: FontWeight.w300),
+                                  ),
+                                ]),
+                          )),
                       InkWell(
                         onTap: () => dosearch(item.property),
                         child: Container(
@@ -180,7 +187,8 @@ class _FavsPageState extends State<FavsPage> {
                                 style: GoogleFonts.raleway(
                                     textStyle: TextStyle(
                                   color: Colors.white,
-                                  fontSize: 15,
+                                  fontSize: MediaQuery.of(context).size.height *
+                                      factorFontInput,
                                   fontWeight: FontWeight.w600,
                                 ))),
                           ),

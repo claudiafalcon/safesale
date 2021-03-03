@@ -285,7 +285,8 @@ class _RightPropertyBarState extends State<RightPropertyBar> {
                                               'images/CORAZONAZUL.svg',
                                               width: _propertyIconSize,
                                               height: _propertyIconSize,
-                                              color: Colors.white,
+                                              color:
+                                                  Color.fromRGBO(0, 59, 139, 1),
                                             )
                                           : SvgPicture.asset(
                                               'images/CORAZON PERFIL.svg',

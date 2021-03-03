@@ -171,8 +171,8 @@ class _SafeSalePlayerState extends State<SafeSalePlayer>
                               m3u8quality = e.dataquality;
                               m3u8show = false;
                               onselectquality(e);
-                              print(
-                                  "--- quality select ---\nquality : ${e.dataquality}\nlink : ${e.dataurl}");
+                              //            print(
+                              //               "--- quality select ---\nquality : ${e.dataquality}\nlink : ${e.dataurl}");
                             },
                             child: Container(
                                 width: 90,
@@ -206,7 +206,7 @@ class _SafeSalePlayerState extends State<SafeSalePlayer>
     final isNetwork = netRegx.hasMatch(url);
     final a = Uri.parse(url);
 
-    print("parse url data end : ${a.pathSegments.last}");
+    //  print("parse url data end : ${a.pathSegments.last}");
     if (isNetwork) {
       setState(() {
         offline = false;
@@ -216,10 +216,10 @@ class _SafeSalePlayerState extends State<SafeSalePlayer>
           setState(() {
             playtype = "MP4";
           });
-          print("urlend : mp4 $playtype");
+          //       print("urlend : mp4 $playtype");
           // widget.onpeningvideo("MP4");
         }
-        print("urlend : mp4");
+        //      print("urlend : mp4");
         videoControllSetup(url);
       } else if (a.pathSegments.last.endsWith("m3u8")) {
         if (widget.onpeningvideo == null) {
@@ -228,20 +228,20 @@ class _SafeSalePlayerState extends State<SafeSalePlayer>
           });
           // widget.onpeningvideo("M3U8");
         }
-        print("urlend : m3u8");
+        //      print("urlend : m3u8");
         videoControllSetup(url);
         getm3u8(url);
       } else {
-        print("urlend : null");
+        //      print("urlend : null");
         videoControllSetup(url);
         getm3u8(url);
       }
-      print("--- Current Video Status ---\noffline : $offline");
+      //    print("--- Current Video Status ---\noffline : $offline");
     } else {
       setState(() {
         offline = true;
-        print(
-            "--- Current Video Status ---\noffline : $offline \n --- :3 done url check ---");
+        //      print(
+        //         "--- Current Video Status ---\noffline : $offline \n --- :3 done url check ---");
       });
       videoControllSetup(url);
     }
@@ -250,10 +250,10 @@ class _SafeSalePlayerState extends State<SafeSalePlayer>
 // M3U8 Data Setup
   void getm3u8(String video) {
     if (safesale.length > 0) {
-      print("${safesale.length} : data start clean");
+      //   print("${safesale.length} : data start clean");
       m3u8clean();
     }
-    print("---- m3u8 fesh start ----\n$video\n--- please wait –––");
+    // print("---- m3u8 fesh start ----\n$video\n--- please wait –––");
     m3u8video(video);
   }
 
@@ -272,7 +272,7 @@ class _SafeSalePlayerState extends State<SafeSalePlayer>
     setState(
       () {
         if (m3u8Content != null) {
-          print("--- HLS Old Data ----\n$m3u8Content");
+          //     print("--- HLS Old Data ----\n$m3u8Content");
           m3u8Content = null;
         }
       },
@@ -345,8 +345,8 @@ class _SafeSalePlayerState extends State<SafeSalePlayer>
       },
     );*/
     M3U8s m3u8s = M3U8s(m3u8s: safesale);
-    print(
-        "--- m3u8 file write ---\n${safesale.map((e) => e.dataquality == e.dataurl).toList()}\nlength : ${safesale.length}\nSuccess");
+    //   print(
+    //      "--- m3u8 file write ---\n${safesale.map((e) => e.dataquality == e.dataurl).toList()}\nlength : ${safesale.length}\nSuccess");
     return m3u8s;
   }
 
@@ -393,8 +393,8 @@ class _SafeSalePlayerState extends State<SafeSalePlayer>
 
   void videoInit(String url) {
     if (offline == false) {
-      print(
-          "--- Player Status ---\nplay url : $url\noffline : $offline\n--- start playing –––");
+      //    print(
+      //       "--- Player Status ---\nplay url : $url\noffline : $offline\n--- start playing –––");
 
       if (playtype == "MP4") {
         // Play MP4
@@ -413,8 +413,8 @@ class _SafeSalePlayerState extends State<SafeSalePlayer>
                   .catchError((e) => setState(() => hasInitError = true));
       }
     } else {
-      print(
-          "--- Player Status ---\nplay url : $url\noffline : $offline\n--- start playing –––");
+      //    print(
+      //        "--- Player Status ---\nplay url : $url\noffline : $offline\n--- start playing –––");
       controller = VideoPlayerController.file(File(url))
         ..initialize()
             .then((value) => setState(() => hasInitError = false))
@@ -456,15 +456,15 @@ class _SafeSalePlayerState extends State<SafeSalePlayer>
         final Directory directory = await getApplicationDocumentsDirectory();
         final File file =
             File('${directory.path}/yoyo${data.dataquality}.m3u8');
-        print("read file success");
+        //  print("read file success");
         text = await file.readAsString();
-        print("data : $text  :: data");
+        //  print("data : $text  :: data");
         localm3u8play(file);
         // videoControllSetup(file);
       } catch (e) {
         print("Couldn't read file ${data.dataquality} e: $e");
       }
-      print("data : ${data.dataquality}");
+      // print("data : ${data.dataquality}");
     }
   }
 
@@ -479,30 +479,29 @@ class _SafeSalePlayerState extends State<SafeSalePlayer>
   }
 
   void m3u8clean() async {
-    print(safesale.length);
     for (int i = 2; i < safesale.length; i++) {
       try {
         final Directory directory = await getApplicationDocumentsDirectory();
         final File file =
             File('${directory.path}/${safesale[i].dataquality}.m3u8');
         file.delete();
-        print("delete success $file");
+        //  print("delete success $file");
       } catch (e) {
-        print("Couldn't delete file $e");
+        //  print("Couldn't delete file $e");
       }
     }
     try {
-      print("Audio m3u8 list clean");
+      // print("Audio m3u8 list clean");
       audioList.clear();
     } catch (e) {
-      print("Audio list clean error $e");
+      // print("Audio list clean error $e");
     }
     audioList.clear();
     try {
-      print("m3u8 data list clean");
+      // print("m3u8 data list clean");
       safesale.clear();
     } catch (e) {
-      print("m3u8 video list clean error $e");
+      // print("m3u8 video list clean error $e");
     }
   }
 

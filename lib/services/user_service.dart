@@ -86,6 +86,10 @@ class UserService {
     return _user;
   }
 
+  void resetUser() {
+    _user = null;
+  }
+
   Future<void> initUser() async {
     if (userStateController != null) {
       final state = UserState(userFlowStatus: UserFlowStatus.started);

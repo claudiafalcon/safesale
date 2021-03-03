@@ -38,14 +38,11 @@ class _SignUpState extends State<SignUp> {
       final name = namecontroller.text.trim().toUpperCase();
       final username = emailcontroller.text.trim().toLowerCase();
       final password = passwordcontroller.text.trim();
-      print('Successfully configured Amplify  222🎉');
+
       final credentials =
           SignUpCredentials(name: name, username: username, password: password);
 
-      print('Successfully configured Amplify  333🎉');
-
       widget.didProvideCredentials(credentials);
-      print('AAA ${credentials.username}');
     } else {
       setState(() {
         _validate = true;
@@ -59,7 +56,7 @@ class _SignUpState extends State<SignUp> {
   bool _validate = false;
   @override
   Widget build(BuildContext context) {
-    var padding = MediaQuery.of(context).size.height * 0.04;
+    var padding = MediaQuery.of(context).size.height * 0.03;
     return Scaffold(
       resizeToAvoidBottomInset: false,
       backgroundColor: Color.fromRGBO(67, 73, 75, 0.8),
@@ -76,199 +73,211 @@ class _SignUpState extends State<SignUp> {
                 alignment: Alignment.center,
                 child: Form(
                   key: _key,
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.start,
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    children: [
-                      Padding(
-                        padding: EdgeInsets.all(padding),
-                        child: SvgPicture.asset(
-                          'images/LoadingImage.svg',
-                          width: MediaQuery.of(context).size.height *
-                              factorAuthLogoWd,
-                          height: MediaQuery.of(context).size.height *
-                              factorAuthLogoWd,
+                  child: SingleChildScrollView(
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: [
+                        Padding(
+                          padding: EdgeInsets.all(padding),
+                          child: SvgPicture.asset(
+                            'images/LoadingImage.svg',
+                            width: MediaQuery.of(context).size.height *
+                                factorAuthLogoWd,
+                            height: MediaQuery.of(context).size.height *
+                                factorAuthLogoWd,
+                          ),
                         ),
-                      ),
-                      Padding(
-                        padding: EdgeInsets.only(
-                            left: padding, right: padding, bottom: padding),
-                        child: Text(
-                            "Recibe notificaciones y disfruta de la experiencia completa de la aplicación.",
-                            textAlign: TextAlign.justify,
-                            style: GoogleFonts.raleway(
-                              textStyle: TextStyle(
-                                color: Colors.white,
-                                fontSize: 18,
-                                fontWeight: FontWeight.w600,
-                              ),
-                            )),
-                      ),
-                      Container(
-                        width: MediaQuery.of(context).size.width,
-                        margin: EdgeInsets.only(left: 20, right: 20),
-                        child: InputDecorationPass(
-                            controller: namecontroller, text: "Nombre"),
-                      ),
-                      SizedBox(
-                        height: 10,
-                      ),
-                      Container(
+                        Padding(
+                          padding: EdgeInsets.only(
+                              left: padding, right: padding, bottom: padding),
+                          child: Text(
+                              "Recibe notificaciones y disfruta de la experiencia completa de la aplicación.",
+                              textAlign: TextAlign.justify,
+                              style: GoogleFonts.raleway(
+                                textStyle: TextStyle(
+                                  color: Colors.white,
+                                  fontSize: MediaQuery.of(context).size.height *
+                                      factorFontInput,
+                                  fontWeight: FontWeight.w600,
+                                ),
+                              )),
+                        ),
+                        Container(
                           width: MediaQuery.of(context).size.width,
                           margin: EdgeInsets.only(left: 20, right: 20),
                           child: InputDecorationPass(
-                              controller: emailcontroller,
-                              text: "E-mail",
-                              validator: "email")),
-                      SizedBox(
-                        height: 10,
-                      ),
-                      Container(
-                        width: MediaQuery.of(context).size.width,
-                        margin: EdgeInsets.only(left: 20, right: 20),
-                        child: InputDecorationPass(
-                          controller: passwordcontroller,
-                          text: "   Password",
-                          validator: "password",
-                          isPassword: true,
+                              controller: namecontroller, text: "Nombre"),
                         ),
-                      ),
-                      widget.error != null
-                          ? Padding(
-                              padding: const EdgeInsets.all(6.0),
-                              child: widget.error == "NotVerified"
-                                  ? Row(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.center,
-                                      children: [
-                                        Text("Correo ya registrado verificalo",
-                                            style: GoogleFonts.raleway(
-                                                textStyle: TextStyle(
-                                              color: Colors.red,
-                                              fontSize: 15,
-                                              fontWeight: FontWeight.normal,
-                                            ))),
-                                        SizedBox(width: 10),
-                                        InkWell(
-                                          onTap: widget.shouldShowVerification,
-                                          child: Text("aquí",
+                        SizedBox(
+                          height: 10,
+                        ),
+                        Container(
+                            width: MediaQuery.of(context).size.width,
+                            margin: EdgeInsets.only(left: 20, right: 20),
+                            child: InputDecorationPass(
+                                controller: emailcontroller,
+                                text: "E-mail",
+                                validator: "email")),
+                        SizedBox(
+                          height: 10,
+                        ),
+                        Container(
+                          width: MediaQuery.of(context).size.width,
+                          margin: EdgeInsets.only(left: 20, right: 20),
+                          child: InputDecorationPass(
+                            controller: passwordcontroller,
+                            text: "   Password",
+                            validator: "password",
+                            isPassword: true,
+                          ),
+                        ),
+                        widget.error != null
+                            ? Padding(
+                                padding: const EdgeInsets.all(6.0),
+                                child: widget.error == "NotVerified"
+                                    ? Row(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.center,
+                                        children: [
+                                          Text(
+                                              "Correo ya registrado verificalo",
                                               style: GoogleFonts.raleway(
                                                   textStyle: TextStyle(
-                                                color: Color.fromRGBO(
-                                                    58, 184, 234, 1),
+                                                color: Colors.red,
                                                 fontSize: 15,
                                                 fontWeight: FontWeight.normal,
                                               ))),
-                                        )
-                                      ],
-                                    )
-                                  : Text(widget.error,
-                                      textAlign: TextAlign.center,
-                                      style: GoogleFonts.raleway(
-                                        textStyle: TextStyle(
-                                          color: Colors.red,
-                                          fontSize: 18,
-                                          fontWeight: FontWeight.w600,
-                                        ),
-                                      )),
-                            )
-                          : SizedBox(
-                              height: 10,
-                            ),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          SizedBox(
-                            width: MediaQuery.of(context).size.width * 0.05,
-                          ),
-                          InkWell(
-                            onTap: () => Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                    builder: (context) => TermsofPolicy())),
-                            child: Text("Acepto el aviso de privacidad",
-                                textAlign: TextAlign.center,
-                                style: GoogleFonts.raleway(
-                                  textStyle: TextStyle(
-                                    color: Colors.white,
-                                    fontSize: 14,
-                                    fontWeight: FontWeight.w600,
-                                  ),
-                                )),
-                          ),
-                          Container(
-                            width: MediaQuery.of(context).size.width * 0.25,
-                            child: MergeSemantics(
-                              child: Visibility(
-                                maintainSize: true,
-                                maintainAnimation: true,
-                                maintainState: true,
-                                visible: isVisible,
-                                child: ListTile(
-                                  title: Text(""),
-                                  leading: Switch(
-                                    value: _lights,
-                                    activeColor:
-                                        Color.fromRGBO(58, 184, 234, 1),
-                                    onChanged: (bool value) {
-                                      setState(() {
-                                        _lights = !_lights;
-                                      });
-                                    },
+                                          SizedBox(width: 10),
+                                          InkWell(
+                                            onTap:
+                                                widget.shouldShowVerification,
+                                            child: Text("aquí",
+                                                style: GoogleFonts.raleway(
+                                                    textStyle: TextStyle(
+                                                  color: Color.fromRGBO(
+                                                      58, 184, 234, 1),
+                                                  fontSize: 15,
+                                                  fontWeight: FontWeight.normal,
+                                                ))),
+                                          )
+                                        ],
+                                      )
+                                    : Text(widget.error,
+                                        textAlign: TextAlign.center,
+                                        style: GoogleFonts.raleway(
+                                          textStyle: TextStyle(
+                                            color: Colors.red,
+                                            fontSize: 18,
+                                            fontWeight: FontWeight.w600,
+                                          ),
+                                        )),
+                              )
+                            : SizedBox(
+                                height: 0,
+                              ),
+                        Center(
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              SizedBox(
+                                width: MediaQuery.of(context).size.width * 0.05,
+                              ),
+                              InkWell(
+                                onTap: () => Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                        builder: (context) => TermsofPolicy())),
+                                child: Text("Acepto el aviso de privacidad",
+                                    textAlign: TextAlign.center,
+                                    style: GoogleFonts.raleway(
+                                      textStyle: TextStyle(
+                                        color: Colors.white,
+                                        fontSize:
+                                            MediaQuery.of(context).size.height *
+                                                factorFontSmall,
+                                        fontWeight: FontWeight.w600,
+                                      ),
+                                    )),
+                              ),
+                              Container(
+                                width: MediaQuery.of(context).size.width * 0.25,
+                                child: MergeSemantics(
+                                  child: ListTile(
+                                    title: Text(""),
+                                    leading: Container(
+                                      width: 50,
+                                      height: 30,
+                                      child: Switch(
+                                        value: _lights,
+                                        activeColor:
+                                            Color.fromRGBO(58, 184, 234, 1),
+                                        onChanged: (bool value) {
+                                          setState(() {
+                                            _lights = !_lights;
+                                          });
+                                        },
+                                      ),
+                                    ),
                                   ),
                                 ),
-                              ),
-                            ),
-                          )
-                        ],
-                      ),
-                      InkWell(
-                        onTap: () => registeruser(),
-                        child: Container(
-                          width: MediaQuery.of(context).size.width / 2,
-                          height: 50,
-                          decoration: BoxDecoration(
-                            color: Color.fromRGBO(58, 184, 234, 1),
-                            borderRadius: BorderRadius.circular(20),
+                              )
+                            ],
                           ),
-                          child: Center(
-                            child: Text("Crear mi cuenta",
+                        ),
+                        InkWell(
+                          onTap: () => registeruser(),
+                          child: Container(
+                            width: MediaQuery.of(context).size.width / 2,
+                            height: 50,
+                            decoration: BoxDecoration(
+                              color: Color.fromRGBO(58, 184, 234, 1),
+                              borderRadius: BorderRadius.circular(20),
+                            ),
+                            child: Center(
+                              child: Text("Crear mi cuenta",
+                                  style: GoogleFonts.raleway(
+                                      textStyle: TextStyle(
+                                    color: Colors.white,
+                                    fontSize:
+                                        MediaQuery.of(context).size.height *
+                                            factorFontTitle1,
+                                    fontWeight: FontWeight.w600,
+                                  ))),
+                            ),
+                          ),
+                        ),
+                        SizedBox(
+                          height: 10,
+                        ),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Text("Ya tienes cuenta",
                                 style: GoogleFonts.raleway(
                                     textStyle: TextStyle(
                                   color: Colors.white,
-                                  fontSize: 22,
-                                  fontWeight: FontWeight.w600,
-                                ))),
-                          ),
-                        ),
-                      ),
-                      SizedBox(
-                        height: 10,
-                      ),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          Text("Ya tienes cuenta",
-                              style: GoogleFonts.raleway(
-                                  textStyle: TextStyle(
-                                color: Colors.white,
-                                fontSize: 15,
-                                fontWeight: FontWeight.normal,
-                              ))),
-                          SizedBox(width: 10),
-                          InkWell(
-                            onTap: widget.shouldShowLogin,
-                            child: Text("Inicia sesión",
-                                style: GoogleFonts.raleway(
-                                    textStyle: TextStyle(
-                                  color: Color.fromRGBO(58, 184, 234, 1),
-                                  fontSize: 15,
+                                  fontSize: MediaQuery.of(context).size.height *
+                                      factorFontSmall,
                                   fontWeight: FontWeight.normal,
                                 ))),
-                          )
-                        ],
-                      )
-                    ],
+                            SizedBox(width: 10),
+                            InkWell(
+                              onTap: widget.shouldShowLogin,
+                              child: Text("Inicia sesión",
+                                  style: GoogleFonts.raleway(
+                                      textStyle: TextStyle(
+                                    color: Color.fromRGBO(58, 184, 234, 1),
+                                    fontSize:
+                                        MediaQuery.of(context).size.height *
+                                            factorFontSmall,
+                                    fontWeight: FontWeight.normal,
+                                  ))),
+                            )
+                          ],
+                        )
+                      ],
+                    ),
                   ),
                 ),
               ),

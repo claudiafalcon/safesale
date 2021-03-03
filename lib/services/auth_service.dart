@@ -83,7 +83,6 @@ class AuthService {
         String emailstr = (email != null ? email.value : null);
         String namestr = (name != null ? name.value : null);
         _credentials = new SignedCredentials(username: emailstr, name: namestr);
-        print(email);
       } else {
         error = "El usuario no se pudo loguear. Intenta mas tarde.";
         final state = AuthState(authFlowStatus: AuthFlowStatus.login_error);
@@ -114,7 +113,7 @@ class AuthService {
           options: CognitoSignUpOptions(userAttributes: userAttributes));
 
       // 4
-      if (result.isSignUpComplete) {
+      if (result.isSignUpComplete && !(result.nextStep is AuthNextSignUpStep)) {
         loginWithCredentials(credentials);
       } else {
         // 5
@@ -194,19 +193,17 @@ class AuthService {
         String emailstr = (email != null ? email.value : null);
         String namestr = (name != null ? name.value : null);
         _credentials = new SignedCredentials(username: emailstr, name: namestr);
-        print(email);
       } else
         state = AuthState(authFlowStatus: AuthFlowStatus.guess);
       authStateController.add(state);
       //final state = AuthState(authFlowStatus: AuthFlowStatus.login);
-      print('State 1');
+
       authStateController.add(state);
     } catch (_) {
       CognitoAuthSession res = await Amplify.Auth.fetchAuthSession(
           options: CognitoSessionOptions(getAWSCredentials: true));
       final state = AuthState(authFlowStatus: AuthFlowStatus.guess);
       authStateController.add(state);
-      print('State 2');
     }
   }
 }
