@@ -37,6 +37,8 @@ class _RightPropertyBarState extends State<RightPropertyBar> {
   final _searchService = SearchService();
   final _userService = UserService();
 
+  bool isfav = false;
+
   LocationData currentLocation;
 
   buildprofile(int total, size) {
@@ -100,6 +102,12 @@ class _RightPropertyBarState extends State<RightPropertyBar> {
     // destino codificado para este ejemplo
   }
 
+  @override
+  initState() {
+    super.initState();
+    isFav(widget.property.id);
+  }
+
   Future<bool> isFav(String id) async {
     if (widget.status != AuthFlowStatus.session) return false;
     await _userService.initUser();
@@ -110,21 +118,18 @@ class _RightPropertyBarState extends State<RightPropertyBar> {
       return null;
     });
     if (fav == null) return false;
+    isfav = true;
+    setState(() {
+      isfav = true;
+    });
     return true;
   }
 
-  likevideo(String id) async {
-    await _userService.initUser();
-    Fav fav = _userService
-        .getUser()
-        .favs
-        .firstWhere((element) => element.property.id == id, orElse: () {
-      return null;
-    });
-    if (fav == null)
-      await _userService.addFav(id);
-    else
-      await _userService.deleteFav(fav.id);
+  likevideo(String id) {
+    if (isfav == false) {
+      _userService.addFav(id);
+    } else
+      _userService.deleteFav(id);
   }
 
   @override
@@ -250,53 +255,43 @@ class _RightPropertyBarState extends State<RightPropertyBar> {
                           SizedBox(
                             height: 60,
                           ),
-                          FutureBuilder<bool>(
-                              future: isFav(widget.property.id),
-                              builder: (context, snapshot) {
-                                if (snapshot.hasData) {
-                                  return InkWell(
-                                      onTap: () async {
-                                        if (widget.status !=
-                                            AuthFlowStatus.session) {
-                                          await showDialog(
-                                              context: context,
-                                              child: new AlertDialog(
-                                                title: new Text(
-                                                  'Ups! ',
-                                                  style: TextStyle(
-                                                      fontFamily: "Smash"),
-                                                ),
-                                                content: new Text(
-                                                  'La funcionalidad de Favoritos solo esta disponible para nuestros usuarios registrados. Corre Registrate! ...',
-                                                  style: TextStyle(
-                                                      fontFamily: "Smash"),
-                                                ),
-                                              ));
+                          InkWell(
+                              onTap: () async {
+                                if (widget.status != AuthFlowStatus.session) {
+                                  await showDialog(
+                                      context: context,
+                                      child: new AlertDialog(
+                                        title: new Text(
+                                          'Ups! ',
+                                          style: TextStyle(fontFamily: "Smash"),
+                                        ),
+                                        content: new Text(
+                                          'La funcionalidad de Favoritos solo esta disponible para nuestros usuarios registrados. Corre Registrate! ...',
+                                          style: TextStyle(fontFamily: "Smash"),
+                                        ),
+                                      ));
 
-                                          // Doesn't run
-                                          Navigator.of(context).maybePop();
-                                        } else {
-                                          await likevideo(widget.property.id);
-                                          setState(() {});
-                                        }
-                                      },
-                                      child: snapshot.data == true
-                                          ? SvgPicture.asset(
-                                              'images/CORAZONAZUL.svg',
-                                              width: _propertyIconSize,
-                                              height: _propertyIconSize,
-                                              color:
-                                                  Color.fromRGBO(0, 59, 139, 1),
-                                            )
-                                          : SvgPicture.asset(
-                                              'images/CORAZON PERFIL.svg',
-                                              width: _propertyIconSize,
-                                              height: _propertyIconSize,
-                                              color: Colors.white));
+                                  // Doesn't run
+                                  Navigator.of(context).maybePop();
                                 } else {
-                                  return Container();
+                                  await likevideo(widget.property.id);
+                                  setState(() {
+                                    isfav = !isfav;
+                                  });
                                 }
-                              }),
+                              },
+                              child: isfav == true
+                                  ? SvgPicture.asset(
+                                      'images/CORAZONAZUL.svg',
+                                      width: _propertyIconSize,
+                                      height: _propertyIconSize,
+                                      color: Color.fromRGBO(0, 59, 139, 1),
+                                    )
+                                  : SvgPicture.asset(
+                                      'images/CORAZON PERFIL.svg',
+                                      width: _propertyIconSize,
+                                      height: _propertyIconSize,
+                                      color: Colors.white)),
                           SizedBox(
                             height: _propertyIconSize,
                           )

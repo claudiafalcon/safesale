@@ -20,6 +20,7 @@ import 'package:safesale/models/user.dart';
 import 'package:amplify_auth_cognito/amplify_auth_cognito.dart';
 
 import 'package:amplify_flutter/amplify.dart';
+import 'package:safesale/models/userfav.dart';
 
 enum UserFlowStatus { started, finalized, error, empty }
 
@@ -192,9 +193,13 @@ class UserService {
 
   Future<void> deleteFav(String id) async {
     try {
+      Fav fav = _user.favs.firstWhere((element) => element.property.id == id,
+          orElse: () {
+        return null;
+      });
       var operation = Amplify.API.mutate(
           request: GraphQLRequest<String>(
-              document: m_deleteFav, variables: {'id': id}));
+              document: m_deleteFav, variables: {'id': fav.id}));
 
       var response = await operation.response;
       var data = response.data;
