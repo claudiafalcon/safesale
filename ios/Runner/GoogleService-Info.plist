@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>CLIENT_ID</key>
+	<string>771511132749-p0ov7300pejp0scou5uo5fg3pbdbiiqd.apps.googleusercontent.com</string>
+	<key>REVERSED_CLIENT_ID</key>
+	<string>com.googleusercontent.apps.771511132749-p0ov7300pejp0scou5uo5fg3pbdbiiqd</string>
+	<key>API_KEY</key>
+	<string>AIzaSyCNvBEV_A44CL5m_9hi-rNt_muDs_SnBjY</string>
+	<key>GCM_SENDER_ID</key>
+	<string>771511132749</string>
+	<key>PLIST_VERSION</key>
+	<string>1</string>
+	<key>BUNDLE_ID</key>
+	<string>com.claud.safesale</string>
+	<key>PROJECT_ID</key>
+	<string>safesalenotify</string>
+	<key>STORAGE_BUCKET</key>
+	<string>safesalenotify.appspot.com</string>
+	<key>IS_ADS_ENABLED</key>
+	<false></false>
+	<key>IS_ANALYTICS_ENABLED</key>
+	<false></false>
+	<key>IS_APPINVITE_ENABLED</key>
+	<true></true>
+	<key>IS_GCM_ENABLED</key>
+	<true></true>
+	<key>IS_SIGNIN_ENABLED</key>
+	<true></true>
+	<key>GOOGLE_APP_ID</key>
+	<string>1:771511132749:ios:034b54909e6727d727b204</string>
+</dict>
+</plist>

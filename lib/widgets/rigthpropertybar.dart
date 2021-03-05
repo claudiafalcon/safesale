@@ -105,7 +105,7 @@ class _RightPropertyBarState extends State<RightPropertyBar> {
   @override
   initState() {
     super.initState();
-    isFav(widget.property.id);
+    if (widget.property != null) isFav(widget.property.id);
   }
 
   Future<bool> isFav(String id) async {
@@ -260,16 +260,18 @@ class _RightPropertyBarState extends State<RightPropertyBar> {
                                 if (widget.status != AuthFlowStatus.session) {
                                   await showDialog(
                                       context: context,
-                                      child: new AlertDialog(
-                                        title: new Text(
-                                          'Ups! ',
-                                          style: TextStyle(fontFamily: "Smash"),
-                                        ),
-                                        content: new Text(
-                                          'La funcionalidad de Favoritos solo esta disponible para nuestros usuarios registrados. Corre Registrate! ...',
-                                          style: TextStyle(fontFamily: "Smash"),
-                                        ),
-                                      ));
+                                      builder: (_) => new AlertDialog(
+                                            title: new Text(
+                                              'Ups! ',
+                                              style: TextStyle(
+                                                  fontFamily: "Smash"),
+                                            ),
+                                            content: new Text(
+                                              'La funcionalidad de Favoritos solo esta disponible para nuestros usuarios registrados. Corre Registrate! ...',
+                                              style: TextStyle(
+                                                  fontFamily: "Smash"),
+                                            ),
+                                          ));
 
                                   // Doesn't run
                                   Navigator.of(context).maybePop();
