@@ -45,7 +45,7 @@ class _VideoPageState extends State<VideoPage> {
     super.initState();
     //  _listenForPermissionStatus();
 
-    setInitialLocation();
+    // setInitialLocation();
   }
 
   @override
@@ -181,6 +181,7 @@ class _VideoPageState extends State<VideoPage> {
 
   @override
   Widget build(BuildContext context) {
+    setInitialLocation();
     return Scaffold(
       backgroundColor: Colors.white,
       body: StreamBuilder<SearchState>(
@@ -220,6 +221,7 @@ class _VideoPageState extends State<VideoPage> {
                     );
                   else {
                     result = _searchService.getProperties();
+                    _searchService.turnOffExternalSearch();
                     return PageView.builder(
                         itemCount: result.length,
                         controller:

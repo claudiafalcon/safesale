@@ -237,18 +237,6 @@ class _RightPropertyBarState extends State<RightPropertyBar> {
                     )
                   ],
                 ),
-                Column(
-                  children: [
-                    InkWell(
-                      onTap: () => setInitialLocation(),
-                      child: Icon(
-                        Icons.explore,
-                        color: Colors.white,
-                        size: _filterIconSize,
-                      ),
-                    ),
-                  ],
-                ),
                 widget.total != 0
                     ? Column(
                         children: [

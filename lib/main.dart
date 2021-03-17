@@ -1,12 +1,16 @@
 import 'package:amplify_flutter/amplify.dart';
 import 'package:amplify_auth_cognito/amplify_auth_cognito.dart';
 import 'package:amplify_storage_s3/amplify_storage_s3.dart';
+import 'package:firebase_core/firebase_core.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
+import 'package:safesale/models/pushnotification.dart';
 import 'package:safesale/services/auth_service.dart';
 import 'package:safesale/amplifyconfiguration.dart';
 import 'package:safesale/home.dart';
 
 import 'package:amplify_api/amplify_api.dart';
+import 'package:safesale/services/notification_service.dart';
 
 void main() {
   runApp(MyApp());
@@ -19,6 +23,7 @@ class MyApp extends StatefulWidget {
 
 class _MyAppState extends State<MyApp> {
   final _authService = AuthService();
+
   bool _amplifyConfigured = false;
 
   @override
