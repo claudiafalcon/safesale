@@ -11,9 +11,14 @@ class ProfilePage extends StatefulWidget {
   final AuthFlowStatus authstatus;
   final SignedCredentials credentials;
   final VoidCallback shouldLogOut;
+  final VoidCallback detachDevice;
 
   const ProfilePage(
-      {Key key, this.authstatus, this.credentials, this.shouldLogOut})
+      {Key key,
+      this.authstatus,
+      this.credentials,
+      this.shouldLogOut,
+      this.detachDevice})
       : super(key: key);
   @override
   _ProfilePageState createState() => _ProfilePageState();
@@ -22,8 +27,9 @@ class ProfilePage extends StatefulWidget {
 class _ProfilePageState extends State<ProfilePage> {
   final _userService = UserService();
 
-  void logout() {
-    _userService.resetUser();
+  void logout() async {
+    // await widget.detachDevice();
+    //  _userService.resetUser();
     widget.shouldLogOut();
   }
 
@@ -61,9 +67,11 @@ class _ProfilePageState extends State<ProfilePage> {
                     ),
                     Text(
                         "Hola: " +
-                            (widget.credentials.name != null
-                                ? widget.credentials.name
-                                : widget.credentials.username),
+                            (widget.credentials != null
+                                ? (widget.credentials.name != null
+                                    ? widget.credentials.name
+                                    : widget.credentials.username)
+                                : ''),
                         textAlign: TextAlign.center,
                         style: GoogleFonts.raleway(
                           textStyle: TextStyle(

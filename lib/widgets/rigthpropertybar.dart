@@ -7,6 +7,7 @@ import 'package:safesale/services/auth_service.dart';
 import 'package:safesale/services/search_service.dart';
 import 'package:safesale/services/user_service.dart';
 import 'package:safesale/variables.dart';
+import 'package:safesale/videopages/contactpage.dart';
 import 'package:safesale/videopages/infopage.dart';
 import 'package:safesale/videopages/locationview.dart';
 import 'package:safesale/videopages/photopage.dart';
@@ -22,12 +23,18 @@ class RightPropertyBar extends StatefulWidget {
 
   final Property property;
 
+  final String email;
+
+  final void Function() togglereloading;
+
   const RightPropertyBar(
       {Key key,
       @required this.total,
       this.property,
+      this.email,
       @required this.headText,
-      @required this.status})
+      @required this.status,
+      this.togglereloading})
       : super(key: key);
   @override
   _RightPropertyBarState createState() => _RightPropertyBarState();
@@ -220,15 +227,18 @@ class _RightPropertyBarState extends State<RightPropertyBar> {
                   mainAxisAlignment: MainAxisAlignment.start,
                   children: [
                     InkWell(
-                      onTap: () => showModalBottomSheet<void>(
-                        isScrollControlled: true,
-                        useRootNavigator: true,
-                        context: context,
-                        shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.vertical(
-                                top: Radius.circular(10.0))),
-                        builder: (context) => SearchPage(widget.status),
-                      ),
+                      onTap: () async {
+                        await showModalBottomSheet<void>(
+                          isScrollControlled: true,
+                          useRootNavigator: true,
+                          context: context,
+                          shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.vertical(
+                                  top: Radius.circular(10.0))),
+                          builder: (context) =>
+                              SearchPage(widget.status, widget.togglereloading),
+                        );
+                      },
                       child: buildprofile(
                           widget.total, _filterIconSize + _filterIconSize / 5),
                     ),
@@ -371,11 +381,29 @@ class _RightPropertyBarState extends State<RightPropertyBar> {
                 widget.total != 0
                     ? Column(
                         children: [
-                          SvgPicture.asset(
-                            'images/DUDAS.svg',
-                            width: _propertyIconSize,
-                            height: _propertyIconSize,
-                            color: Colors.white,
+                          InkWell(
+                            onTap: () => showModalBottomSheet<void>(
+                              useRootNavigator: true,
+                              isScrollControlled: true,
+                              context: context,
+                              shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.vertical(
+                                      top: Radius.circular(10.0))),
+                              builder: (context) => ContactPage(
+                                  widget.property,
+                                  widget.status != AuthFlowStatus.session
+                                      ? true
+                                      : false,
+                                  widget.status == AuthFlowStatus.session
+                                      ? widget.email
+                                      : null),
+                            ),
+                            child: SvgPicture.asset(
+                              'images/DUDAS.svg',
+                              width: _propertyIconSize,
+                              height: _propertyIconSize,
+                              color: Colors.white,
+                            ),
                           ),
                           SizedBox(
                             height: _propertyIconSize,

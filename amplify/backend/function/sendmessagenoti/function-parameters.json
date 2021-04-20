@@ -1,0 +1,27 @@
+{
+  "permissions": {
+    "function": {
+      "searchdeliveryaddresses": [
+        "create",
+        "read",
+        "update",
+        "delete"
+      ]
+    },
+    "api": {
+      "safesalesearch": [
+        "create",
+        "read",
+        "update",
+        "delete"
+      ]
+    }
+  },
+  "lambdaLayers": [
+    {
+      "type": "ProjectLayer",
+      "resourceName": "safsaleappsynclayer",
+      "version": 6
+    }
+  ]
+}

@@ -21,6 +21,10 @@ class MyApp extends StatefulWidget {
   State<StatefulWidget> createState() => _MyAppState();
 }
 
+Future initialiseFirebase() async {
+  await Firebase.initializeApp();
+}
+
 class _MyAppState extends State<MyApp> {
   final _authService = AuthService();
 
@@ -31,6 +35,7 @@ class _MyAppState extends State<MyApp> {
     super.initState();
     _configureAmplify();
     _authService.checkAuthStatus();
+    initialiseFirebase();
   }
 
   void _configureAmplify() async {

@@ -2,6 +2,7 @@ import 'dart:ui';
 import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:location/location.dart' show Location, LocationData;
+import 'package:safesale/auth_credentials.dart';
 
 import 'package:safesale/models/property.dart';
 import 'package:safesale/services/auth_service.dart';
@@ -24,8 +25,17 @@ import 'package:video_player/video_player.dart';
 
 class VideoPage extends StatefulWidget {
   final AuthFlowStatus authstatus;
+  final SignedCredentials credentials;
 
-  const VideoPage({Key key, this.authstatus}) : super(key: key);
+  final bool Function() needsreload;
+  final void Function() turnoffreloading;
+  const VideoPage(
+      {Key key,
+      this.authstatus,
+      this.credentials,
+      this.needsreload,
+      this.turnoffreloading})
+      : super(key: key);
 
   @override
   _VideoPageState createState() => _VideoPageState();
@@ -33,6 +43,8 @@ class VideoPage extends StatefulWidget {
 
 class _VideoPageState extends State<VideoPage> {
   final _searchService = SearchService();
+
+  Stream<SearchState> searchStateController;
 
   LocationData currentLocation;
 
@@ -43,6 +55,8 @@ class _VideoPageState extends State<VideoPage> {
   @override
   initState() {
     super.initState();
+    searchStateController = _searchService.searchStateController.stream;
+    setInitialLocation();
     //  _listenForPermissionStatus();
 
     // setInitialLocation();
@@ -181,11 +195,16 @@ class _VideoPageState extends State<VideoPage> {
 
   @override
   Widget build(BuildContext context) {
-    setInitialLocation();
+    if (widget.needsreload()) {
+      widget.turnoffreloading();
+      setInitialLocation();
+    }
+    ;
+
     return Scaffold(
       backgroundColor: Colors.white,
-      body: StreamBuilder<SearchState>(
-          stream: _searchService.searchStateController.stream,
+      body: new StreamBuilder<SearchState>(
+          stream: searchStateController,
           builder: (context, snapshot) {
             if (snapshot.hasError) {
               return Stack(
@@ -211,7 +230,9 @@ class _VideoPageState extends State<VideoPage> {
                 case ConnectionState.active:
                   if (snapshot.data.searchFlowStatus ==
                       SearchFlowStatus.started) return LoadingPage();
-                  if (snapshot.data.searchFlowStatus == SearchFlowStatus.empty)
+                  if (snapshot.data.searchFlowStatus ==
+                      SearchFlowStatus.empty) {
+                    _searchService.turnOffExternalSearch();
                     return Stack(
                       children: [
                         EmptyPage(),
@@ -219,7 +240,7 @@ class _VideoPageState extends State<VideoPage> {
                             total: 0, headText: "", status: widget.authstatus)
                       ],
                     );
-                  else {
+                  } else {
                     result = _searchService.getProperties();
                     _searchService.turnOffExternalSearch();
                     return PageView.builder(
@@ -237,6 +258,9 @@ class _VideoPageState extends State<VideoPage> {
                                 total: result.length,
                                 property: property,
                                 headText: property.nombre,
+                                email: widget.credentials != null
+                                    ? widget.credentials.username
+                                    : null,
                                 status: widget.authstatus)
                           ]);
                         });

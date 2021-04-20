@@ -92,6 +92,7 @@ String q_preffix_search(SearchCriterio criterio) =>
 const q_getUser = '''query GetUser(\$id:ID!) {
                                       getUser(id: \$id) {
                                         id
+                                        username
                                            alerts(limit: 10) {
                                             items {
                                               amenidades
@@ -150,13 +151,36 @@ const q_getUser = '''query GetUser(\$id:ID!) {
                                               id
                                               updatedAt
                                             }
+                                           
                                             nextToken
                                           }
+                                          devices {
+                                              items {
+                                                id
+                                                token
+                                                platform
+                                                vendorid
+                                              }
+                                              nextToken
+                                            }
+                                           conversations(limit: 100) {
+                                              items {
+                                                id
+                                                conversation {
+                                                  id
+                                                  name
+                                                  property {
+                                                    id
+                                                    nombre
+                                                  }
+                                                }
+                                              }
+                                            }
                                         }
                                       }''';
 
-const m_createUser = '''mutation CreateUser(\$id:ID!) {
-                                     createUser(input: {id: \$id}){
+const m_createUser = '''mutation CreateUser(\$id:ID!,\$username:String!) {
+                                     createUser(input: {id: \$id, username:\$username}){
                                         id
                                       }
                                    }''';
@@ -191,3 +215,53 @@ const m_deleteFav = '''mutation DeleteFav(\$id:ID!) {
                                         id
                                       }
                                    }''';
+
+const q_getuserbyusername = '''query ListUser(\$username:String!) {
+                      listUsers(filter: {username: {eq: \$username}}) {
+                      items {
+                      id
+                      username
+                    }
+                    nextToken
+                  }
+                }''';
+
+const m_createDevice =
+    '''mutation CreateUserDevice(\$deviceOwnerId: ID!, \$platform: String!, \$token: String! , \$vendorid: String! ) {
+                                createDevice(input: {deviceOwnerId: \$deviceOwnerId, platform: \$platform, token: \$token, vendorid: \$vendorid}) {
+    id
+  }
+}''';
+
+const m_updateDevice = '''mutation UpdateDevice(\$token: String !, \$id: ID !) {
+  updateDevice(input: {id: \$id, token: \$token}) {
+    id
+  }
+}''';
+
+const m_deleteDevice = '''mutation DeleteDevice(\$id:ID!) {
+                                     deleteDevice(input: {id: \$id}){
+                                        id
+                                      }
+                                   }''';
+
+const m_createConvo =
+    '''mutation CreateConvo(\$members: [ID!]!, \$name: String!, \$type: String! , \$conversationPropertyId: ID) {
+                                     createConvo(input: {members: \$members, name: \$name, type: \$type, conversationPropertyId: \$conversationPropertyId}){
+                                        id
+                                      }
+                                   }''';
+
+const m_createConvoLink =
+    '''mutation CreateConvoLink(\$convoLinkConversationId:ID!, \$convoLinkUserId:ID!, \$guestmail:String ) {
+                                createConvoLink(input: {convoLinkConversationId: \$convoLinkConversationId, convoLinkUserId:\$convoLinkUserId, guestmail: \$guestmail }) {
+                                  id
+                                }
+                          }''';
+
+const m_createMessage =
+    '''mutation CreateMessahe (\$authorId:ID!, \$content:String!, \$messageConversationId:ID!, \$guestmail:String ) {
+  createMessage(input: {authorId: \$authorId, content: \$content, messageConversationId: \$messageConversationId, guestmail: \$guestmail}) {
+    id
+  }
+} ''';

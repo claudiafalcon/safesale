@@ -6,6 +6,7 @@ import 'package:safesale/pages/messages.dart';
 import 'package:safesale/pages/profile.dart';
 import 'package:safesale/pages/videos.dart';
 import 'package:safesale/services/auth_service.dart';
+import 'package:safesale/services/user_service.dart';
 import 'package:safesale/signup.dart';
 import 'package:safesale/verification.dart';
 import 'package:safesale/widgets/loading.dart';
@@ -14,9 +15,16 @@ class NavigatorPage extends StatefulWidget {
   final String pagename;
   final bool guestallowed;
   final void Function(int) call;
+  final bool Function() needsreload;
+  final void Function()  turnoffreloading;
 
   const NavigatorPage(
-      {Key key, @required this.pagename, this.guestallowed: false, this.call})
+      {Key key,
+      @required this.pagename,
+      this.guestallowed: false,
+      this.call,
+      this.needsreload,
+      this. turnoffreloading})
       : super(key: key);
   @override
   _NavigatorPageState createState() => _NavigatorPageState();
@@ -24,6 +32,7 @@ class NavigatorPage extends StatefulWidget {
 
 class _NavigatorPageState extends State<NavigatorPage> {
   final _authService = AuthService();
+  final _userService = UserService();
 
   @override
   initState() {
@@ -32,9 +41,14 @@ class _NavigatorPageState extends State<NavigatorPage> {
   }
 
   Widget getPage(AuthFlowStatus status) {
+    // widget.getpage();
     switch (widget.pagename) {
       case "VideoPage":
-        return VideoPage(authstatus: status);
+        return VideoPage(
+            authstatus: status,
+            credentials: _authService.getCredentials(),
+            needsreload: widget.needsreload,
+            turnoffreloading: widget.turnoffreloading);
       case "AlertsPage":
         return AlertsPage(authstatus: status, call: widget.call);
       case "FavsPage":
@@ -43,7 +57,8 @@ class _NavigatorPageState extends State<NavigatorPage> {
         return ProfilePage(
             authstatus: status,
             credentials: _authService.getCredentials(),
-            shouldLogOut: _authService.logOut);
+            shouldLogOut: _authService.logOut,
+            detachDevice: _userService.detachDevice);
       case "MessagesPage":
         return MessagesPage(authstatus: status);
       default:
@@ -73,6 +88,7 @@ class _NavigatorPageState extends State<NavigatorPage> {
                           didProvideCredentials:
                               _authService.loginWithCredentials,
                           shouldShowsSingUp: _authService.showSignUp,
+                          shouldUpdateDevice: _userService.updateDevice,
                           error: snapshot.data.authFlowStatus ==
                                   AuthFlowStatus.login_error
                               ? _authService.error

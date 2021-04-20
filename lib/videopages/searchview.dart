@@ -12,7 +12,10 @@ import 'package:safesale/services/user_service.dart';
 
 class SearchPage extends StatefulWidget {
   final AuthFlowStatus status;
-  SearchPage(this.status);
+
+  final void Function() togglereloading;
+
+  SearchPage(this.status, this.togglereloading);
   @override
   _SearchPageState createState() => _SearchPageState();
 }
@@ -1874,6 +1877,7 @@ class _SearchPageState extends State<SearchPage> {
                                     // If the form is valid, display a Snackbar.
                                     _searchService.searchProperties(_criterio);
                                     Navigator.of(context).pop();
+                                    widget.togglereloading();
                                   }
                                 },
                               ),

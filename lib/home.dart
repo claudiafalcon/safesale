@@ -21,6 +21,7 @@ class Page {
 }
 
 class _HomePageState extends State<HomePage> {
+  bool isreloading = true;
   List<Page> pageoptions = [
     Page(page: "VideoPage", isGuestAllowed: true),
     Page(page: "AlertsPage"),
@@ -28,6 +29,14 @@ class _HomePageState extends State<HomePage> {
     Page(page: "ProfilePage"),
     Page(page: "MessagesPage"),
   ];
+
+  bool needsreload() {
+    return isreloading;
+  }
+
+  turnoffreloading() {
+    isreloading = false;
+  }
 
   updatePage(int i) {
     setState(() {
@@ -44,7 +53,9 @@ class _HomePageState extends State<HomePage> {
       body: NavigatorPage(
           pagename: pageoptions[page].page,
           guestallowed: pageoptions[page].isGuestAllowed,
-          call: updatePage),
+          call: updatePage,
+          needsreload: needsreload,
+          turnoffreloading: turnoffreloading),
       bottomNavigationBar: new Theme(
         data: Theme.of(context)
             .copyWith(canvasColor: Color.fromRGBO(42, 180, 233, 300)),
@@ -52,6 +63,11 @@ class _HomePageState extends State<HomePage> {
           height: MediaQuery.of(context).size.height * factorBottonHeigh,
           child: BottomNavigationBar(
             onTap: (index) {
+              print("Entra al tap");
+              if (page == 0 && index == 0) {
+                isreloading = true;
+                print("Entra al change");
+              }
               setState(() {
                 page = index;
               });

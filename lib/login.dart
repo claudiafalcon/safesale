@@ -9,10 +9,15 @@ import 'variables.dart';
 class LoginPage extends StatefulWidget {
   final ValueChanged<LoginCredentials> didProvideCredentials;
   final VoidCallback shouldShowsSingUp;
+  final VoidCallback shouldUpdateDevice;
   final String error;
 
   LoginPage(
-      {Key key, this.didProvideCredentials, this.shouldShowsSingUp, this.error})
+      {Key key,
+      this.didProvideCredentials,
+      this.shouldShowsSingUp,
+      this.error,
+      this.shouldUpdateDevice})
       : super(key: key);
 
   @override
@@ -31,6 +36,7 @@ class _LoginPageState extends State<LoginPage> {
     final credentials =
         LoginCredentials(username: username, password: password);
     widget.didProvideCredentials(credentials);
+    widget.shouldUpdateDevice();
   }
 
   @override

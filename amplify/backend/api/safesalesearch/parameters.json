@@ -1,11 +1,11 @@
 {
-  "AppSyncApiName": "safesalesearch",
-  "DynamoDBBillingMode": "PAY_PER_REQUEST",
-  "DynamoDBEnableServerSideEncryption": false,
-  "AuthCognitoUserPoolId": {
-    "Fn::GetAtt": [
-      "authsafesaleba936a14",
-      "Outputs.UserPoolId"
-    ]
-  }
+    "AppSyncApiName": "safesalesearch",
+    "DynamoDBBillingMode": "PAY_PER_REQUEST",
+    "DynamoDBEnableServerSideEncryption": false,
+    "AuthCognitoUserPoolId": {
+        "Fn::GetAtt": [
+            "authsafesaleba936a14",
+            "Outputs.UserPoolId"
+        ]
+    }
 }

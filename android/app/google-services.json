@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "771511132749",
+    "project_id": "safesalenotify",
+    "storage_bucket": "safesalenotify.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:771511132749:android:470a2e347272003227b204",
+        "android_client_info": {
+          "package_name": "com.claud.safesale"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "771511132749-v65kjkv5g7m8h2u23t6uc321esma48e4.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDOoxbHlxw33VJQWWZ92IKabBz0DOulG5U"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "771511132749-v65kjkv5g7m8h2u23t6uc321esma48e4.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "771511132749-p0ov7300pejp0scou5uo5fg3pbdbiiqd.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.claud.safesale",
+                "app_store_id": "1554605063"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

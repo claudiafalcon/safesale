@@ -57,7 +57,7 @@ class _MessagesPageState extends State<MessagesPage> {
   @override
   void initState() {
     _totalNotifications = 0;
-    //  registerNotification();
+    registerNotification();
     super.initState();
   }
 
