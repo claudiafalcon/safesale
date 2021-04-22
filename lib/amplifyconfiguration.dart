@@ -52,13 +52,6 @@ const amplifyconfig = ''' {
                     "Default": {
                         "ApiUrl": "https://m5rpvgvc5rh6dlwbqlrxg5s3fi.appsync-api.us-east-1.amazonaws.com/graphql",
                         "Region": "us-east-1",
-                        "AuthMode": "API_KEY",
-                        "ApiKey": "da2-fyjpi5hc6zczrbpucpcg2u63le",
-                        "ClientDatabasePrefix": "safesalesearch_API_KEY"
-                    },
-                    "safesalesearch_AMAZON_COGNITO_USER_POOLS": {
-                        "ApiUrl": "https://m5rpvgvc5rh6dlwbqlrxg5s3fi.appsync-api.us-east-1.amazonaws.com/graphql",
-                        "Region": "us-east-1",
                         "AuthMode": "AMAZON_COGNITO_USER_POOLS",
                         "ClientDatabasePrefix": "safesalesearch_AMAZON_COGNITO_USER_POOLS"
                     },
@@ -67,17 +60,6 @@ const amplifyconfig = ''' {
                         "Region": "us-east-1",
                         "AuthMode": "AWS_IAM",
                         "ClientDatabasePrefix": "safesalesearch_AWS_IAM"
-                    }
-                },
-                "PinpointAnalytics": {
-                    "Default": {
-                        "AppId": "7fdc9f9916334dd9ab7404dc658f760a",
-                        "Region": "us-east-1"
-                    }
-                },
-                "PinpointTargeting": {
-                    "Default": {
-                        "Region": "us-east-1"
                     }
                 }
             }

@@ -31,6 +31,22 @@ class FormValidator {
     }
   }
 
+  String validatePhone(String value) {
+    if (value.length != 10) {
+      return "El teléfono debe tener 10 dígitos.";
+    } else {
+      return null;
+    }
+  }
+
+  String validateName(String value) {
+    if (value.isEmpty) {
+      return "Nombre es requerido";
+    } else {
+      return null;
+    }
+  }
+
   String validateNull() {
     return null;
   }

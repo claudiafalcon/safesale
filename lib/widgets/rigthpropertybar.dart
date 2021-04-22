@@ -11,6 +11,7 @@ import 'package:safesale/videopages/contactpage.dart';
 import 'package:safesale/videopages/infopage.dart';
 import 'package:safesale/videopages/locationview.dart';
 import 'package:safesale/videopages/photopage.dart';
+import 'package:safesale/videopages/scheduler.dart';
 import 'package:safesale/videopages/searchview.dart';
 import 'package:location/location.dart' show Location, LocationData;
 
@@ -414,11 +415,29 @@ class _RightPropertyBarState extends State<RightPropertyBar> {
                 widget.total != 0
                     ? Column(
                         children: [
-                          SvgPicture.asset(
-                            'images/CITAS.svg',
-                            width: _propertyIconSize,
-                            height: _propertyIconSize,
-                            color: Colors.white,
+                          InkWell(
+                            onTap: () => showModalBottomSheet<void>(
+                              useRootNavigator: true,
+                              isScrollControlled: true,
+                              context: context,
+                              shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.vertical(
+                                      top: Radius.circular(10.0))),
+                              builder: (context) => SchedulerPage(
+                                  widget.property,
+                                  widget.status != AuthFlowStatus.session
+                                      ? true
+                                      : false,
+                                  widget.status == AuthFlowStatus.session
+                                      ? widget.email
+                                      : null),
+                            ),
+                            child: SvgPicture.asset(
+                              'images/CITAS.svg',
+                              width: _propertyIconSize,
+                              height: _propertyIconSize,
+                              color: Colors.white,
+                            ),
                           )
                         ],
                       )

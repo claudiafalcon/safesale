@@ -11,6 +11,8 @@ class Conversation {
   final String type;
   final String createdAt;
   final String updatedAt;
+  final String scheduler;
+  final String schedulerdate;
 
   Conversation(
       {this.id,
@@ -20,7 +22,9 @@ class Conversation {
       this.name,
       this.type,
       this.createdAt,
-      this.updatedAt});
+      this.updatedAt,
+      this.scheduler,
+      this.schedulerdate});
 
   factory Conversation.fromJson(Map<String, dynamic> data) {
     List<Message> messages = <Message>[];
@@ -38,9 +42,11 @@ class Conversation {
 
     return Conversation(
         id: data["id"] as String,
+        scheduler: data["scheduler"] as String,
+        schedulerdate: data["schedulerdate"] as String,
         messages: messages,
         associated: associated,
-        property: data["property"],
+        property: Property.fromJson(data["property"]),
         name: data["name"] == null ? null : data["name"] as String,
         type: data["type"] == null ? null : data["type"] as String,
         createdAt:

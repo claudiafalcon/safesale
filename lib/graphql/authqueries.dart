@@ -169,9 +169,17 @@ const q_getUser = '''query GetUser(\$id:ID!) {
                                                 conversation {
                                                   id
                                                   name
+                                                  type
+                                                  schedulerdate
+                                                  scheduler
                                                   property {
                                                     id
                                                     nombre
+                                                  }
+                                                  associated{
+                                                    items{
+                                                      guestmail
+                                                    }
                                                   }
                                                 }
                                               }
@@ -246,8 +254,8 @@ const m_deleteDevice = '''mutation DeleteDevice(\$id:ID!) {
                                    }''';
 
 const m_createConvo =
-    '''mutation CreateConvo(\$members: [ID!]!, \$name: String!, \$type: String! , \$conversationPropertyId: ID) {
-                                     createConvo(input: {members: \$members, name: \$name, type: \$type, conversationPropertyId: \$conversationPropertyId}){
+    '''mutation CreateConvo(\$members: [ID!]!, \$name: String!, \$type: String! , \$conversationPropertyId: ID, \$schedulerdate: String, \$scheduler: String) {
+                                     createConvo(input: {members: \$members, name: \$name, type: \$type, conversationPropertyId: \$conversationPropertyId, scheduler:\$scheduler, schedulerdate:\$schedulerdate }){
                                         id
                                       }
                                    }''';

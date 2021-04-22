@@ -4,12 +4,14 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:safesale/auth/formvalidator.dart';
+import 'package:safesale/models/associated.dart';
 import 'package:safesale/models/conversation.dart';
 import 'package:safesale/models/property.dart';
 import 'package:safesale/models/user.dart';
 import 'package:safesale/painters/softpaint.dart';
 import 'package:safesale/services/notification_service.dart';
 import 'package:safesale/services/user_service.dart';
+import 'package:safesale/utils.dart';
 import 'package:safesale/variables.dart';
 import 'package:safesale/widgets/listItem.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -39,6 +41,69 @@ class _ContactPageState extends State<ContactPage> {
 
   final _userService = UserService();
   final _notiService = NotificationService();
+
+  void _showDialog({@required String text}) {
+    showDialog(
+      context: context,
+      barrierDismissible: false,
+      builder: (context) {
+        return Dialog(
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(4),
+          ),
+          elevation: 0,
+          child: Padding(
+            padding: EdgeInsets.symmetric(
+              horizontal: 20,
+              vertical: 10,
+            ),
+            child: IntrinsicWidth(
+              child: IntrinsicHeight(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: <Widget>[
+                    SizedBox(
+                      height: 10,
+                    ),
+                    Text(
+                      "Alerta!",
+                      style: TextStyle(
+                        fontWeight: FontWeight.w700,
+                        fontSize: 18,
+                      ),
+                    ),
+                    SizedBox(
+                      height: 20,
+                    ),
+                    Text(
+                      text,
+                      style: TextStyle(
+                        fontWeight: FontWeight.w400,
+                        fontSize: 16,
+                      ),
+                    ),
+                    SizedBox(
+                      height: 20,
+                    ),
+                    Align(
+                      alignment: Alignment.bottomRight,
+                      child: FlatButton(
+                        onPressed: () {
+                          Navigator.pop(context);
+                        },
+                        child: Text("OK"),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ),
+          ),
+        );
+      },
+    );
+  }
+
   void _sendquestion() async {
     final username = emailcontroller.text.trim().toLowerCase();
     final dude = dudecontroller.text.trim();
@@ -47,10 +112,46 @@ class _ContactPageState extends State<ContactPage> {
     User contact;
     bool contactNotRegister = false;
 
-    if (!widget.isGuest)
+    if (!widget.isGuest) {
       owner = _userService.getUser();
-    else
+      Conversation conv = owner.convs.firstWhere(
+          (element) => (element.property != null &&
+              element.property.id == widget.property.id &&
+              element.type == 'dude'), orElse: () {
+        return null;
+      });
+      if (conv != null) {
+        Navigator.pop(context);
+        _showDialog(
+            text:
+                "Ya has enviado una duda con anteriorioridad, dale seguimiento en el chat.");
+        // Navigator.of(context).pop();
+        return;
+      }
+    } else {
       owner = await _userService.getUserByUsername(UserService.genericEmail);
+      Conversation conv = owner.convs.firstWhere((element) {
+        if (element.property != null &&
+            element.property.id == widget.property.id &&
+            element.type == 'dude') {
+          Associated ass = element.associated.firstWhere(
+              (element) => (element.guestemail == username), orElse: () {
+            return null;
+          });
+          if (ass != null) return true;
+        }
+        return false;
+      });
+      if (conv != null) {
+        Navigator.pop(context);
+        _showDialog(
+            text:
+                "Ya has enviado una duda con anteriorioridad, te contactaremos por e-mail.");
+        Navigator.of(context).pop();
+        return;
+      }
+    }
+
     contact = await _userService.getUserByUsername(widget.property.asesor);
     if (contact == null) {
       contact = await _userService.getUserByUsername(UserService.genericEmail);
@@ -68,7 +169,9 @@ class _ContactPageState extends State<ContactPage> {
             (!widget.isGuest ? widget.email : username),
         "dude",
         members,
-        widget.property.id);
+        widget.property.id,
+        '',
+        '');
     if (id != null) {
       await _notiService.createConvoLink(
           id, owner.id, widget.isGuest ? username : "");

@@ -162,17 +162,17 @@
             "output": {
                 "authConfig": {
                     "defaultAuthentication": {
-                        "authenticationType": "API_KEY",
-                        "apiKeyConfig": {
-                            "apiKeyExpirationDays": 365,
-                            "description": "safesaleapikey"
+                        "authenticationType": "AMAZON_COGNITO_USER_POOLS",
+                        "userPoolConfig": {
+                            "userPoolId": "authsafesaleba936a14"
                         }
                     },
                     "additionalAuthenticationProviders": [
                         {
-                            "authenticationType": "AMAZON_COGNITO_USER_POOLS",
-                            "userPoolConfig": {
-                                "userPoolId": "authsafesaleba936a14"
+                            "authenticationType": "API_KEY",
+                            "apiKeyConfig": {
+                                "apiKeyExpirationDays": 365,
+                                "description": "safesalesearch_API_KEY"
                             }
                         },
                         {

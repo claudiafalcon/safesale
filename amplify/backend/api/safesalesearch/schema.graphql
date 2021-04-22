@@ -116,6 +116,8 @@ type Alert @model
 }
 
 
+
+
 type User @model @searchable
   @auth(rules: [{  allow: owner},
    {allow: private, operations:[read], queries: null},
@@ -149,6 +151,7 @@ type UserFavs @model   (queries:null)
   }
 
 
+
 type Conversation
   @model(
     mutations: { create: "createConvo" }
@@ -166,6 +169,8 @@ type Conversation
   type: String!
   members: [ID!]!
   property: Property @connection(name:"PropertyConv")
+  schedulerdate : String
+  scheduler: String
 	createdAt: String
 	updatedAt: String
 }

@@ -24,8 +24,8 @@ class NotificationService {
     return _notiService;
   }
 
-  Future<String> createConvo(
-      String name, String type, List<String> members, String propertyId) async {
+  Future<String> createConvo(String name, String type, List<String> members,
+      String propertyId, String schedulerdate, String scheduler) async {
     String jsonMember = jsonEncode(members);
 
     try {
@@ -53,7 +53,9 @@ class NotificationService {
                 'members': jsonMember,
                 'name': name,
                 'type': type,
-                'conversationPropertyId': propertyId
+                'conversationPropertyId': propertyId,
+                'scheduler': scheduler,
+                'schedulerdate': schedulerdate
               }
             }));
         http.Response response;
@@ -67,7 +69,8 @@ class NotificationService {
             json.decode(response.body)["data"]["createConvo"]["id"];
         return id;
       } else {
-        return createConvoSigned(name, type, members, propertyId);
+        return createConvoSigned(
+            name, type, members, propertyId, schedulerdate, scheduler);
       }
     } catch (e) {
       print('Query filed: $e');
@@ -77,7 +80,12 @@ class NotificationService {
   }
 
   Future<String> createConvoSigned(
-      String name, String type, List<String> members, String propertyId) async {
+      String name,
+      String type,
+      List<String> members,
+      String propertyId,
+      String schedulerdate,
+      String scheduler) async {
     String jsonMember = jsonEncode(members);
     try {
       var operation = Amplify.API.query(
@@ -85,7 +93,9 @@ class NotificationService {
         'members': jsonMember,
         'name': name,
         'type': type,
-        'conversationPropertyId': propertyId
+        'conversationPropertyId': propertyId,
+        'scheduler': scheduler,
+        'schedulerdate': schedulerdate
       }));
       var response = await operation.response;
       if (response.errors.length == 0 && response.data != null) {
