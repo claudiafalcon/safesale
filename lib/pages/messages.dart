@@ -77,7 +77,7 @@ class _MessagesPageState extends State<MessagesPage> {
 
   void subscribeConversations() async {
     userId = await _userService.getUser().id;
-    await _notiService.subscribeConvos(userId);
+    //await _notiService.subscribeConvos(userId);
   }
 
   void registerNotification() async {

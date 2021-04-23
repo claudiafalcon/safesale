@@ -111,15 +111,18 @@ class _ContactPageState extends State<ContactPage> {
     User owner;
     User contact;
     bool contactNotRegister = false;
+    Conversation conv;
 
     if (!widget.isGuest) {
       owner = _userService.getUser();
-      Conversation conv = owner.convs.firstWhere(
-          (element) => (element.property != null &&
-              element.property.id == widget.property.id &&
-              element.type == 'dude'), orElse: () {
-        return null;
-      });
+      if (owner.convs.length != 0) {
+        conv = owner.convs.firstWhere(
+            (element) => (element.property != null &&
+                element.property.id == widget.property.id &&
+                element.type == 'dude'), orElse: () {
+          return null;
+        });
+      }
       if (conv != null) {
         Navigator.pop(context);
         _showDialog(
@@ -130,18 +133,20 @@ class _ContactPageState extends State<ContactPage> {
       }
     } else {
       owner = await _userService.getUserByUsername(UserService.genericEmail);
-      Conversation conv = owner.convs.firstWhere((element) {
-        if (element.property != null &&
-            element.property.id == widget.property.id &&
-            element.type == 'dude') {
-          Associated ass = element.associated.firstWhere(
-              (element) => (element.guestemail == username), orElse: () {
-            return null;
-          });
-          if (ass != null) return true;
-        }
-        return false;
-      });
+      if (owner.convs.length != 0) {
+        conv = owner.convs.firstWhere((element) {
+          if (element.property != null &&
+              element.property.id == widget.property.id &&
+              element.type == 'dude') {
+            Associated ass = element.associated.firstWhere(
+                (element) => (element.guestemail == username), orElse: () {
+              return null;
+            });
+            if (ass != null) return true;
+          }
+          return false;
+        });
+      }
       if (conv != null) {
         Navigator.pop(context);
         _showDialog(

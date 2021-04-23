@@ -114,7 +114,7 @@ class _LoginPageState extends State<LoginPage> {
                               controller: passwordcontroller,
                               text: "Password",
                               isPassword: true,
-                              validator: "password")),
+                              validator: "")),
                       widget.error != null
                           ? Padding(
                               padding: const EdgeInsets.all(6.0),

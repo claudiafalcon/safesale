@@ -122,18 +122,21 @@ class _SchedulerPageState extends State<SchedulerPage> {
       User owner;
       User contact;
       bool contactNotRegister = false;
+      Conversation conv;
 
       if (!widget.isGuest) {
         owner = _userService.getUser();
-        Conversation conv = owner.convs.firstWhere(
-            (element) => (element.property != null &&
-                element.property.id == widget.property.id &&
-                element.type == 'scheduler' &&
-                DateFormat('dd/MM/yyyy')
-                    .parse(element.schedulerdate)
-                    .isAfter(DateTime.now())), orElse: () {
-          return null;
-        });
+        if (owner.convs.length != 0) {
+          conv = owner.convs.firstWhere(
+              (element) => (element.property != null &&
+                  element.property.id == widget.property.id &&
+                  element.type == 'scheduler' &&
+                  DateFormat('dd/MM/yyyy')
+                      .parse(element.schedulerdate)
+                      .isAfter(DateTime.now())), orElse: () {
+            return null;
+          });
+        }
         if (conv != null) {
           Navigator.pop(context);
           _showDialog(text: "Tienes ya una visita próxima a esta casa.");
@@ -142,21 +145,23 @@ class _SchedulerPageState extends State<SchedulerPage> {
         }
       } else {
         owner = await _userService.getUserByUsername(UserService.genericEmail);
-        Conversation conv = owner.convs.firstWhere((element) {
-          if (element.property != null &&
-              element.property.id == widget.property.id &&
-              element.type == 'scheduler' &&
-              DateFormat('dd/MM/yyyy')
-                  .parse(element.schedulerdate)
-                  .isAfter(DateTime.now())) {
-            Associated ass = element.associated.firstWhere(
-                (element) => (element.guestemail == username), orElse: () {
-              return null;
-            });
-            if (ass != null) return true;
-          }
-          return false;
-        });
+        if (owner.convs.length != 0) {
+          conv = owner.convs.firstWhere((element) {
+            if (element.property != null &&
+                element.property.id == widget.property.id &&
+                element.type == 'scheduler' &&
+                DateFormat('dd/MM/yyyy')
+                    .parse(element.schedulerdate)
+                    .isAfter(DateTime.now())) {
+              Associated ass = element.associated.firstWhere(
+                  (element) => (element.guestemail == username), orElse: () {
+                return null;
+              });
+              if (ass != null) return true;
+            }
+            return false;
+          });
+        }
         if (conv != null) {
           Navigator.pop(context);
           _showDialog(text: "Tienes ya una visita próxima a esta casa.");
@@ -327,7 +332,7 @@ class _SchedulerPageState extends State<SchedulerPage> {
                                         CrossAxisAlignment.center,
                                     children: [
                                       Padding(
-                                        padding: EdgeInsets.all(padding),
+                                        padding: EdgeInsets.all(padding / 2),
                                         child: SvgPicture.asset(
                                           'images/LoadingImage.svg',
                                           width: MediaQuery.of(context)
@@ -341,7 +346,7 @@ class _SchedulerPageState extends State<SchedulerPage> {
                                         ),
                                       ),
                                       Padding(
-                                        padding: EdgeInsets.all(padding),
+                                        padding: EdgeInsets.all(padding / 2),
                                         child: Text(
                                             "Esta es la casa de tus sueños, si deseas visitarla por favor déjanos tus datos y agenda una cita.",
                                             textAlign: TextAlign.center,

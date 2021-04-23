@@ -84,7 +84,13 @@ class _ProfilePageState extends State<ProfilePage> {
                     SizedBox(
                       height: 5 * padding,
                     ),
-                    Text("Email: " + widget.credentials.username,
+                    Text(
+                        "Email: " +
+                            (widget.credentials != null
+                                ? (widget.credentials.name != null
+                                    ? widget.credentials.name
+                                    : widget.credentials.username)
+                                : ''),
                         textAlign: TextAlign.left,
                         style: GoogleFonts.raleway(
                           textStyle: TextStyle(
