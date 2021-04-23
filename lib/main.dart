@@ -79,6 +79,7 @@ class _MyAppState extends State<MyApp> {
         theme: ThemeData(
             visualDensity: VisualDensity.adaptivePlatformDensity,
             primaryColor: Color(0xff003b8b),
+            canvasColor: Color.fromRGBO(58, 184, 234, 1),
             bottomSheetTheme: BottomSheetThemeData(
                 backgroundColor: Colors.white.withOpacity(0))),
         // 2

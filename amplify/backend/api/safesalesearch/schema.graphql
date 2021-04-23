@@ -179,6 +179,7 @@ type Conversation
 type Message 
   @model(subscriptions: null, queries: null) 
   @auth(rules: [{ allow: owner, ownerField: "authorId" }
+  {allow: private, operations:[read,update]}
   {allow: public, operations:[create], provider:iam, queries: null}]) {
   id: ID!
   author: User @connection(name: "UserMessages", keyField: "authorId")
@@ -187,6 +188,7 @@ type Message
   content: String!
   conversation: Conversation! @connection(name: "ConvoMsgs")
   messageConversationId: ID!
+  unread: Boolean
 	createdAt: String
 	updatedAt: String
 }

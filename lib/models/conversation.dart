@@ -1,3 +1,4 @@
+import 'package:intl/intl.dart';
 import 'package:safesale/models/associated.dart';
 import 'package:safesale/models/message.dart';
 import 'package:safesale/models/property.dart';
@@ -13,6 +14,8 @@ class Conversation {
   final String updatedAt;
   final String scheduler;
   final String schedulerdate;
+  final bool unreadMessage;
+  final String dateUnreadMessage;
 
   Conversation(
       {this.id,
@@ -24,15 +27,22 @@ class Conversation {
       this.createdAt,
       this.updatedAt,
       this.scheduler,
-      this.schedulerdate});
+      this.schedulerdate,
+      this.unreadMessage,
+      this.dateUnreadMessage});
 
   factory Conversation.fromJson(Map<String, dynamic> data) {
     List<Message> messages = <Message>[];
     List<Associated> associated = <Associated>[];
+    bool unread = false;
+    String stringDate = "En espera";
 
-    if (data["messages"] != null && data["messages"]["items"] != null) {
-      var list = data["messages"]["items"] as List;
-      messages = list.map((i) => Message.fromJson(i)).toList();
+    if (data["messages"] != null &&
+        data["messages"]["items"] != null &&
+        data["messages"]["items"].length > 0) {
+      unread = true;
+      DateTime date = DateTime.parse(data["messages"]["items"][0]["createdAt"]);
+      stringDate = DateFormat.MMMd('es_MX').add_Hm().format(date);
     }
 
     if (data["associated"] != null && data["associated"]["items"] != null) {
@@ -49,6 +59,8 @@ class Conversation {
         property: Property.fromJson(data["property"]),
         name: data["name"] == null ? null : data["name"] as String,
         type: data["type"] == null ? null : data["type"] as String,
+        unreadMessage: unread,
+        dateUnreadMessage: stringDate,
         createdAt:
             data["createdAt"] == null ? null : data["createdAt"] as String,
         updatedAt:

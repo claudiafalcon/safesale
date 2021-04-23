@@ -9,6 +9,7 @@ import 'package:amplify_auth_cognito/amplify_auth_cognito.dart';
 import 'package:amplify_flutter/amplify.dart';
 
 import 'package:safesale/graphql/authqueries.dart';
+import 'package:safesale/models/message.dart';
 
 import 'package:safesale/models/user.dart';
 
@@ -24,9 +25,64 @@ class NotificationService {
     return _notiService;
   }
 
+  List<Message> parseMessages(List jsonList) {
+    return jsonList.map<Message>((json) => Message.fromJson(json)).toList();
+  }
+
+  Future<void> updateUnreadMessage(String messageId) async {
+    try {
+      var operation = Amplify.API.mutate(
+          request: GraphQLRequest<String>(
+              document: m_updateMessage, variables: {'id': messageId}));
+      var response = await operation.response;
+      if (response.errors.length == 0 && response.data != null) {
+        var data = response.data;
+        final String id = json.decode(data)["updateMessage"]["id"];
+        return null;
+      }
+    } on ApiException catch (e) {
+      print('Query filed: $e');
+    }
+  }
+
+  Future<List<Message>> getMessageByConvoId(String convoId) async {
+    List<Message> messages;
+    var operation = Amplify.API.query(
+        request: GraphQLRequest<String>(
+            document: q_getMessages, variables: {"id": convoId}));
+    var response = await operation.response;
+    var data = response.data;
+    final List parsedList = json.decode(data)["getConvo"]["messages"]["items"];
+    messages = parseMessages(parsedList);
+    return messages;
+  }
+
+  Future<void> subscribeConvos(String userId) {
+    try {
+      var operation = Amplify.API.subscribe(
+          request: GraphQLRequest<String>(document: s_onCreateConvoLink),
+          onData: (event) {
+            print('Subscription event data received: ${event.data}');
+          },
+          onEstablished: () {
+            print('Subscription established');
+          },
+          onError: (e) {
+            print('Subscription failed with error: $e');
+          },
+          onDone: () {
+            print('Subscription has been closed successfully');
+          });
+    } on ApiException catch (e) {
+      print('Query filed: $e');
+    }
+
+    return null;
+  }
+
   Future<String> createConvo(String name, String type, List<String> members,
       String propertyId, String schedulerdate, String scheduler) async {
-    String jsonMember = jsonEncode(members);
+    String jsonMember = "[" + members.join(",") + "]";
 
     try {
       CognitoAuthSession res = await Amplify.Auth.fetchAuthSession(
@@ -50,7 +106,7 @@ class NotificationService {
             body: new Map<String, Object>.from({
               'query': m_createConvo,
               'variables': {
-                'members': jsonMember,
+                'members': members,
                 'name': name,
                 'type': type,
                 'conversationPropertyId': propertyId,
@@ -86,11 +142,11 @@ class NotificationService {
       String propertyId,
       String schedulerdate,
       String scheduler) async {
-    String jsonMember = jsonEncode(members);
+    String jsonMember = "[" + members.join(",") + "]";
     try {
       var operation = Amplify.API.query(
           request: GraphQLRequest<String>(document: m_createConvo, variables: {
-        'members': jsonMember,
+        'members': members,
         'name': name,
         'type': type,
         'conversationPropertyId': propertyId,

@@ -64,7 +64,9 @@ class Property {
   factory Property.fromJson(Map<String, dynamic> data) {
     List<Media> gallery = <Media>[];
 
-    if (data["gallery"] != null && data["gallery"]["items"] != null) {
+    if (data != null &&
+        data["gallery"] != null &&
+        data["gallery"]["items"] != null) {
       var list = data["gallery"] as List;
       gallery = list.map((i) => Media.fromJson(i)).toList();
     }

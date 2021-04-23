@@ -181,6 +181,11 @@ const q_getUser = '''query GetUser(\$id:ID!) {
                                                       guestmail
                                                     }
                                                   }
+                                                  messages(filter: {unread: {eq: true}, authorId: {ne: \$id}}, sortDirection: DESC, limit: 1) {
+                                                  items {
+                                                      createdAt
+                                                    }
+                                                  }
                                                 }
                                               }
                                             }
@@ -269,7 +274,101 @@ const m_createConvoLink =
 
 const m_createMessage =
     '''mutation CreateMessahe (\$authorId:ID!, \$content:String!, \$messageConversationId:ID!, \$guestmail:String ) {
-  createMessage(input: {authorId: \$authorId, content: \$content, messageConversationId: \$messageConversationId, guestmail: \$guestmail}) {
+  createMessage(input: {authorId: \$authorId, content: \$content, messageConversationId: \$messageConversationId, guestmail: \$guestmail, unread: true}) {
     id
   }
 } ''';
+
+const s_onCreateConvoLink = '''subscription OnCreateConvoLink{
+  onCreateConvoLink {
+    id
+    user {
+      id
+      username
+      conversations {
+        nextToken
+      }
+      messages {
+        nextToken
+      }
+      createdAt
+      updatedAt
+    }
+    convoLinkUserId
+    conversation {
+      id
+      messages {
+        nextToken
+      }
+      associated {
+        nextToken
+      }
+      name
+      members
+      createdAt
+      updatedAt
+    }
+    convoLinkConversationId
+    createdAt
+    updatedAt
+  }
+}
+''';
+
+const s_onCreateMessage =
+    '''subscription OnCreateMessage(\$messageConversationId: ID!) {
+  onCreateMessage(messageConversationId: \$messageConversationId) {
+    id
+    author {
+      id
+      username
+      conversations {
+        nextToken
+      }
+      messages {
+        nextToken
+      }
+      createdAt
+      updatedAt
+    }
+    authorId
+    content
+    conversation {
+      id
+      messages {
+        nextToken
+      }
+      associated {
+        nextToken
+      }
+      name
+      members
+      createdAt
+      updatedAt
+    }
+    messageConversationId
+    createdAt
+    updatedAt
+  }
+}
+''';
+
+const q_getMessages = '''query GetConvo(\$id: ID!) {
+  getConvo(id: \$id) {
+    messages(sortDirection: ASC) {
+      items {
+        authorId
+        content
+        createdAt
+        id
+        unread
+      }
+    }
+  }
+}''';
+
+const m_updateMessage = '''mutation UpdateMessage( \$id: ID !) {
+  updateMessage(input: {id: \$id, unread: false}) {
+    id
+  }
+}''';

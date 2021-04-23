@@ -2,16 +2,24 @@ import 'package:safesale/models/user.dart';
 
 class Message {
   final String id;
-  final User author;
+  final String authorId;
   final String content;
   final String createdAt;
   final String updatedAt;
-  Message({this.id, this.author, this.content, this.createdAt, this.updatedAt});
+  final bool unread;
+  Message(
+      {this.id,
+      this.authorId,
+      this.content,
+      this.createdAt,
+      this.updatedAt,
+      this.unread});
 
   factory Message.fromJson(Map<String, dynamic> data) {
     return Message(
         id: data["id"] as String,
-        author: data["author"] as User,
+        unread: data["unread"] as bool,
+        authorId: data["authorId"] as String,
         content: data["content"] as String,
         updatedAt:
             data["updatedAt"] == null ? null : data["updatedAt"] as String,

@@ -202,6 +202,7 @@ class _VideoPageState extends State<VideoPage> {
     ;
 
     return Scaffold(
+      resizeToAvoidBottomInset: false,
       backgroundColor: Colors.white,
       body: new StreamBuilder<SearchState>(
           stream: searchStateController,
