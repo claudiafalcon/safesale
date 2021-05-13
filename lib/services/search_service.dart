@@ -1,4 +1,5 @@
 import 'dart:async' show StreamController;
+import 'dart:collection';
 import 'dart:convert';
 
 import 'package:amplify_api/amplify_api.dart';
@@ -31,6 +32,27 @@ class SearchService {
 
   bool _fromASearch = false;
 
+  int _currentindex = 0;
+
+  List<String> _tokens = <String>[];
+
+  int _total = 0;
+
+  int getTotal() {
+    return _total;
+  }
+
+  SearchCriterio criterio;
+
+  String getnextToken() {
+    return _tokens[_currentindex];
+  }
+
+  String getpreviousToken() {
+    if (_currentindex == 0) return null;
+    return _tokens[_currentindex - 1];
+  }
+
   void turnOffExternalSearch() {
     _fromASearch = false;
   }
@@ -40,6 +62,8 @@ class SearchService {
   }
 
   List<Property> _properties;
+
+  Queue<Property> _props = new Queue();
 
   List<Property> getProperties() {
     return _properties;
@@ -70,9 +94,14 @@ class SearchService {
     _properties.add(property);
   }
 
-  void fetchProperties(double lat, double lon) async {
+  void fetchProperties(double lat, double lon, String nextToken) async {
     try {
       _properties = null;
+      if (nextToken == null) {
+        _total = 0;
+        _tokens = <String>[];
+      }
+
       final state = SearchState(searchFlowStatus: SearchFlowStatus.started);
       searchStateController.add(state);
 
@@ -108,6 +137,19 @@ class SearchService {
         }
         final List parsedList =
             json.decode(response.body)["data"]["nearbyProperties"]["items"];
+        if (nextToken == null)
+          _total = json.decode(response.body)["data"]["nearbyProperties"]
+                      ["total"] ==
+                  null
+              ? 0
+              : json.decode(response.body)["data"]["nearbyProperties"]["total"];
+        _tokens.add(json.decode(response.body)["data"]["nearbyProperties"]
+                    ["nextToken"] ==
+                null
+            ? "-1"
+            : json.decode(response.body)["data"]["nearbyProperties"]
+                ["nextToken"]);
+
         _properties = parseProperties(parsedList);
         final state = SearchState(searchFlowStatus: SearchFlowStatus.finalized);
         searchStateController.add(state);
@@ -120,7 +162,16 @@ class SearchService {
         var response = await operation.response;
         var data = response.data;
         final List parsedList = json.decode(data)["nearbyProperties"]["items"];
+        if (nextToken == null)
+          _total = json.decode(data)["nearbyProperties"]["total"] == null
+              ? 0
+              : json.decode(data)["nearbyProperties"]["total"];
+        _tokens.add(json.decode(data)["nearbyProperties"]["nextToken"] == null
+            ? "-1"
+            : json.decode(data)["nearbyProperties"]["nextToken"]);
+
         _properties = parseProperties(parsedList);
+        _props.addAll(_properties);
         final state = SearchState(searchFlowStatus: SearchFlowStatus.finalized);
         searchStateController.add(state);
         return;
@@ -131,9 +182,14 @@ class SearchService {
     return null;
   }
 
-  void searchProperties(SearchCriterio criterio) async {
+  void searchProperties(SearchCriterio criterio, String nextToken) async {
     try {
       _properties = null;
+      if (nextToken == null) {
+        _total = 0;
+        _tokens = <String>[];
+      }
+      criterio = criterio;
       _fromASearch = true;
       final state = SearchState(searchFlowStatus: SearchFlowStatus.started);
       searchStateController.add(state);
@@ -167,6 +223,20 @@ class SearchService {
         } catch (e) {
           print(e);
         }
+
+        if (nextToken == null)
+          _total = json.decode(response.body)["data"]["searchProperties"]
+                      ["total"] ==
+                  null
+              ? 0
+              : json.decode(response.body)["data"]["searchProperties"]["total"];
+        _tokens.add(json.decode(response.body)["data"]["searchProperties"]
+                    ["nextToken"] ==
+                null
+            ? "-1"
+            : json.decode(response.body)["data"]["searchProperties"]
+                ["nextToken"]);
+
         final List parsedList =
             json.decode(response.body)["data"]["searchProperties"]["items"];
         if (parsedList.isEmpty) {
@@ -185,6 +255,13 @@ class SearchService {
                 GraphQLRequest<String>(document: q_preffix_search(criterio)));
         var response = await operation.response;
         var data = response.data;
+        if (nextToken == null)
+          _total = json.decode(data)["searchProperties"]["total"] == null
+              ? 0
+              : json.decode(data)["searchProperties"]["total"];
+        _tokens.add(json.decode(data)["searchProperties"]["nextToken"] == null
+            ? "-1"
+            : json.decode(data)["searchProperties"]["nextToken"]);
         final List parsedList = json.decode(data)["searchProperties"]["items"];
         if (parsedList.isEmpty) {
           final state = SearchState(searchFlowStatus: SearchFlowStatus.empty);

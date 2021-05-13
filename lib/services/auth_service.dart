@@ -4,6 +4,7 @@ import 'package:amazon_cognito_identity_dart_2/cognito.dart';
 import 'package:amplify_auth_cognito/amplify_auth_cognito.dart';
 
 import 'package:amplify_flutter/amplify.dart';
+import 'package:flutter/services.dart';
 
 import 'package:safesale/auth_credentials.dart';
 
@@ -200,7 +201,9 @@ class AuthService {
       //final state = AuthState(authFlowStatus: AuthFlowStatus.login);
 
       authStateController.add(state);
-    } catch (_) {
+    } on SessionExpiredException catch (e) {
+      logOut();
+    } catch (e) {
       CognitoAuthSession res = await Amplify.Auth.fetchAuthSession(
           options: CognitoSessionOptions(getAWSCredentials: true));
       final state = AuthState(authFlowStatus: AuthFlowStatus.guess);

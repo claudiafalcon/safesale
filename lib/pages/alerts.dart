@@ -117,7 +117,7 @@ class _AlertsPageState extends State<AlertsPage> {
   }
 
   void dosearch(SearchCriterio criterio) async {
-    _searchService.searchProperties(criterio);
+    _searchService.searchProperties(criterio, null);
     widget.call(0);
   }
 

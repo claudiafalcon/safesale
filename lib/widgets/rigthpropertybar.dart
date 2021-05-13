@@ -26,16 +26,13 @@ class RightPropertyBar extends StatefulWidget {
 
   final String email;
 
-  final void Function() togglereloading;
-
   const RightPropertyBar(
       {Key key,
       @required this.total,
       this.property,
       this.email,
       @required this.headText,
-      @required this.status,
-      this.togglereloading})
+      @required this.status})
       : super(key: key);
   @override
   _RightPropertyBarState createState() => _RightPropertyBarState();
@@ -105,7 +102,7 @@ class _RightPropertyBarState extends State<RightPropertyBar> {
     // ubicación actual de getLocation () de la ubicación
     currentLocation = await location.getLocation();
     _searchService.fetchProperties(
-        currentLocation.latitude, currentLocation.longitude);
+        currentLocation.latitude, currentLocation.longitude, null);
 
     // destino codificado para este ejemplo
   }
@@ -236,8 +233,7 @@ class _RightPropertyBarState extends State<RightPropertyBar> {
                           shape: RoundedRectangleBorder(
                               borderRadius: BorderRadius.vertical(
                                   top: Radius.circular(10.0))),
-                          builder: (context) =>
-                              SearchPage(widget.status, widget.togglereloading),
+                          builder: (context) => SearchPage(widget.status),
                         );
                       },
                       child: buildprofile(

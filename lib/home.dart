@@ -34,8 +34,9 @@ class _HomePageState extends State<HomePage> {
     return isreloading;
   }
 
-  turnoffreloading() {
+  void turnoffreloading() {
     isreloading = false;
+    return;
   }
 
   updatePage(int i) {
@@ -63,11 +64,11 @@ class _HomePageState extends State<HomePage> {
           height: MediaQuery.of(context).size.height * factorBottonHeigh,
           child: BottomNavigationBar(
             onTap: (index) {
-              print("Entra al tap");
-              if (page == 0 && index == 0) {
-                isreloading = true;
-                print("Entra al change");
-              }
+              print("Entra al tap :: page :: $page : index:: $index");
+              //             if (page == 0 && index == 0) {
+              //             isreloading = true;
+              //           print("Entra al change");
+              //       }
               setState(() {
                 page = index;
               });

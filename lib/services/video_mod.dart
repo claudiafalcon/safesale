@@ -364,12 +364,6 @@ class _SafeSalePlayerState extends State<SafeSalePlayer>
       if (!await Wakelock.isEnabled) {
         await Wakelock.enable();
       }
-      setState(() {
-        videoDuration = convertDurationToString(controller.value.duration);
-        videoSeek = convertDurationToString(controller.value.position);
-        videoSeekSecond = controller.value.position.inSeconds.toDouble();
-        videoDurationSecond = controller.value.duration.inSeconds.toDouble();
-      });
     } else {
       if (await Wakelock.isEnabled) {
         await Wakelock.disable();

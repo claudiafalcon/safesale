@@ -3,7 +3,7 @@ import 'dart:convert';
 import 'package:safesale/models/searchcriterio.dart';
 
 const q_nerbyProperties = '''query MyQuery(\$lat:Float!, \$lon: Float!) {
-                                    nearbyProperties(limit: 10, location: {lat: \$lat, lon: \$lon}, m: 50000) {
+                                    nearbyProperties(limit: 5, location: {lat: \$lat, lon: \$lon}, m: 50000) {
                                       total
                                       nextToken
                                       items {

@@ -9,9 +9,6 @@ import 'package:safesale/services/auth_service.dart';
 import 'package:safesale/services/video_mod.dart';
 import 'package:safesale/variables.dart';
 
-import 'package:safesale/videopages/locationview.dart';
-import 'package:safesale/videopages/searchview.dart';
-
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:safesale/services/search_service.dart';
 
@@ -19,7 +16,6 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:safesale/widgets/empyList.dart';
 import 'package:safesale/widgets/loading.dart';
 import 'package:safesale/widgets/rigthpropertybar.dart';
-import 'package:video_player/video_player.dart';
 
 //import 'package:location_permissions/location_permissions.dart';
 
@@ -56,7 +52,7 @@ class _VideoPageState extends State<VideoPage> {
   initState() {
     super.initState();
     searchStateController = _searchService.searchStateController.stream;
-    setInitialLocation();
+    // setInitialLocation();
     //  _listenForPermissionStatus();
 
     // setInitialLocation();
@@ -87,9 +83,9 @@ class _VideoPageState extends State<VideoPage> {
     currentLocation = await location.getLocation();
     if (!_searchService.isAExternalSearch())
       _searchService.fetchProperties(
-          currentLocation.latitude, currentLocation.longitude);
-    else
-      _searchService.turnOffExternalSearch();
+          currentLocation.latitude, currentLocation.longitude, null);
+    //else
+    //_searchService.turnOffExternalSearch();
     // destino codificado para este ejemplo
   }
 
@@ -193,10 +189,20 @@ class _VideoPageState extends State<VideoPage> {
     );
   }
 
+  _onPageViewChange(int page) {
+    print("Current Page: " + page.toString());
+    int previousPage = page;
+    if (page != 0)
+      previousPage--;
+    else
+      previousPage = 2;
+    print("Previous page: $previousPage");
+  }
+
   @override
   Widget build(BuildContext context) {
     if (widget.needsreload()) {
-      widget.turnoffreloading();
+      // widget.turnoffreloading();
       setInitialLocation();
     }
     ;
@@ -246,17 +252,19 @@ class _VideoPageState extends State<VideoPage> {
                     _searchService.turnOffExternalSearch();
                     return PageView.builder(
                         itemCount: result.length,
+                        onPageChanged: _onPageViewChange,
                         controller:
                             PageController(initialPage: 0, viewportFraction: 1),
                         scrollDirection: Axis.vertical,
                         itemBuilder: (context, index) {
+                          print(index);
                           Property property = result[index];
                           return Stack(children: [
                             VideoPlayerItem(property.id)
                             //video
                             ,
                             RightPropertyBar(
-                                total: result.length,
+                                total: _searchService.getTotal(),
                                 property: property,
                                 headText: property.nombre,
                                 email: widget.credentials != null
