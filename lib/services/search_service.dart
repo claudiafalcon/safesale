@@ -16,6 +16,7 @@ import 'package:amplify_flutter/amplify.dart';
 import 'package:safesale/graphql/authqueries.dart';
 import 'package:safesale/models/property.dart';
 import 'package:safesale/models/searchcriterio.dart';
+import 'package:safesale/variables.dart';
 
 enum SearchFlowStatus { started, finalized, error, empty }
 
@@ -44,8 +45,8 @@ class SearchService {
 
   SearchCriterio criterio;
 
-  String getnextToken() {
-    return _tokens[_currentindex];
+  String getnextToken(int index) {
+    return _tokens[index];
   }
 
   String getpreviousToken() {
@@ -62,6 +63,10 @@ class SearchService {
   }
 
   List<Property> _properties;
+
+  double _lat;
+
+  double _lon;
 
   Queue<Property> _props = new Queue();
 
@@ -98,6 +103,9 @@ class SearchService {
     try {
       _properties = null;
       if (nextToken == null) {
+        _lat = lat;
+        _lon = lon;
+        criterio = null;
         _total = 0;
         _tokens = <String>[];
       }
@@ -126,7 +134,11 @@ class SearchService {
                 {'Content-Type': 'application/graphql; charset=utf-8'}),
             body: new Map<String, Object>.from({
               'query': q_nerbyProperties,
-              'variables': {"lat": lat, "lon": lon}
+              'variables': {
+                "lat": lat,
+                "lon": lon,
+                "limit": resultBlockSize,
+              }
             }));
         http.Response response;
         try {
@@ -156,9 +168,12 @@ class SearchService {
         return;
       } else {
         var operation = Amplify.API.query(
-            request: GraphQLRequest<String>(
-                document: q_nerbyProperties,
-                variables: {"lat": lat, "lon": lon}));
+            request:
+                GraphQLRequest<String>(document: q_nerbyProperties, variables: {
+          "lat": lat,
+          "lon": lon,
+          "limit": resultBlockSize,
+        }));
         var response = await operation.response;
         var data = response.data;
         final List parsedList = json.decode(data)["nearbyProperties"]["items"];

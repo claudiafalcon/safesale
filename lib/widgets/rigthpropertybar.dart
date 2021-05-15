@@ -20,6 +20,8 @@ class RightPropertyBar extends StatefulWidget {
 
   final String headText;
 
+  final void Function(String) toggleplay;
+
   final AuthFlowStatus status;
 
   final Property property;
@@ -32,7 +34,8 @@ class RightPropertyBar extends StatefulWidget {
       this.property,
       this.email,
       @required this.headText,
-      @required this.status})
+      @required this.status,
+      this.toggleplay})
       : super(key: key);
   @override
   _RightPropertyBarState createState() => _RightPropertyBarState();
@@ -226,6 +229,7 @@ class _RightPropertyBarState extends State<RightPropertyBar> {
                   children: [
                     InkWell(
                       onTap: () async {
+                        widget.toggleplay('pause');
                         await showModalBottomSheet<void>(
                           isScrollControlled: true,
                           useRootNavigator: true,
@@ -233,7 +237,8 @@ class _RightPropertyBarState extends State<RightPropertyBar> {
                           shape: RoundedRectangleBorder(
                               borderRadius: BorderRadius.vertical(
                                   top: Radius.circular(10.0))),
-                          builder: (context) => SearchPage(widget.status),
+                          builder: (context) =>
+                              SearchPage(widget.status, widget.toggleplay),
                         );
                       },
                       child: buildprofile(
@@ -299,16 +304,20 @@ class _RightPropertyBarState extends State<RightPropertyBar> {
                     ? Column(
                         children: [
                           InkWell(
-                            onTap: () => showModalBottomSheet<void>(
-                              useRootNavigator: true,
-                              isScrollControlled: true,
-                              context: context,
-                              shape: RoundedRectangleBorder(
-                                  borderRadius:
-                                      BorderRadius.all(Radius.circular(10.0))),
-                              builder: (context) =>
-                                  PhotoPage(widget.property.id),
-                            ),
+                            onTap: () async {
+                              widget.toggleplay('pause');
+                              showModalBottomSheet<void>(
+                                useRootNavigator: true,
+                                isScrollControlled: true,
+                                context: context,
+                                shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.all(
+                                        Radius.circular(10.0))),
+                                builder: (context) => PhotoPage(
+                                    widget.property.id, widget.toggleplay),
+                              );
+                              widget.toggleplay('pause');
+                            },
                             child: SvgPicture.asset(
                               'images/FOTOS.svg',
                               width: _propertyIconSize,
@@ -326,16 +335,19 @@ class _RightPropertyBarState extends State<RightPropertyBar> {
                     ? Column(
                         children: [
                           InkWell(
-                            onTap: () => showModalBottomSheet<void>(
-                              useRootNavigator: true,
-                              isScrollControlled: true,
-                              context: context,
-                              shape: RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.vertical(
-                                      top: Radius.circular(10.0))),
-                              builder: (context) =>
-                                  LocationPage(widget.property),
-                            ),
+                            onTap: () async {
+                              widget.toggleplay('pause');
+                              showModalBottomSheet<void>(
+                                useRootNavigator: true,
+                                isScrollControlled: true,
+                                context: context,
+                                shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.vertical(
+                                        top: Radius.circular(10.0))),
+                                builder: (context) => LocationPage(
+                                    widget.property, widget.toggleplay),
+                              );
+                            },
                             child: SvgPicture.asset(
                               'images/UBICACION.svg',
                               width: _propertyIconSize,
@@ -353,15 +365,19 @@ class _RightPropertyBarState extends State<RightPropertyBar> {
                     ? Column(
                         children: [
                           InkWell(
-                            onTap: () => showModalBottomSheet<void>(
-                              useRootNavigator: true,
-                              isScrollControlled: true,
-                              context: context,
-                              shape: RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.vertical(
-                                      top: Radius.circular(10.0))),
-                              builder: (context) => InfoPage(widget.property),
-                            ),
+                            onTap: () async {
+                              widget.toggleplay('pause');
+                              showModalBottomSheet<void>(
+                                useRootNavigator: true,
+                                isScrollControlled: true,
+                                context: context,
+                                shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.vertical(
+                                        top: Radius.circular(10.0))),
+                                builder: (context) => InfoPage(
+                                    widget.property, widget.toggleplay),
+                              );
+                            },
                             child: SvgPicture.asset(
                               'images/INFORMACION.svg',
                               width: _propertyIconSize,
@@ -379,22 +395,26 @@ class _RightPropertyBarState extends State<RightPropertyBar> {
                     ? Column(
                         children: [
                           InkWell(
-                            onTap: () => showModalBottomSheet<void>(
-                              useRootNavigator: true,
-                              isScrollControlled: true,
-                              context: context,
-                              shape: RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.vertical(
-                                      top: Radius.circular(10.0))),
-                              builder: (context) => ContactPage(
-                                  widget.property,
-                                  widget.status != AuthFlowStatus.session
-                                      ? true
-                                      : false,
-                                  widget.status == AuthFlowStatus.session
-                                      ? widget.email
-                                      : null),
-                            ),
+                            onTap: () async {
+                              widget.toggleplay('pause');
+                              showModalBottomSheet<void>(
+                                useRootNavigator: true,
+                                isScrollControlled: true,
+                                context: context,
+                                shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.vertical(
+                                        top: Radius.circular(10.0))),
+                                builder: (context) => ContactPage(
+                                    widget.property,
+                                    widget.status != AuthFlowStatus.session
+                                        ? true
+                                        : false,
+                                    widget.status == AuthFlowStatus.session
+                                        ? widget.email
+                                        : null,
+                                    widget.toggleplay),
+                              );
+                            },
                             child: SvgPicture.asset(
                               'images/DUDAS.svg',
                               width: _propertyIconSize,
@@ -412,22 +432,26 @@ class _RightPropertyBarState extends State<RightPropertyBar> {
                     ? Column(
                         children: [
                           InkWell(
-                            onTap: () => showModalBottomSheet<void>(
-                              useRootNavigator: true,
-                              isScrollControlled: true,
-                              context: context,
-                              shape: RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.vertical(
-                                      top: Radius.circular(10.0))),
-                              builder: (context) => SchedulerPage(
-                                  widget.property,
-                                  widget.status != AuthFlowStatus.session
-                                      ? true
-                                      : false,
-                                  widget.status == AuthFlowStatus.session
-                                      ? widget.email
-                                      : null),
-                            ),
+                            onTap: () async {
+                              widget.toggleplay('pause');
+                              showModalBottomSheet<void>(
+                                useRootNavigator: true,
+                                isScrollControlled: true,
+                                context: context,
+                                shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.vertical(
+                                        top: Radius.circular(10.0))),
+                                builder: (context) => SchedulerPage(
+                                    widget.property,
+                                    widget.status != AuthFlowStatus.session
+                                        ? true
+                                        : false,
+                                    widget.status == AuthFlowStatus.session
+                                        ? widget.email
+                                        : null,
+                                    widget.toggleplay),
+                              );
+                            },
                             child: SvgPicture.asset(
                               'images/CITAS.svg',
                               width: _propertyIconSize,

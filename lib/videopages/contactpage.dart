@@ -26,7 +26,10 @@ class ContactPage extends StatefulWidget {
   final bool isGuest;
   final String email;
 
-  const ContactPage(this.property, this.isGuest, this.email, {Key key})
+  final void Function(String) toggleplay;
+
+  const ContactPage(this.property, this.isGuest, this.email, this.toggleplay,
+      {Key key})
       : super(key: key);
   @override
   _ContactPageState createState() => _ContactPageState();
@@ -35,6 +38,13 @@ class ContactPage extends StatefulWidget {
 class _ContactPageState extends State<ContactPage> {
   final TextEditingController emailcontroller = TextEditingController();
   final TextEditingController dudecontroller = TextEditingController();
+
+  @override
+  void dispose() {
+    // TODO: implement dispose
+    super.dispose();
+    widget.toggleplay('play');
+  }
 
   //final emailController =  TextEditingController();
   final _formKey = GlobalKey<FormState>();

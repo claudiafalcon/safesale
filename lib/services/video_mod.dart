@@ -5,7 +5,12 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:orientation/orientation.dart';
 import 'package:path_provider/path_provider.dart';
+import 'package:safesale/auth_credentials.dart';
+import 'package:safesale/models/property.dart';
+import 'package:safesale/services/auth_service.dart';
+import 'package:safesale/variables.dart';
 import 'package:safesale/widgets/loading.dart';
+import 'package:safesale/widgets/rigthpropertybar.dart';
 import 'package:screen/screen.dart';
 import 'package:video_player/video_player.dart';
 import 'package:wakelock/wakelock.dart';
@@ -19,17 +24,26 @@ import 'package:safesale/responses/regex_response.dart';
 typedef VideoCallback<T> = void Function(T t);
 
 class SafeSalePlayer extends StatefulWidget {
-  final String url;
-
   final VideoCallback<bool> onfullscreen;
 
   final VideoCallback<String> onpeningvideo;
 
+  final int total;
+
+  final Property property;
+
+  final SignedCredentials credentials;
+
+  final AuthFlowStatus status;
+
   SafeSalePlayer({
     Key key,
-    @required this.url,
     this.onfullscreen,
     this.onpeningvideo,
+    this.total,
+    this.credentials,
+    this.status,
+    @required this.property,
   }) : super(key: key);
 
   @override
@@ -39,6 +53,8 @@ class SafeSalePlayer extends StatefulWidget {
 class _SafeSalePlayerState extends State<SafeSalePlayer>
     with SingleTickerProviderStateMixin {
   String playtype;
+
+  String url;
 
   VideoPlayerController controller;
 
@@ -74,7 +90,9 @@ class _SafeSalePlayerState extends State<SafeSalePlayer>
 
   @override
   void initState() {
-    urlcheck(widget.url);
+    url =
+        cloudfronturl + widget.property.id + "/" + widget.property.id + ".m3u8";
+    urlcheck(url);
     super.initState();
     var widgetsBinding = WidgetsBinding.instance;
 
@@ -143,6 +161,14 @@ class _SafeSalePlayerState extends State<SafeSalePlayer>
           ),
         ),
       ),
+      RightPropertyBar(
+          total: widget.total,
+          property: widget.property,
+          headText: widget.property.nombre,
+          email:
+              widget.credentials != null ? widget.credentials.username : null,
+          status: widget.status,
+          toggleplay: togglePlayAction)
     ];
     videoChildrens.addAll(videoBuiltInChildrens());
     return //AspectRatio(
@@ -374,6 +400,14 @@ class _SafeSalePlayerState extends State<SafeSalePlayer>
 
   void clearHideControlbarTimer() {
     showTime?.cancel();
+  }
+
+  void togglePlayAction(String action) {
+    if (action == 'pause') {
+      controller.pause();
+    } else {
+      controller.play();
+    }
   }
 
   void togglePlay() {

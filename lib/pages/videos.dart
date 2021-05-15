@@ -25,6 +25,7 @@ class VideoPage extends StatefulWidget {
 
   final bool Function() needsreload;
   final void Function() turnoffreloading;
+
   const VideoPage(
       {Key key,
       this.authstatus,
@@ -191,6 +192,16 @@ class _VideoPageState extends State<VideoPage> {
 
   _onPageViewChange(int page) {
     print("Current Page: " + page.toString());
+    if (page + 1 == result.length) {
+      int i = ((page + 1) ~/ resultBlockSize) - 1;
+      if (_searchService.criterio != null)
+        _searchService.fetchProperties(
+            null, null, _searchService.getnextToken(i));
+      setState(() {
+        result.addAll(_searchService.getProperties());
+      });
+    }
+
     int previousPage = page;
     if (page != 0)
       previousPage--;
@@ -251,27 +262,29 @@ class _VideoPageState extends State<VideoPage> {
                     result = _searchService.getProperties();
                     _searchService.turnOffExternalSearch();
                     return PageView.builder(
-                        itemCount: result.length,
+                        //      itemCount: result.length,
                         onPageChanged: _onPageViewChange,
                         controller:
                             PageController(initialPage: 0, viewportFraction: 1),
                         scrollDirection: Axis.vertical,
                         itemBuilder: (context, index) {
-                          print(index);
-                          Property property = result[index];
-                          return Stack(children: [
-                            VideoPlayerItem(property.id)
-                            //video
-                            ,
-                            RightPropertyBar(
-                                total: _searchService.getTotal(),
-                                property: property,
-                                headText: property.nombre,
-                                email: widget.credentials != null
-                                    ? widget.credentials.username
-                                    : null,
-                                status: widget.authstatus)
-                          ]);
+                          print("[info] This is the current page $index");
+                          bool fullscreen = false;
+                          if (index != result.length) {
+                            Property property = result[index];
+                            return Stack(fit: StackFit.expand, children: [
+                              SafeSalePlayer(
+                                  onfullscreen: (t) {
+                                    setState(() {
+                                      fullscreen = t;
+                                    });
+                                  },
+                                  total: _searchService.getTotal(),
+                                  property: property,
+                                  credentials: widget.credentials,
+                                  status: widget.authstatus),
+                            ]);
+                          }
                         });
                   }
                   break;
@@ -287,70 +300,5 @@ class _VideoPageState extends State<VideoPage> {
             }
           }),
     );
-  }
-}
-
-class VideoPlayerItem extends StatefulWidget {
-  final String video;
-
-  VideoPlayerItem(this.video);
-
-  @override
-  _VideoPlayerItemState createState() => _VideoPlayerItemState();
-}
-
-class _VideoPlayerItemState extends State<VideoPlayerItem> {
-  @override
-  initState() {
-    super.initState();
-    //_loadVideo(_videoUrl);
-
-    // _controller = VideoPlayerController.network(_videoUrl)
-    // ..initialize().then((value) {
-    // _controller.play();
-    // });
-  }
-
-  //void _loadVideo(String key) async {
-  //await Media.getURL(widget.video).then((String result) {
-  //_videoUrl = result;
-  //});
-
-  //_controller = VideoPlayerController.network(_videoUrl)
-  //..initialize().then((_) {
-  // setState(() {});
-  // });
-  //_controller.setLooping(true);
-  //_controller.play();
-
-  // _controller = VideoPlayerController.network(_videoUrl);
-
-  // _controller.addListener(() {
-  //  setState(() {});
-  //}//);
-
-  //await _controller.initialize();
-  //await _controller.play();
-  //controller.setLooping(true);
-  // _controller.setVolume(1.0);
-
-  // Use the controller to loop the video.
-  // }
-
-  bool fullscreen = false;
-  // @override
-  Widget build(BuildContext context) {
-    return Stack(fit: StackFit.expand, children: [
-      SafeSalePlayer(
-        url: cloudfronturl + widget.video + "/" + widget.video + ".m3u8",
-        // "https://player.vimeo.com/external/440218055.m3u8?s=7ec886b4db9c3a52e0e7f5f917ba7287685ef67f&oauth2_token_id=1360367101",
-        // "https://sfux-ext.sfux.info/hls/chapter/105/1588724110/1588724110.m3u8",
-        onfullscreen: (t) {
-          setState(() {
-            fullscreen = t;
-          });
-        },
-      )
-    ]);
   }
 }

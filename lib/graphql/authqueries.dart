@@ -2,8 +2,9 @@ import 'dart:convert';
 
 import 'package:safesale/models/searchcriterio.dart';
 
-const q_nerbyProperties = '''query MyQuery(\$lat:Float!, \$lon: Float!) {
-                                    nearbyProperties(limit: 5, location: {lat: \$lat, lon: \$lon}, m: 50000) {
+const q_nerbyProperties =
+    '''query MyQuery(\$lat:Float!, \$lon: Float!, \$limit: Int!, \$nextToken:String ) {
+                                    nearbyProperties(limit: \$limit, nextToken: \$nextToken, location: {lat: \$lat, lon: \$lon}, m: 50000) {
                                       total
                                       nextToken
                                       items {
@@ -45,8 +46,8 @@ const q_nerbyProperties = '''query MyQuery(\$lat:Float!, \$lon: Float!) {
                                   }''';
 
 String q_preffix_search(SearchCriterio criterio) =>
-    '''query MyQuery {
-                                                            searchProperties(criteria:{''' +
+    '''query MyQuery( \$limit: Integer! ) {
+                                                            searchProperties(limit: \$limit, criteria:{''' +
     criterio.toGrapql() +
     '''}) {
                                       total

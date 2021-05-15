@@ -10,13 +10,21 @@ import 'package:safesale/widgets/listItem.dart';
 
 class InfoPage extends StatefulWidget {
   final Property property;
-  InfoPage(this.property);
+  final void Function(String) toggleplay;
+  InfoPage(this.property, this.toggleplay);
   @override
   _InfoPageState createState() => _InfoPageState();
 }
 
 class _InfoPageState extends State<InfoPage> {
   GoogleMapController mapController;
+
+  @override
+  void dispose() {
+    // TODO: implement dispose
+    super.dispose();
+    widget.toggleplay('play');
+  }
 
   LatLng _center;
   final Map<String, Marker> _markers = {};
