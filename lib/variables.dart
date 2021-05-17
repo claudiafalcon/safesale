@@ -19,7 +19,7 @@ final double factorFontSmall = 0.015;
 
 final String cloudfronturl = 'https://didsugvpn60.cloudfront.net/public/';
 
-final int resultBlockSize = 5;
+final int resultBlockSize = 20;
 
 farsiSimpleStyle(double size, [Color color, FontWeight fw = FontWeight.w400]) {
   return TextStyle(
