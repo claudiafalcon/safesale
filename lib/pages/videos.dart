@@ -1,3 +1,4 @@
+import 'dart:collection';
 import 'dart:ui';
 import 'dart:async';
 import 'package:flutter/material.dart';
@@ -45,7 +46,12 @@ class _VideoPageState extends State<VideoPage> {
 
   LocationData currentLocation;
 
-  List<Property> result;
+  Map<int, List<Property>> _pages = new Map<int, List<Property>>();
+  int _element = 0;
+
+  List<Property> _result;
+
+  int _currentProperty = 0;
 
   //PermissionStatus _permissionStatus = PermissionStatus.unknown;
 
@@ -77,7 +83,11 @@ class _VideoPageState extends State<VideoPage> {
   //}
 
   Future<void> setInitialLocation() async {
+    _pages = null;
+    _pages = new Map<int, List<Property>>();
     Location location = new Location();
+    _element = 0;
+    _currentProperty = 0;
     // establece la ubicación inicial tirando del usuario
     // ubicación actual de getLocation () de la ubicación
     await _searchService.checkState();
@@ -190,16 +200,30 @@ class _VideoPageState extends State<VideoPage> {
     );
   }
 
-  _onPageViewChange(int page) {
+  _onNextPage(int page) async {
     print("Current Page: " + page.toString());
-    if (page + 1 == result.length) {
-      int i = ((page + 1) ~/ resultBlockSize) - 1;
-      if (_searchService.criterio != null)
+    if (page < _searchService.getTotal()) {
+      _element = ((page) ~/ resultBlockSize);
+      if (_searchService.criterio == null)
         _searchService.fetchProperties(
-            null, null, _searchService.getnextToken(i));
-      setState(() {
-        result.addAll(_searchService.getProperties());
-      });
+            null, null, _searchService.getnextToken(_element - 1));
+      else
+        _searchService.searchProperties(
+            null, _searchService.getnextToken(_element - 1));
+    }
+  }
+
+  _onPreviousPage(int page) async {
+    int _index = (page - resultBlockSize) + (resultBlockSize * (_element));
+
+    if (page < resultBlockSize) _element = _element - 1;
+    print("Current Page: " + page.toString());
+    if (page - resultBlockSize == _result.length &&
+        _index < _searchService.getTotal()) {
+      _element = ((_index) ~/ resultBlockSize);
+      if (_searchService.criterio == null && _index > 0)
+        _searchService.fetchProperties(
+            null, null, _searchService.getnextToken(_element - 1));
     }
 
     int previousPage = page;
@@ -216,7 +240,6 @@ class _VideoPageState extends State<VideoPage> {
       // widget.turnoffreloading();
       setInitialLocation();
     }
-    ;
 
     return Scaffold(
       resizeToAvoidBottomInset: false,
@@ -243,7 +266,6 @@ class _VideoPageState extends State<VideoPage> {
                       _searchService.checkState();
 
                     return LoadingPage();
-                    break;
                   }
                 case ConnectionState.active:
                   if (snapshot.data.searchFlowStatus ==
@@ -259,19 +281,48 @@ class _VideoPageState extends State<VideoPage> {
                       ],
                     );
                   } else {
-                    result = _searchService.getProperties();
-                    _searchService.turnOffExternalSearch();
+                    if (_pages.containsKey(_element)) _pages.remove(_element);
+                    final initialPage = 0;
+                    final itemCount = _searchService.getTotal();
                     return PageView.builder(
-                        //      itemCount: result.length,
-                        onPageChanged: _onPageViewChange,
-                        controller:
-                            PageController(initialPage: 0, viewportFraction: 1),
+                        itemCount: initialPage + _searchService.getTotal(),
+                        controller: PageController(
+                            initialPage:
+                                initialPage + _element * resultBlockSize,
+                            viewportFraction: 1),
                         scrollDirection: Axis.vertical,
-                        itemBuilder: (context, index) {
+                        itemBuilder: (context, page) {
+                          final index = (page - initialPage);
+
                           print("[info] This is the current page $index");
+                          if ((index) ~/ resultBlockSize < _element) {
+                            _element = _element - 1;
+                            _result = _pages[(resultBlockSize * _element)];
+                          }
+
+                          if ((index == 0 || index % resultBlockSize == 0) &&
+                              index < _searchService.getTotal()) {
+                            int _ele = ((index) ~/ resultBlockSize);
+                            if (!_pages.containsKey(resultBlockSize * _ele)) {
+                              if (_ele == _element)
+                                _pages[resultBlockSize * _element] =
+                                    _searchService.getProperties();
+                              else
+                                _onNextPage(index);
+                            }
+                            _result = _pages[resultBlockSize * _ele];
+                          }
+
+                          _searchService.turnOffExternalSearch();
                           bool fullscreen = false;
-                          if (index != result.length) {
-                            Property property = result[index];
+                          if (index < 0) {
+                            _element = _element - 1;
+                            _result = _pages[(resultBlockSize * _element)];
+                          }
+
+                          if (_result != null) {
+                            int _idx = index % resultBlockSize;
+                            Property property = _result[_idx];
                             return Stack(fit: StackFit.expand, children: [
                               SafeSalePlayer(
                                   onfullscreen: (t) {
@@ -284,6 +335,16 @@ class _VideoPageState extends State<VideoPage> {
                                   credentials: widget.credentials,
                                   status: widget.authstatus),
                             ]);
+                          } else {
+                            return Stack(
+                              children: [
+                                EmptyPage(),
+                                RightPropertyBar(
+                                    total: 0,
+                                    headText: "",
+                                    status: widget.authstatus)
+                              ],
+                            );
                           }
                         });
                   }

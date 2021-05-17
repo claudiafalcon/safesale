@@ -46,8 +46,8 @@ const q_nerbyProperties =
                                   }''';
 
 String q_preffix_search(SearchCriterio criterio) =>
-    '''query MyQuery( \$limit: Integer! ) {
-                                                            searchProperties(limit: \$limit, criteria:{''' +
+    '''query MyQuery( \$limit: Int!, \$nextToken:String ) {
+                                                            searchProperties(limit: \$limit,  nextToken: \$nextToken,  criteria:{''' +
     criterio.toGrapql() +
     '''}) {
                                       total

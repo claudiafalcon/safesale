@@ -100,6 +100,7 @@ class SearchService {
   }
 
   void fetchProperties(double lat, double lon, String nextToken) async {
+    print("[info] Esta iniciando la busqueda");
     try {
       _properties = null;
       if (nextToken == null) {
@@ -135,9 +136,10 @@ class SearchService {
             body: new Map<String, Object>.from({
               'query': q_nerbyProperties,
               'variables': {
-                "lat": lat,
-                "lon": lon,
+                "lat": _lat,
+                "lon": _lon,
                 "limit": resultBlockSize,
+                "nextToken": nextToken
               }
             }));
         http.Response response;
@@ -168,12 +170,14 @@ class SearchService {
         return;
       } else {
         var operation = Amplify.API.query(
-            request:
-                GraphQLRequest<String>(document: q_nerbyProperties, variables: {
-          "lat": lat,
-          "lon": lon,
-          "limit": resultBlockSize,
-        }));
+            request: GraphQLRequest<String>(
+                document: q_nerbyProperties,
+                variables: {
+              "lat": _lat,
+              "lon": _lon,
+              "limit": resultBlockSize,
+              "nextToken": nextToken
+            }));
         var response = await operation.response;
         var data = response.data;
         final List parsedList = json.decode(data)["nearbyProperties"]["items"];
@@ -203,8 +207,9 @@ class SearchService {
       if (nextToken == null) {
         _total = 0;
         _tokens = <String>[];
+        this.criterio = criterio;
       }
-      criterio = criterio;
+
       _fromASearch = true;
       final state = SearchState(searchFlowStatus: SearchFlowStatus.started);
       searchStateController.add(state);
@@ -229,7 +234,8 @@ class SearchService {
             headers: new Map<String, String>.from(
                 {'Content-Type': 'application/graphql; charset=utf-8'}),
             body: new Map<String, Object>.from({
-              'query': q_preffix_search(criterio),
+              'query': q_preffix_search(this.criterio),
+              'variables': {"limit": resultBlockSize, "nextToken": nextToken}
             }));
         http.Response response;
         try {
@@ -266,8 +272,9 @@ class SearchService {
         return;
       } else {
         var operation = Amplify.API.query(
-            request:
-                GraphQLRequest<String>(document: q_preffix_search(criterio)));
+            request: GraphQLRequest<String>(
+                document: q_preffix_search(this.criterio),
+                variables: {"limit": resultBlockSize, "nextToken": nextToken}));
         var response = await operation.response;
         var data = response.data;
         if (nextToken == null)

@@ -6,7 +6,10 @@
   "path": "/property/doc/_search",  
   "params": {    
     "body": {      
-     #if( $context.args.nextToken ) "search_after": ["$context.args.nextToken"], #end       
+     #if( $context.args.nextToken ) 
+
+     "search_after": $context.args.nextToken,
+     #end       
      "size" : ${limit},      
      "query": {        
       "bool" : { "must" : [{ 
@@ -39,8 +42,8 @@
                             ]
                 }
               },
-                   "sort": [{"_score": {"order": "desc"}},
-    {"_id": {"order":"asc"}}]
+                    "sort": [{"_score":{"order" : "desc"}},{ "createdAt" : {"order" : "desc"}}
+    ] 
             }
     }
 }
