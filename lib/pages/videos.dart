@@ -239,10 +239,10 @@ class _VideoPageState extends State<VideoPage> {
   bool _transition = false;
 
   void _thereisanopenwindow(bool isthere) {
-    setState(() {
-      _transition = true;
-      _openWindow = isthere;
-    });
+    //  setState(() {
+    _transition = true;
+    _openWindow = isthere;
+    // });
   }
 
   @override

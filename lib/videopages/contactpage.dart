@@ -129,7 +129,6 @@ class _ContactPageState extends State<ContactPage> {
         });
       }
       if (conv != null) {
-        widget.thereisanopenwindow(false);
         Navigator.pop(context);
         _showDialog(
             text:
