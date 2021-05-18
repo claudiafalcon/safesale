@@ -6,27 +6,20 @@ import 'package:safesale/painters/softpaint.dart';
 
 import 'variables.dart';
 
-class LoginPage extends StatefulWidget {
-  final ValueChanged<LoginCredentials> didProvideCredentials;
-  final VoidCallback shouldShowsSingUp;
-  final VoidCallback shouldUpdateDevice;
-  final VoidCallback shouldShowResetPassword;
+class ResetPasswordPage extends StatefulWidget {
+  final ValueChanged<String> didProvideUserName;
+  final VoidCallback shouldShowLogin;
   final String error;
 
-  LoginPage(
-      {Key key,
-      this.didProvideCredentials,
-      this.shouldShowsSingUp,
-      this.error,
-      this.shouldUpdateDevice,
-      this.shouldShowResetPassword})
+  ResetPasswordPage(
+      {Key key, this.shouldShowLogin, this.error, this.didProvideUserName})
       : super(key: key);
 
   @override
-  _LoginPageState createState() => _LoginPageState();
+  _ResetPasswordPageState createState() => _ResetPasswordPageState();
 }
 
-class _LoginPageState extends State<LoginPage> {
+class _ResetPasswordPageState extends State<ResetPasswordPage> {
   bool _validate = false;
   bool _isObscure = true;
   TextEditingController emailcontroller = TextEditingController();
@@ -34,15 +27,10 @@ class _LoginPageState extends State<LoginPage> {
 
   GlobalKey<FormState> _key = new GlobalKey();
 
-  void _login() {
+  void _resetPassword() {
     if (_key.currentState.validate()) {
       final username = emailcontroller.text.trim().toLowerCase();
-      final password = passwordcontroller.text.trim();
-
-      final credentials =
-          LoginCredentials(username: username, password: password);
-      widget.didProvideCredentials(credentials);
-      widget.shouldUpdateDevice();
+      widget.didProvideUserName(username);
     } else {
       setState(() {
         _validate = true;
@@ -84,7 +72,7 @@ class _LoginPageState extends State<LoginPage> {
                               factorAuthLogoWd,
                         ),
                       ),
-                      Text("Bienvenido a Safe Sale",
+                      Text("Restablece tu password",
                           textAlign: TextAlign.center,
                           style: GoogleFonts.raleway(
                             textStyle: TextStyle(
@@ -106,17 +94,6 @@ class _LoginPageState extends State<LoginPage> {
                             text: "E-mail",
                             validator: "email"),
                       ),
-                      SizedBox(
-                        height: 10,
-                      ),
-                      Container(
-                          width: MediaQuery.of(context).size.width,
-                          margin: EdgeInsets.only(left: 20, right: 20),
-                          child: InputDecorationPass(
-                              controller: passwordcontroller,
-                              text: "Password",
-                              isPassword: true,
-                              validator: "")),
                       widget.error != null
                           ? Padding(
                               padding: const EdgeInsets.all(6.0),
@@ -134,7 +111,7 @@ class _LoginPageState extends State<LoginPage> {
                               height: 30,
                             ),
                       InkWell(
-                        onTap: () => _login(),
+                        onTap: () => _resetPassword(),
                         child: Container(
                           width: MediaQuery.of(context).size.width / 2,
                           height: 50,
@@ -143,7 +120,7 @@ class _LoginPageState extends State<LoginPage> {
                             borderRadius: BorderRadius.circular(20),
                           ),
                           child: Center(
-                            child: Text("Login",
+                            child: Text("Enviar Código",
                                 style: GoogleFonts.raleway(
                                     textStyle: TextStyle(
                                   color: Colors.white,
@@ -160,22 +137,14 @@ class _LoginPageState extends State<LoginPage> {
                       Row(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
-                          Text("¿No tienes cuenta?",
-                              style: GoogleFonts.raleway(
-                                  textStyle: TextStyle(
-                                color: Colors.white,
-                                fontSize: MediaQuery.of(context).size.height *
-                                    factorFontInput,
-                                fontWeight: FontWeight.normal,
-                              ))),
-                          SizedBox(width: 10),
                           InkWell(
-                            onTap: widget.shouldShowsSingUp,
-                            child: Text("Registrate",
+                            onTap: widget.shouldShowLogin,
+                            child: Text("Inicia sesión",
                                 style: GoogleFonts.raleway(
                                     textStyle: TextStyle(
                                   color: Color.fromRGBO(58, 184, 234, 1),
-                                  fontSize: 15,
+                                  fontSize: MediaQuery.of(context).size.height *
+                                      factorFontSmall,
                                   fontWeight: FontWeight.normal,
                                 ))),
                           )
@@ -184,21 +153,6 @@ class _LoginPageState extends State<LoginPage> {
                       SizedBox(
                         height: 10,
                       ),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          InkWell(
-                            onTap: widget.shouldShowResetPassword,
-                            child: Text("¿Olvidaste tu contraseña?",
-                                style: GoogleFonts.raleway(
-                                    textStyle: TextStyle(
-                                  color: Color.fromRGBO(58, 184, 234, 1),
-                                  fontSize: 15,
-                                  fontWeight: FontWeight.normal,
-                                ))),
-                          )
-                        ],
-                      )
                     ],
                   ),
                 ),

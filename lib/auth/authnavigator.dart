@@ -5,10 +5,12 @@ import 'package:safesale/pages/favs.dart';
 import 'package:safesale/pages/messages.dart';
 import 'package:safesale/pages/profile.dart';
 import 'package:safesale/pages/videos.dart';
+import 'package:safesale/resetpassword.dart';
 import 'package:safesale/services/auth_service.dart';
 import 'package:safesale/services/user_service.dart';
 import 'package:safesale/signup.dart';
 import 'package:safesale/verification.dart';
+import 'package:safesale/verificationpass.dart';
 import 'package:safesale/widgets/loading.dart';
 
 class NavigatorPage extends StatefulWidget {
@@ -16,7 +18,7 @@ class NavigatorPage extends StatefulWidget {
   final bool guestallowed;
   final void Function(int) call;
   final bool Function() needsreload;
-  final void Function()  turnoffreloading;
+  final void Function() turnoffreloading;
 
   const NavigatorPage(
       {Key key,
@@ -24,7 +26,7 @@ class NavigatorPage extends StatefulWidget {
       this.guestallowed: false,
       this.call,
       this.needsreload,
-      this. turnoffreloading})
+      this.turnoffreloading})
       : super(key: key);
   @override
   _NavigatorPageState createState() => _NavigatorPageState();
@@ -89,6 +91,8 @@ class _NavigatorPageState extends State<NavigatorPage> {
                               _authService.loginWithCredentials,
                           shouldShowsSingUp: _authService.showSignUp,
                           shouldUpdateDevice: _userService.updateDevice,
+                          shouldShowResetPassword:
+                              _authService.showResetPassword,
                           error: snapshot.data.authFlowStatus ==
                                   AuthFlowStatus.login_error
                               ? _authService.error
@@ -108,6 +112,19 @@ class _NavigatorPageState extends State<NavigatorPage> {
                               ? _authService.error
                               : null)),
                 if ((snapshot.data.authFlowStatus ==
+                            AuthFlowStatus.resetPassword ||
+                        snapshot.data.authFlowStatus ==
+                            AuthFlowStatus.resetPassword_error) &&
+                    !widget.guestallowed)
+                  MaterialPage(
+                      child: ResetPasswordPage(
+                          didProvideUserName: _authService.resetPassword,
+                          shouldShowLogin: _authService.showLogin,
+                          error: snapshot.data.authFlowStatus ==
+                                  AuthFlowStatus.resetPassword_error
+                              ? _authService.error
+                              : null)),
+                if ((snapshot.data.authFlowStatus ==
                             AuthFlowStatus.verification ||
                         snapshot.data.authFlowStatus ==
                             AuthFlowStatus.verification_error) &&
@@ -118,6 +135,21 @@ class _NavigatorPageState extends State<NavigatorPage> {
                           shouldShowLogin: _authService.showLogin,
                           error: snapshot.data.authFlowStatus ==
                                   AuthFlowStatus.verification_error
+                              ? _authService.error
+                              : null,
+                          email: _authService.getCredentials().username)),
+                if ((snapshot.data.authFlowStatus ==
+                            AuthFlowStatus.verifificationPass ||
+                        snapshot.data.authFlowStatus ==
+                            AuthFlowStatus.verifificationPass_error) &&
+                    !widget.guestallowed)
+                  MaterialPage(
+                      child: VerificationPassPage(
+                          didProvideNewPassword:
+                              _authService.setNewPasswordCode,
+                          shouldShowLogin: _authService.showLogin,
+                          error: snapshot.data.authFlowStatus ==
+                                  AuthFlowStatus.verifificationPass_error
                               ? _authService.error
                               : null,
                           email: _authService.getCredentials().username)),

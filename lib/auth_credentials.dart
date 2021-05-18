@@ -4,9 +4,15 @@ abstract class AuthCredentials {
   final String name;
   String id;
   String error;
+  String verificationCode;
 
   AuthCredentials(
-      {this.username, this.password, this.name, this.id, this.error});
+      {this.username,
+      this.password,
+      this.name,
+      this.id,
+      this.error,
+      this.verificationCode});
 }
 
 // 2
@@ -24,4 +30,12 @@ class SignUpCredentials extends AuthCredentials {
 class SignedCredentials extends AuthCredentials {
   SignedCredentials({String username, String name})
       : super(username: username, name: name);
+}
+
+class ResetCredentials extends AuthCredentials {
+  ResetCredentials({String username, String verificationCode, String password})
+      : super(
+            username: username,
+            verificationCode: verificationCode,
+            password: password);
 }

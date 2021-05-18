@@ -101,6 +101,8 @@ class _InputDecorationPassState extends State<InputDecorationPass> {
           return FormValidator().validateEmail(value);
         if (widget.validator == "password")
           return FormValidator().validatePassword(value);
+        if (widget.validator == "code")
+          return FormValidator().validateCode(value);
         return FormValidator().validateNull();
       },
       decoration: InputDecoration(

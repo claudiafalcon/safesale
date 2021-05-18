@@ -47,6 +47,14 @@ class FormValidator {
     }
   }
 
+  String validateCode(String value) {
+    if (value.isEmpty) {
+      return "El código es requerido";
+    } else {
+      return null;
+    }
+  }
+
   String validateNull() {
     return null;
   }

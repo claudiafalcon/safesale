@@ -17,7 +17,11 @@ enum AuthFlowStatus {
   session,
   login_error,
   signUp_error,
-  verification_error
+  verification_error,
+  resetPassword,
+  verifificationPass,
+  resetPassword_error,
+  verifificationPass_error,
 }
 
 // 2
@@ -42,6 +46,11 @@ class AuthService {
     authStateController.add(state);
   }
 
+  void showResetPassword() {
+    final state = AuthState(authFlowStatus: AuthFlowStatus.resetPassword);
+    authStateController.add(state);
+  }
+
   // 6
   void showLogin() {
     final state = AuthState(authFlowStatus: AuthFlowStatus.login);
@@ -51,6 +60,26 @@ class AuthService {
   void showGuess() {
     final state = AuthState(authFlowStatus: AuthFlowStatus.guess);
     authStateController.add(state);
+  }
+
+  void resetPassword(String username) async {
+    try {
+      ResetPasswordResult res = await Amplify.Auth.resetPassword(
+        username: username,
+      );
+
+      final state =
+          AuthState(authFlowStatus: AuthFlowStatus.verifificationPass);
+      authStateController.add(state);
+
+      _credentials = new ResetCredentials(username: username);
+    } catch (authError) {
+      error = "El username no existe.";
+      final state =
+          AuthState(authFlowStatus: AuthFlowStatus.resetPassword_error);
+      authStateController.add(state);
+      print('Could not verify code - ${authError.cause}');
+    }
   }
 
   void showVerification() {
@@ -70,8 +99,6 @@ class AuthService {
 
       // 3
       if (result.isSignedIn) {
-        final state = AuthState(authFlowStatus: AuthFlowStatus.session);
-        authStateController.add(state);
         var res2 = await Amplify.Auth.fetchUserAttributes();
         AuthUserAttribute email = res2.firstWhere(
             (element) => element.userAttributeKey == "email", orElse: () {
@@ -84,6 +111,8 @@ class AuthService {
         String emailstr = (email != null ? email.value : null);
         String namestr = (name != null ? name.value : null);
         _credentials = new SignedCredentials(username: emailstr, name: namestr);
+        final state = AuthState(authFlowStatus: AuthFlowStatus.session);
+        authStateController.add(state);
       } else {
         error = "El usuario no se pudo loguear. Intenta mas tarde.";
         final state = AuthState(authFlowStatus: AuthFlowStatus.login_error);
@@ -98,6 +127,26 @@ class AuthService {
 
       final state = AuthState(authFlowStatus: AuthFlowStatus.login_error);
       authStateController.add(state);
+    }
+  }
+
+  void setNewPasswordCode(AuthCredentials credentials) async {
+    try {
+      // 2
+      final result = await Amplify.Auth.confirmPassword(
+          username: credentials.username,
+          newPassword: credentials.password,
+          confirmationCode: credentials.verificationCode);
+      _credentials = new LoginCredentials(
+          username: credentials.username, password: credentials.password);
+
+      loginWithCredentials(_credentials);
+    } catch (authError) {
+      error = "El código no es correcto.";
+      final state =
+          AuthState(authFlowStatus: AuthFlowStatus.verification_error);
+      authStateController.add(state);
+      print('Could not verify code - ${authError.cause}');
     }
   }
 
