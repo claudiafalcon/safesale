@@ -4,9 +4,12 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'package:intl/intl.dart';
 import 'package:safesale/models/property.dart';
 import 'package:safesale/painters/softpaint.dart';
+import 'package:safesale/variables.dart';
 import 'package:safesale/widgets/listItem.dart';
+import 'package:safesale/widgets/listItemdark.dart';
 
 class InfoPage extends StatefulWidget {
   final Property property;
@@ -19,6 +22,8 @@ class InfoPage extends StatefulWidget {
 
 class _InfoPageState extends State<InfoPage> {
   GoogleMapController mapController;
+
+  final oCcy = new NumberFormat("#,##0.00", "es_MX");
 
   LatLng _center;
   final Map<String, Marker> _markers = {};
@@ -49,7 +54,9 @@ class _InfoPageState extends State<InfoPage> {
 
   @override
   Widget build(BuildContext context) {
-    double _fontsize = MediaQuery.of(context).size.height < 800 ? 10 : 14;
+    double _fontsize =
+        MediaQuery.of(context).size.height * factorFontSmall * 1.1;
+    double _pad = MediaQuery.of(context).size.height * factorSmallIconSize / 2;
     return ClipRRect(
         borderRadius: BorderRadius.only(
             topLeft: Radius.circular(10), topRight: Radius.circular(10)),
@@ -98,115 +105,177 @@ class _InfoPageState extends State<InfoPage> {
                                                   .size
                                                   .width *
                                               0.9,
-                                          child: Column(
-                                            mainAxisSize: MainAxisSize.min,
-                                            children: [
-                                              Container(
-                                                  width: 80,
-                                                  height: 60,
-                                                  child: Center(
-                                                    child: Builder(
-                                                      builder: (context) {
-                                                        return SvgPicture.asset(
-                                                          'images/INFO_CASA.svg',
-                                                          width: 50,
-                                                          height: 50,
-                                                          color:
-                                                              Color(0xff003b8b),
-                                                        );
-                                                      },
-                                                    ),
-                                                  )),
-                                              Container(
-                                                child: Padding(
-                                                  padding:
-                                                      const EdgeInsets.all(8.0),
-                                                  child: Column(children: [
-                                                    Container(
-                                                        child: ListItem(
-                                                      parametro: "Terreno-m2:",
-                                                      texto: widget
-                                                          .property.terrenoM2
-                                                          .toString(),
-                                                      bulletcolor:
-                                                          Color(0xff003b8b),
-                                                      textcolor: Colors.white,
-                                                      fontsize: _fontsize,
+                                          child: Padding(
+                                            padding: EdgeInsets.only(
+                                                top: _pad, bottom: _pad),
+                                            child: Column(
+                                              mainAxisSize: MainAxisSize.min,
+                                              children: [
+                                                Container(
+                                                    width: MediaQuery.of(
+                                                                context)
+                                                            .size
+                                                            .height *
+                                                        factorRighBarFilterIconSize *
+                                                        1.3,
+                                                    height: MediaQuery.of(
+                                                                context)
+                                                            .size
+                                                            .height *
+                                                        factorRighBarFilterIconSize *
+                                                        1.3,
+                                                    child: Center(
+                                                      child: Builder(
+                                                        builder: (context) {
+                                                          return SvgPicture
+                                                              .asset(
+                                                            'images/INFO_CASA.svg',
+                                                            width: MediaQuery.of(
+                                                                        context)
+                                                                    .size
+                                                                    .height *
+                                                                factorRighBarFilterIconSize *
+                                                                1.2,
+                                                            height: MediaQuery.of(
+                                                                        context)
+                                                                    .size
+                                                                    .height *
+                                                                factorRighBarFilterIconSize *
+                                                                1.2,
+                                                            color: Color(
+                                                                0xff003b8b),
+                                                          );
+                                                        },
+                                                      ),
                                                     )),
-                                                    ListItem(
-                                                      parametro:
-                                                          "Construccion-m2:",
-                                                      texto: widget.property
-                                                          .construccionM2
-                                                          .toString(),
-                                                      bulletcolor:
-                                                          Color(0xff003b8b),
-                                                      textcolor: Colors.white,
-                                                      fontsize: _fontsize,
-                                                    ),
-                                                    ListItem(
-                                                      parametro: "Antigüedad:",
-                                                      texto: widget
-                                                          .property.edad
-                                                          .toString(),
-                                                      bulletcolor:
-                                                          Color(0xff003b8b),
-                                                      textcolor: Colors.white,
-                                                      fontsize: _fontsize,
-                                                    ),
-                                                    ListItem(
-                                                      parametro:
-                                                          "Estacionamientos:",
-                                                      texto: widget.property
-                                                          .estacionamientos
-                                                          .toString(),
-                                                      bulletcolor:
-                                                          Color(0xff003b8b),
-                                                      textcolor: Colors.white,
-                                                      fontsize: _fontsize,
-                                                    ),
-                                                    ListItem(
-                                                      parametro: "Recamaras:",
-                                                      texto: widget
-                                                          .property.recamaras
-                                                          .toString(),
-                                                      bulletcolor:
-                                                          Color(0xff003b8b),
-                                                      textcolor: Colors.white,
-                                                      fontsize: _fontsize,
-                                                    ),
-                                                    ListItem(
-                                                      parametro:
-                                                          "Caracteristicas:",
-                                                      texto: widget.property
-                                                          .caracteristicas,
-                                                      bulletcolor:
-                                                          Color(0xff003b8b),
-                                                      textcolor: Colors.white,
-                                                      fontsize: _fontsize,
-                                                    ),
-                                                    ListItem(
-                                                      parametro: "Amenidades:",
-                                                      texto: widget
-                                                          .property.amenidades,
-                                                      bulletcolor:
-                                                          Color(0xff003b8b),
-                                                      textcolor: Colors.white,
-                                                      fontsize: _fontsize,
-                                                    ),
-                                                    ListItem(
-                                                      parametro: "Tipo:",
-                                                      texto:
-                                                          widget.property.tipo,
-                                                      bulletcolor:
-                                                          Color(0xff003b8b),
-                                                      textcolor: Colors.white,
-                                                      fontsize: _fontsize,
-                                                    ),
-                                                  ]),
-                                                ),
-                                              )
-                                            ],
+                                                Container(
+                                                  child: Padding(
+                                                    padding:
+                                                        const EdgeInsets.all(
+                                                            8.0),
+                                                    child: Column(children: [
+                                                      Container(
+                                                          child: Padding(
+                                                        padding:
+                                                            EdgeInsets.only(
+                                                                top: _pad),
+                                                        child: ListItem(
+                                                          parametro:
+                                                              "Terreno-m2:",
+                                                          texto: widget.property
+                                                              .terrenoM2
+                                                              .toString(),
+                                                          bulletcolor:
+                                                              Color(0xff003b8b),
+                                                          textcolor:
+                                                              Colors.white,
+                                                          fontsize: _fontsize,
+                                                        ),
+                                                      )),
+                                                      Padding(
+                                                        padding:
+                                                            EdgeInsets.only(
+                                                                top: _pad),
+                                                        child: ListItem(
+                                                          parametro:
+                                                              "Construccion-m2:",
+                                                          texto: widget.property
+                                                              .construccionM2
+                                                              .toString(),
+                                                          bulletcolor:
+                                                              Color(0xff003b8b),
+                                                          textcolor:
+                                                              Colors.white,
+                                                          fontsize: _fontsize,
+                                                        ),
+                                                      ),
+                                                      Padding(
+                                                        padding:
+                                                            EdgeInsets.only(
+                                                                top: _pad),
+                                                        child: ListItem(
+                                                          parametro:
+                                                              "Antigüedad:",
+                                                          texto: widget
+                                                              .property.edad
+                                                              .toString(),
+                                                          bulletcolor:
+                                                              Color(0xff003b8b),
+                                                          textcolor:
+                                                              Colors.white,
+                                                          fontsize: _fontsize,
+                                                        ),
+                                                      ),
+                                                      Padding(
+                                                        padding:
+                                                            EdgeInsets.only(
+                                                                top: _pad),
+                                                        child: ListItem(
+                                                          parametro:
+                                                              "Estacionamientos:",
+                                                          texto: widget.property
+                                                              .estacionamientos
+                                                              .toString(),
+                                                          bulletcolor:
+                                                              Color(0xff003b8b),
+                                                          textcolor:
+                                                              Colors.white,
+                                                          fontsize: _fontsize,
+                                                        ),
+                                                      ),
+                                                      Padding(
+                                                        padding:
+                                                            EdgeInsets.only(
+                                                                top: _pad),
+                                                        child: ListItem(
+                                                          parametro:
+                                                              "Recamaras:",
+                                                          texto: widget.property
+                                                              .recamaras
+                                                              .toString(),
+                                                          bulletcolor:
+                                                              Color(0xff003b8b),
+                                                          textcolor:
+                                                              Colors.white,
+                                                          fontsize: _fontsize,
+                                                        ),
+                                                      ),
+                                                      Padding(
+                                                        padding:
+                                                            EdgeInsets.only(
+                                                                top: _pad),
+                                                        child: ListItem(
+                                                          parametro:
+                                                              "Amenidades:",
+                                                          texto: widget.property
+                                                              .amenidades,
+                                                          bulletcolor:
+                                                              Color(0xff003b8b),
+                                                          textcolor:
+                                                              Colors.white,
+                                                          fontsize: _fontsize,
+                                                        ),
+                                                      ),
+                                                      Padding(
+                                                        padding:
+                                                            EdgeInsets.only(
+                                                                top: _pad),
+                                                        child: ListItem(
+                                                          parametro: "Tipo:",
+                                                          texto: widget
+                                                              .property.tipo,
+                                                          bulletcolor:
+                                                              Color(0xff003b8b),
+                                                          textcolor:
+                                                              Colors.white,
+                                                          fontsize: _fontsize,
+                                                        ),
+                                                      ),
+                                                    ]),
+                                                  ),
+                                                )
+                                              ],
+                                            ),
                                           )),
                                     ),
                                     ClipRRect(
@@ -216,22 +285,43 @@ class _InfoPageState extends State<InfoPage> {
                                           alignment: Alignment.topCenter,
                                           height: MediaQuery.of(context)
                                                   .size
-                                                  .width /
+                                                  .height /
                                               10 *
-                                              5.0,
+                                              3.0,
+                                          width: MediaQuery.of(context)
+                                                  .size
+                                                  .width *
+                                              0.85,
                                           child: Column(
-                                            mainAxisSize: MainAxisSize.min,
                                             children: [
                                               Container(
-                                                  width: 80,
-                                                  height: 80,
+                                                  width: MediaQuery.of(context)
+                                                          .size
+                                                          .height *
+                                                      factorRighBarFilterIconSize *
+                                                      1.3,
+                                                  height: MediaQuery.of(context)
+                                                          .size
+                                                          .height *
+                                                      factorRighBarFilterIconSize *
+                                                      1.3,
                                                   child: Center(
                                                     child: Builder(
                                                       builder: (context) {
                                                         return SvgPicture.asset(
                                                           'images/INFO_SALE.svg',
-                                                          width: 50,
-                                                          height: 50,
+                                                          width: MediaQuery.of(
+                                                                      context)
+                                                                  .size
+                                                                  .height *
+                                                              factorRighBarFilterIconSize *
+                                                              1.2,
+                                                          height: MediaQuery.of(
+                                                                      context)
+                                                                  .size
+                                                                  .height *
+                                                              factorRighBarFilterIconSize *
+                                                              1.2,
                                                           color: Color.fromRGBO(
                                                               58, 184, 234, 1),
                                                         );
@@ -241,32 +331,105 @@ class _InfoPageState extends State<InfoPage> {
                                               Container(
                                                 child: Padding(
                                                   padding:
-                                                      const EdgeInsets.all(8.0),
-                                                  child: Column(children: [
-                                                    Container(
-                                                        child: ListItem(
-                                                      parametro: "Nombre:",
-                                                      texto: widget
-                                                          .property.nombre,
-                                                      bulletcolor:
-                                                          Color.fromRGBO(
-                                                              58, 184, 234, 1),
-                                                      textcolor: Colors.white,
-                                                      fontsize: _fontsize,
-                                                    )),
-                                                    ListItem(
-                                                      parametro: "Descripción:",
-                                                      texto: widget
-                                                          .property.descripcion,
-                                                      bulletcolor:
-                                                          Color.fromRGBO(
-                                                              58, 184, 234, 1),
-                                                      textcolor: Colors.white,
-                                                      fontsize: _fontsize,
-                                                    )
-                                                  ]),
+                                                      EdgeInsets.only(top: 0),
+                                                  child: Column(
+                                                      mainAxisAlignment:
+                                                          MainAxisAlignment
+                                                              .center,
+                                                      crossAxisAlignment:
+                                                          CrossAxisAlignment
+                                                              .center,
+                                                      children: [
+                                                        Container(
+                                                            child: Padding(
+                                                          padding:
+                                                              EdgeInsets.only(
+                                                                  top: _pad),
+                                                          child: ListItem(
+                                                            parametro:
+                                                                "Nombre:",
+                                                            texto: widget
+                                                                .property
+                                                                .nombre,
+                                                            bulletcolor:
+                                                                Color.fromRGBO(
+                                                                    58,
+                                                                    184,
+                                                                    234,
+                                                                    1),
+                                                            textcolor:
+                                                                Colors.white,
+                                                            fontsize: _fontsize,
+                                                          ),
+                                                        )),
+                                                        Padding(
+                                                          padding:
+                                                              EdgeInsets.only(
+                                                                  top: _pad),
+                                                          child: ListItem(
+                                                            parametro:
+                                                                "Descripción:",
+                                                            texto: widget
+                                                                .property
+                                                                .descripcion,
+                                                            bulletcolor:
+                                                                Color.fromRGBO(
+                                                                    58,
+                                                                    184,
+                                                                    234,
+                                                                    1),
+                                                            textcolor:
+                                                                Colors.white,
+                                                            fontsize: _fontsize,
+                                                          ),
+                                                        ),
+                                                        Padding(
+                                                          padding:
+                                                              EdgeInsets.only(
+                                                                  top: _pad),
+                                                          child: ListItem(
+                                                            parametro:
+                                                                "Características:",
+                                                            texto: widget
+                                                                .property
+                                                                .caracteristicas,
+                                                            bulletcolor:
+                                                                Color.fromRGBO(
+                                                                    58,
+                                                                    184,
+                                                                    234,
+                                                                    1),
+                                                            textcolor:
+                                                                Colors.white,
+                                                            fontsize: _fontsize,
+                                                          ),
+                                                        ),
+                                                        Padding(
+                                                          padding:
+                                                              EdgeInsets.only(
+                                                                  top: _pad),
+                                                          child: ListItemBold(
+                                                            parametro:
+                                                                "Precio:",
+                                                            texto: '\$ ' +
+                                                                oCcy.format(double
+                                                                    .parse(widget
+                                                                        .property
+                                                                        .precio)),
+                                                            bulletcolor:
+                                                                Color.fromRGBO(
+                                                                    58,
+                                                                    184,
+                                                                    234,
+                                                                    1),
+                                                            textcolor:
+                                                                Colors.white,
+                                                            fontsize: _fontsize,
+                                                          ),
+                                                        ),
+                                                      ]),
                                                 ),
-                                              )
+                                              ),
                                             ],
                                           )),
                                     ),

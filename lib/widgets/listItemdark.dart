@@ -1,28 +1,27 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
-class ListItem extends StatefulWidget {
+class ListItemBold extends StatefulWidget {
   final String parametro;
   final String texto;
 
   final Color bulletcolor;
   final Color textcolor;
   final double fontsize;
-  final bool special;
 
-  const ListItem(
-      {this.parametro,
-      this.texto,
-      this.bulletcolor,
-      this.textcolor,
-      this.fontsize,
-      this.special});
+  const ListItemBold({
+    this.parametro,
+    this.texto,
+    this.bulletcolor,
+    this.textcolor,
+    this.fontsize,
+  });
 
   @override
-  _ListItemState createState() => _ListItemState();
+  _ListItemBoldState createState() => _ListItemBoldState();
 }
 
-class _ListItemState extends State<ListItem> {
+class _ListItemBoldState extends State<ListItemBold> {
   @override
   Widget build(BuildContext context) {
     return Row(
@@ -38,10 +37,10 @@ class _ListItemState extends State<ListItem> {
         Text(widget.parametro,
             style: GoogleFonts.raleway(
               textStyle: TextStyle(
-                color: widget.textcolor,
-                fontSize: widget.fontsize,
-                fontWeight: FontWeight.w600,
-              ),
+                  color: widget.textcolor,
+                  fontSize: widget.fontsize,
+                  fontWeight: FontWeight.w600,
+                  fontStyle: FontStyle.italic),
             )),
         Flexible(
           fit: FlexFit.loose,
@@ -51,7 +50,10 @@ class _ListItemState extends State<ListItem> {
               widget.texto,
               textAlign: TextAlign.left,
               style: GoogleFonts.raleway(
-                  color: widget.textcolor, fontSize: widget.fontsize),
+                  color: widget.textcolor,
+                  fontSize: widget.fontsize,
+                  fontWeight: FontWeight.w600,
+                  fontStyle: FontStyle.italic),
               overflow: TextOverflow.ellipsis,
               maxLines: 3,
             ),

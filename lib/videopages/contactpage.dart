@@ -153,7 +153,6 @@ class _ContactPageState extends State<ContactPage> {
         });
       }
       if (conv != null) {
-        widget.thereisanopenwindow(false);
         Navigator.pop(context);
         _showDialog(
             text:
@@ -192,7 +191,7 @@ class _ContactPageState extends State<ContactPage> {
       await _notiService.createMessage(
           id, owner.id, dude, widget.isGuest ? username : "");
     }
-    widget.thereisanopenwindow(false);
+
     Navigator.of(context).pop();
     // final credentials =
     //   LoginCredentials(username: username, password: password);
@@ -537,7 +536,6 @@ class _ContactPageState extends State<ContactPage> {
                           onPressed: () {
                             // Validate returns true if the form is valid, or false
                             // otherwise.
-                            widget.thereisanopenwindow(false);
                             Navigator.of(context).pop();
                           },
                         ),
