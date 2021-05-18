@@ -20,6 +20,8 @@ class RightPropertyBar extends StatefulWidget {
 
   final String headText;
 
+  final void Function(bool) thereisanopenwindow;
+
   final void Function(String) toggleplay;
 
   final AuthFlowStatus status;
@@ -35,7 +37,8 @@ class RightPropertyBar extends StatefulWidget {
       this.email,
       @required this.headText,
       @required this.status,
-      this.toggleplay})
+      this.toggleplay,
+      this.thereisanopenwindow})
       : super(key: key);
   @override
   _RightPropertyBarState createState() => _RightPropertyBarState();
@@ -56,17 +59,17 @@ class _RightPropertyBarState extends State<RightPropertyBar> {
       child: Stack(
         children: [
           Positioned(
-            left: (size / 2) - ((size - 10) / 2),
+            left: 0.05,
             child: Container(
-              width: size,
-              height: size,
-              padding: EdgeInsets.all(1),
+              width: size * 0.9,
+              height: size * 0.9,
+              padding: EdgeInsets.only(top: 5),
               decoration: BoxDecoration(
                 color: Color.fromARGB(20, 255, 255, 255),
                 borderRadius: BorderRadius.circular(25),
               ),
               child: ClipRRect(
-                borderRadius: BorderRadius.circular(25),
+                borderRadius: BorderRadius.circular(5),
                 child: SvgPicture.asset(
                   'images/filter.svg',
                   color: Colors.white,
@@ -75,23 +78,32 @@ class _RightPropertyBarState extends State<RightPropertyBar> {
             ),
           ),
           Positioned(
-            left: (size / 2) + 10,
+            left: (size / 2),
             child: Container(
-              width: 20,
-              height: 20,
+              width: MediaQuery.of(context).size.height * factorSmallIconSize,
+              height: MediaQuery.of(context).size.height * factorSmallIconSize,
               decoration: BoxDecoration(
-                color: Colors.pink,
+                color: Theme.of(context).primaryColor,
                 borderRadius: BorderRadius.circular(15),
               ),
-              child: Text(total.toString(),
-                  style: GoogleFonts.raleway(
-                    textStyle: TextStyle(
-                      color: Colors.white,
-                      fontSize: 14,
-                      fontWeight: FontWeight.bold,
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Text(
+                    total > 99 ? '99+' : total.toString(), //--total.toString(),
+                    style: GoogleFonts.raleway(
+                      textStyle: TextStyle(
+                        color: Colors.white,
+                        fontSize: MediaQuery.of(context).size.height *
+                            factorFontSmall *
+                            .8,
+                        fontWeight: FontWeight.bold,
+                      ),
                     ),
+                    //textAlign: TextAlign.center
                   ),
-                  textAlign: TextAlign.center),
+                ],
+              ),
             ),
           ),
         ],
@@ -108,6 +120,20 @@ class _RightPropertyBarState extends State<RightPropertyBar> {
         currentLocation.latitude, currentLocation.longitude, null);
 
     // destino codificado para este ejemplo
+  }
+
+  void _openModal() {
+    if (widget.total > 0) {
+      widget.thereisanopenwindow(true);
+      widget.toggleplay('pause');
+    }
+  }
+
+  void _closeModal(void value) {
+    if (widget.total > 0) {
+      widget.thereisanopenwindow(false);
+      widget.toggleplay('play');
+    }
   }
 
   @override
@@ -229,17 +255,19 @@ class _RightPropertyBarState extends State<RightPropertyBar> {
                   children: [
                     InkWell(
                       onTap: () async {
-                        widget.toggleplay('pause');
-                        await showModalBottomSheet<void>(
+                        _openModal();
+
+                        Future<void> future = showModalBottomSheet<void>(
                           isScrollControlled: true,
                           useRootNavigator: true,
                           context: context,
                           shape: RoundedRectangleBorder(
                               borderRadius: BorderRadius.vertical(
                                   top: Radius.circular(10.0))),
-                          builder: (context) =>
-                              SearchPage(widget.status, widget.toggleplay),
+                          builder: (context) => SearchPage(widget.status,
+                              widget.toggleplay, widget.thereisanopenwindow),
                         );
+                        future.then((void value) => _closeModal(value));
                       },
                       child: buildprofile(
                           widget.total, _filterIconSize + _filterIconSize / 5),
@@ -305,8 +333,8 @@ class _RightPropertyBarState extends State<RightPropertyBar> {
                         children: [
                           InkWell(
                             onTap: () async {
-                              widget.toggleplay('pause');
-                              showModalBottomSheet<void>(
+                              _openModal();
+                              Future<void> future = showModalBottomSheet<void>(
                                 useRootNavigator: true,
                                 isScrollControlled: true,
                                 context: context,
@@ -314,9 +342,11 @@ class _RightPropertyBarState extends State<RightPropertyBar> {
                                     borderRadius: BorderRadius.all(
                                         Radius.circular(10.0))),
                                 builder: (context) => PhotoPage(
-                                    widget.property.id, widget.toggleplay),
+                                    widget.property.id,
+                                    widget.toggleplay,
+                                    widget.thereisanopenwindow),
                               );
-                              widget.toggleplay('pause');
+                              future.then((void value) => _closeModal(value));
                             },
                             child: SvgPicture.asset(
                               'images/FOTOS.svg',
@@ -336,8 +366,8 @@ class _RightPropertyBarState extends State<RightPropertyBar> {
                         children: [
                           InkWell(
                             onTap: () async {
-                              widget.toggleplay('pause');
-                              showModalBottomSheet<void>(
+                              _openModal();
+                              Future<void> future = showModalBottomSheet<void>(
                                 useRootNavigator: true,
                                 isScrollControlled: true,
                                 context: context,
@@ -345,8 +375,11 @@ class _RightPropertyBarState extends State<RightPropertyBar> {
                                     borderRadius: BorderRadius.vertical(
                                         top: Radius.circular(10.0))),
                                 builder: (context) => LocationPage(
-                                    widget.property, widget.toggleplay),
+                                    widget.property,
+                                    widget.toggleplay,
+                                    widget.thereisanopenwindow),
                               );
+                              future.then((void value) => _closeModal(value));
                             },
                             child: SvgPicture.asset(
                               'images/UBICACION.svg',
@@ -366,8 +399,8 @@ class _RightPropertyBarState extends State<RightPropertyBar> {
                         children: [
                           InkWell(
                             onTap: () async {
-                              widget.toggleplay('pause');
-                              showModalBottomSheet<void>(
+                              _openModal();
+                              Future<void> future = showModalBottomSheet<void>(
                                 useRootNavigator: true,
                                 isScrollControlled: true,
                                 context: context,
@@ -375,8 +408,11 @@ class _RightPropertyBarState extends State<RightPropertyBar> {
                                     borderRadius: BorderRadius.vertical(
                                         top: Radius.circular(10.0))),
                                 builder: (context) => InfoPage(
-                                    widget.property, widget.toggleplay),
+                                    widget.property,
+                                    widget.toggleplay,
+                                    widget.thereisanopenwindow),
                               );
+                              future.then((void value) => _closeModal(value));
                             },
                             child: SvgPicture.asset(
                               'images/INFORMACION.svg',
@@ -396,8 +432,8 @@ class _RightPropertyBarState extends State<RightPropertyBar> {
                         children: [
                           InkWell(
                             onTap: () async {
-                              widget.toggleplay('pause');
-                              showModalBottomSheet<void>(
+                              _openModal();
+                              Future<void> future = showModalBottomSheet<void>(
                                 useRootNavigator: true,
                                 isScrollControlled: true,
                                 context: context,
@@ -412,8 +448,10 @@ class _RightPropertyBarState extends State<RightPropertyBar> {
                                     widget.status == AuthFlowStatus.session
                                         ? widget.email
                                         : null,
-                                    widget.toggleplay),
+                                    widget.toggleplay,
+                                    widget.thereisanopenwindow),
                               );
+                              future.then((void value) => _closeModal(value));
                             },
                             child: SvgPicture.asset(
                               'images/DUDAS.svg',
@@ -433,8 +471,8 @@ class _RightPropertyBarState extends State<RightPropertyBar> {
                         children: [
                           InkWell(
                             onTap: () async {
-                              widget.toggleplay('pause');
-                              showModalBottomSheet<void>(
+                              _openModal();
+                              Future<void> future = showModalBottomSheet<void>(
                                 useRootNavigator: true,
                                 isScrollControlled: true,
                                 context: context,
@@ -449,8 +487,10 @@ class _RightPropertyBarState extends State<RightPropertyBar> {
                                     widget.status == AuthFlowStatus.session
                                         ? widget.email
                                         : null,
-                                    widget.toggleplay),
+                                    widget.toggleplay,
+                                    widget.thereisanopenwindow),
                               );
+                              future.then((void value) => _closeModal(value));
                             },
                             child: SvgPicture.asset(
                               'images/CITAS.svg',

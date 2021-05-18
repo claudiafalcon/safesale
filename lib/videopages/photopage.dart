@@ -13,8 +13,9 @@ import 'package:safesale/widgets/loading.dart';
 
 class PhotoPage extends StatefulWidget {
   final String id;
-  PhotoPage(this.id, this.toggleplay);
+  PhotoPage(this.id, this.toggleplay, this.thereisanopenwindow);
   final void Function(String) toggleplay;
+  final void Function(bool) thereisanopenwindow;
 
   @override
   _PhotoPageState createState() => _PhotoPageState();
@@ -23,13 +24,6 @@ class PhotoPage extends StatefulWidget {
 class _PhotoPageState extends State<PhotoPage> {
   final _formKey = GlobalKey<FormState>();
   List _keys = <String>[];
-
-  @override
-  void dispose() {
-    // TODO: implement dispose
-    super.dispose();
-    widget.toggleplay('play');
-  }
 
   Future<String> getPhotos() async {
     try {

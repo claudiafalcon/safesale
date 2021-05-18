@@ -13,20 +13,14 @@ import 'package:safesale/services/user_service.dart';
 class SearchPage extends StatefulWidget {
   final AuthFlowStatus status;
   final void Function(String) toggleplay;
+  final void Function(bool) thereisanopenwindow;
 
-  SearchPage(this.status, this.toggleplay);
+  SearchPage(this.status, this.toggleplay, this.thereisanopenwindow);
   @override
   _SearchPageState createState() => _SearchPageState();
 }
 
 class _SearchPageState extends State<SearchPage> {
-  @override
-  void dispose() {
-    // TODO: implement dispose
-    super.dispose();
-    widget.toggleplay('play');
-  }
-
   final _formKey = GlobalKey<FormState>();
   var _criterio = new SearchCriterio();
   final _searchService = SearchService();

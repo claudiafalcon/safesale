@@ -26,9 +26,11 @@ class ContactPage extends StatefulWidget {
   final bool isGuest;
   final String email;
 
+  final void Function(bool) thereisanopenwindow;
   final void Function(String) toggleplay;
 
   const ContactPage(this.property, this.isGuest, this.email, this.toggleplay,
+      this.thereisanopenwindow,
       {Key key})
       : super(key: key);
   @override
@@ -38,13 +40,6 @@ class ContactPage extends StatefulWidget {
 class _ContactPageState extends State<ContactPage> {
   final TextEditingController emailcontroller = TextEditingController();
   final TextEditingController dudecontroller = TextEditingController();
-
-  @override
-  void dispose() {
-    // TODO: implement dispose
-    super.dispose();
-    widget.toggleplay('play');
-  }
 
   //final emailController =  TextEditingController();
   final _formKey = GlobalKey<FormState>();
@@ -134,6 +129,7 @@ class _ContactPageState extends State<ContactPage> {
         });
       }
       if (conv != null) {
+        widget.thereisanopenwindow(false);
         Navigator.pop(context);
         _showDialog(
             text:
@@ -158,6 +154,7 @@ class _ContactPageState extends State<ContactPage> {
         });
       }
       if (conv != null) {
+        widget.thereisanopenwindow(false);
         Navigator.pop(context);
         _showDialog(
             text:
@@ -196,7 +193,7 @@ class _ContactPageState extends State<ContactPage> {
       await _notiService.createMessage(
           id, owner.id, dude, widget.isGuest ? username : "");
     }
-
+    widget.thereisanopenwindow(false);
     Navigator.of(context).pop();
     // final credentials =
     //   LoginCredentials(username: username, password: password);
@@ -541,7 +538,7 @@ class _ContactPageState extends State<ContactPage> {
                           onPressed: () {
                             // Validate returns true if the form is valid, or false
                             // otherwise.
-
+                            widget.thereisanopenwindow(false);
                             Navigator.of(context).pop();
                           },
                         ),

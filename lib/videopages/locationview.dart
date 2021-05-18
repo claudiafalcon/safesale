@@ -13,8 +13,9 @@ import 'package:safesale/widgets/listItem.dart';
 class LocationPage extends StatefulWidget {
   final Property property;
   final void Function(String) toggleplay;
+  final void Function(bool) thereisanopenwindow;
 
-  LocationPage(this.property, this.toggleplay);
+  LocationPage(this.property, this.toggleplay, this.thereisanopenwindow);
   @override
   _LocationPageState createState() => _LocationPageState();
 }
@@ -22,13 +23,6 @@ class LocationPage extends StatefulWidget {
 class _LocationPageState extends State<LocationPage> {
   final _formKey = GlobalKey<FormState>();
   GoogleMapController mapController;
-
-  @override
-  void dispose() {
-    // TODO: implement dispose
-    super.dispose();
-    widget.toggleplay('play');
-  }
 
   LatLng _center;
   final Map<String, Marker> _markers = {};

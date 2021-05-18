@@ -234,12 +234,24 @@ class _VideoPageState extends State<VideoPage> {
     print("Previous page: $previousPage");
   }
 
+  bool _openWindow = false;
+
+  bool _transition = false;
+
+  void _thereisanopenwindow(bool isthere) {
+    setState(() {
+      _transition = true;
+      _openWindow = isthere;
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
-    if (widget.needsreload()) {
+    if (widget.needsreload() && !_transition) {
       // widget.turnoffreloading();
       setInitialLocation();
     }
+    if (_transition && !_openWindow) _transition = false;
 
     return Scaffold(
       resizeToAvoidBottomInset: false,
@@ -333,7 +345,9 @@ class _VideoPageState extends State<VideoPage> {
                                   total: _searchService.getTotal(),
                                   property: property,
                                   credentials: widget.credentials,
-                                  status: widget.authstatus),
+                                  status: widget.authstatus,
+                                  thereisanopenwindow: _thereisanopenwindow,
+                                  windowOpen: _openWindow),
                             ]);
                           } else {
                             return Stack(

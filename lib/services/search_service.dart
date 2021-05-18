@@ -94,6 +94,7 @@ class SearchService {
 
   void setProperty(Property property) {
     _fromASearch = true;
+    _total = 1;
     _properties = null;
     _properties = <Property>[];
     _properties.add(property);
@@ -206,6 +207,7 @@ class SearchService {
       _properties = null;
       if (nextToken == null) {
         _total = 0;
+        _tokens = null;
         _tokens = <String>[];
         this.criterio = criterio;
       }
@@ -245,12 +247,14 @@ class SearchService {
           print(e);
         }
 
-        if (nextToken == null)
+        if (nextToken == null) {
           _total = json.decode(response.body)["data"]["searchProperties"]
                       ["total"] ==
                   null
               ? 0
               : json.decode(response.body)["data"]["searchProperties"]["total"];
+          _tokens = <String>[];
+        }
         _tokens.add(json.decode(response.body)["data"]["searchProperties"]
                     ["nextToken"] ==
                 null

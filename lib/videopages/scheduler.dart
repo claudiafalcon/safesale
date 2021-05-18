@@ -29,8 +29,10 @@ class SchedulerPage extends StatefulWidget {
   final bool isGuest;
   final String email;
   final void Function(String) toggleplay;
+  final void Function(bool) thereisanopenwindow;
 
   const SchedulerPage(this.property, this.isGuest, this.email, this.toggleplay,
+      this.thereisanopenwindow,
       {Key key})
       : super(key: key);
   @override
@@ -52,13 +54,6 @@ class _SchedulerPageState extends State<SchedulerPage> {
 
   final _userService = UserService();
   final _notiService = NotificationService();
-
-  @override
-  void dispose() {
-    // TODO: implement dispose
-    super.dispose();
-    widget.toggleplay('play');
-  }
 
   void _showDialog({@required String text}) {
     showDialog(

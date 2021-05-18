@@ -28,6 +28,9 @@ class SafeSalePlayer extends StatefulWidget {
 
   final VideoCallback<String> onpeningvideo;
 
+  final void Function(bool) thereisanopenwindow;
+  final bool windowOpen;
+
   final int total;
 
   final Property property;
@@ -44,6 +47,8 @@ class SafeSalePlayer extends StatefulWidget {
     this.credentials,
     this.status,
     @required this.property,
+    this.thereisanopenwindow,
+    this.windowOpen,
   }) : super(key: key);
 
   @override
@@ -168,7 +173,8 @@ class _SafeSalePlayerState extends State<SafeSalePlayer>
           email:
               widget.credentials != null ? widget.credentials.username : null,
           status: widget.status,
-          toggleplay: togglePlayAction)
+          toggleplay: togglePlayAction,
+          thereisanopenwindow: widget.thereisanopenwindow)
     ];
     videoChildrens.addAll(videoBuiltInChildrens());
     return //AspectRatio(
@@ -380,7 +386,7 @@ class _SafeSalePlayerState extends State<SafeSalePlayer>
   void videoControllSetup(String url) {
     videoInit(url);
     controller.addListener(listener);
-    controller.play();
+    if (!widget.windowOpen) controller.play();
     controller.setLooping(true);
   }
 
