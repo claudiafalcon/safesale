@@ -177,8 +177,19 @@ class AuthService {
 
       // 7
     } on UsernameExistsException {
+      try {
+        var res = await Amplify.Auth.resendSignUpCode(
+          username: credentials.username,
+        );
+        var destination = res.codeDeliveryDetails.destination;
+        print('Confirmation code set to $destination');
+      } on AmplifyException catch (e) {
+        print(e.message);
+      }
+
       error = 'NotVerified';
       final state = AuthState(authFlowStatus: AuthFlowStatus.signUp_error);
+
       _credentials = new SignedCredentials(
           username: credentials.username, name: credentials.name);
       authStateController.add(state);
