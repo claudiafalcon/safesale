@@ -128,7 +128,7 @@ class _AlertsPageState extends State<AlertsPage> {
       if (![null, ""].contains(item.criterio.tipo))
         text.write(item.criterio.tipo);
       if (item.criterio.recamaras != null)
-        text.write("Recamarás +" + item.criterio.recamaras.toString() + " ");
+        text.write("Recámaras +" + item.criterio.recamaras.toString() + " ");
       if (item.criterio.baths != null)
         text.write("Baños +" + item.criterio.baths.toString() + " ");
       if (item.criterio.estacionamientos != null)

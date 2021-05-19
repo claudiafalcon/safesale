@@ -311,7 +311,7 @@ class _ContactPageState extends State<ContactPage> {
                                                   BorderRadius.circular(20),
                                             ),
                                             child: Center(
-                                              child: Text("Aqui",
+                                              child: Text("Aquí",
                                                   style: GoogleFonts.raleway(
                                                       textStyle: TextStyle(
                                                     color: Colors.white,

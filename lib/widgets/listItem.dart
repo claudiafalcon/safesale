@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:safesale/variables.dart';
 
 class ListItem extends StatefulWidget {
   final String parametro;
@@ -35,44 +36,31 @@ class _ListItemState extends State<ListItem> {
             size: 12.0,
           ),
         ),
-        Text(widget.parametro,
-            style: GoogleFonts.raleway(
-              textStyle: TextStyle(
-                color: widget.textcolor,
-                fontSize: widget.fontsize,
-                fontWeight: FontWeight.w600,
-              ),
-            )),
         Flexible(
           fit: FlexFit.loose,
-          child: Padding(
-            padding: const EdgeInsets.only(left: 8.0, right: 8.0, top: 4.0),
-            child: Text(
-              widget.texto,
-              textAlign: TextAlign.left,
+          child: RichText(
+            maxLines: 3,
+            overflow: TextOverflow.ellipsis,
+            text: TextSpan(
+              text: widget.parametro,
               style: GoogleFonts.raleway(
-                  color: widget.textcolor, fontSize: widget.fontsize),
-              overflow: TextOverflow.ellipsis,
-              maxLines: 3,
+                  textStyle: TextStyle(
+                color: Colors.white,
+                fontSize: widget.fontsize,
+                fontWeight: FontWeight.w800,
+              )),
+              children: <TextSpan>[
+                TextSpan(
+                  text: widget.texto,
+                  style: GoogleFonts.raleway(
+                      color: widget.textcolor,
+                      fontSize: widget.fontsize,
+                      fontWeight: FontWeight.w200),
+                ),
+              ],
             ),
           ),
         )
-
-        /*
-        Flexible(
-          fit: FlexFit.loose,
-          child: Padding(
-            padding: const EdgeInsets.only(left: 8.0, right: 8.0, top: 4.0),
-            child: Text(widget.texto,
-                textAlign: TextAlign.left,
-                style: GoogleFonts.raleway(
-                  textStyle: TextStyle(
-                    color: widget.textcolor,
-                    fontSize: widget.fontsize,
-                  ),
-                )),
-          ),
-        )*/
       ],
     );
   }

@@ -54,8 +54,7 @@ class _InfoPageState extends State<InfoPage> {
 
   @override
   Widget build(BuildContext context) {
-    double _fontsize =
-        MediaQuery.of(context).size.height * factorFontSmall * 1.1;
+    double _fontsize = MediaQuery.of(context).size.height * factorFontSmall;
     double _pad = MediaQuery.of(context).size.height * factorSmallIconSize / 2;
     return ClipRRect(
         borderRadius: BorderRadius.only(
@@ -154,6 +153,21 @@ class _InfoPageState extends State<InfoPage> {
                                                         const EdgeInsets.all(
                                                             8.0),
                                                     child: Column(children: [
+                                                      Padding(
+                                                        padding:
+                                                            EdgeInsets.only(
+                                                                top: _pad),
+                                                        child: ListItem(
+                                                          parametro: "Tipo : ",
+                                                          texto: widget
+                                                              .property.tipo,
+                                                          bulletcolor:
+                                                              Color(0xff003b8b),
+                                                          textcolor:
+                                                              Colors.white,
+                                                          fontsize: _fontsize,
+                                                        ),
+                                                      ),
                                                       Container(
                                                           child: Padding(
                                                         padding:
@@ -161,7 +175,7 @@ class _InfoPageState extends State<InfoPage> {
                                                                 top: _pad),
                                                         child: ListItem(
                                                           parametro:
-                                                              "Terreno-m2:",
+                                                              "Terreno-m2 : ",
                                                           texto: widget.property
                                                               .terrenoM2
                                                               .toString(),
@@ -178,7 +192,7 @@ class _InfoPageState extends State<InfoPage> {
                                                                 top: _pad),
                                                         child: ListItem(
                                                           parametro:
-                                                              "Construccion-m2:",
+                                                              "Construcción-m2 : ",
                                                           texto: widget.property
                                                               .construccionM2
                                                               .toString(),
@@ -195,7 +209,7 @@ class _InfoPageState extends State<InfoPage> {
                                                                 top: _pad),
                                                         child: ListItem(
                                                           parametro:
-                                                              "Antigüedad:",
+                                                              "Antigüedad : ",
                                                           texto: widget
                                                               .property.edad
                                                               .toString(),
@@ -212,7 +226,7 @@ class _InfoPageState extends State<InfoPage> {
                                                                 top: _pad),
                                                         child: ListItem(
                                                           parametro:
-                                                              "Estacionamientos:",
+                                                              "Estacionamientos : ",
                                                           texto: widget.property
                                                               .estacionamientos
                                                               .toString(),
@@ -229,7 +243,7 @@ class _InfoPageState extends State<InfoPage> {
                                                                 top: _pad),
                                                         child: ListItem(
                                                           parametro:
-                                                              "Recamaras:",
+                                                              "Recámaras : ",
                                                           texto: widget.property
                                                               .recamaras
                                                               .toString(),
@@ -246,24 +260,9 @@ class _InfoPageState extends State<InfoPage> {
                                                                 top: _pad),
                                                         child: ListItem(
                                                           parametro:
-                                                              "Amenidades:",
+                                                              "Amenidades : ",
                                                           texto: widget.property
                                                               .amenidades,
-                                                          bulletcolor:
-                                                              Color(0xff003b8b),
-                                                          textcolor:
-                                                              Colors.white,
-                                                          fontsize: _fontsize,
-                                                        ),
-                                                      ),
-                                                      Padding(
-                                                        padding:
-                                                            EdgeInsets.only(
-                                                                top: _pad),
-                                                        child: ListItem(
-                                                          parametro: "Tipo:",
-                                                          texto: widget
-                                                              .property.tipo,
                                                           bulletcolor:
                                                               Color(0xff003b8b),
                                                           textcolor:
@@ -347,7 +346,7 @@ class _InfoPageState extends State<InfoPage> {
                                                                   top: _pad),
                                                           child: ListItem(
                                                             parametro:
-                                                                "Nombre:",
+                                                                "Nombre : ",
                                                             texto: widget
                                                                 .property
                                                                 .nombre,
@@ -368,7 +367,7 @@ class _InfoPageState extends State<InfoPage> {
                                                                   top: _pad),
                                                           child: ListItem(
                                                             parametro:
-                                                                "Descripción:",
+                                                                "Descripción : ",
                                                             texto: widget
                                                                 .property
                                                                 .descripcion,
@@ -389,7 +388,7 @@ class _InfoPageState extends State<InfoPage> {
                                                                   top: _pad),
                                                           child: ListItem(
                                                             parametro:
-                                                                "Características:",
+                                                                "Características : ",
                                                             texto: widget
                                                                 .property
                                                                 .caracteristicas,
@@ -410,7 +409,7 @@ class _InfoPageState extends State<InfoPage> {
                                                                   top: _pad),
                                                           child: ListItemBold(
                                                             parametro:
-                                                                "Precio:",
+                                                                "Precio : ",
                                                             texto: '\$ ' +
                                                                 oCcy.format(double
                                                                     .parse(widget

@@ -128,7 +128,7 @@ class _LocationPageState extends State<LocationPage> {
                                                   child: Column(children: [
                                                     Container(
                                                         child: ListItem(
-                                                      parametro: "Pais:",
+                                                      parametro: "País:",
                                                       texto:
                                                           widget.property.pais,
                                                       bulletcolor:
