@@ -9,6 +9,7 @@ import 'package:google_fonts/google_fonts.dart';
 
 import 'package:safesale/painters/softpaint.dart';
 import 'package:safesale/variables.dart';
+import 'package:safesale/videopages/carrouselPage.dart';
 import 'package:safesale/widgets/loading.dart';
 
 class PhotoPage extends StatefulWidget {
@@ -97,18 +98,32 @@ class _PhotoPageState extends State<PhotoPage> {
                                   mainAxisSpacing: 24,
                                   crossAxisSpacing: 12,
                                   itemCount: _keys.length,
-                                  itemBuilder:
-                                      (BuildContext context, int index) =>
-                                          GestureDetector(
-                                            onTap: () {},
-                                            child: ClipRRect(
-                                              borderRadius:
-                                                  BorderRadius.circular(20),
-                                              child: Image.network(
-                                                cloudfronturl + _keys[index],
-                                              ),
-                                            ),
+                                  itemBuilder: (BuildContext context,
+                                          int index) =>
+                                      GestureDetector(
+                                        onTap: () async {
+                                          Future<void> future =
+                                              showModalBottomSheet<void>(
+                                            useRootNavigator: true,
+                                            isScrollControlled: true,
+                                            context: context,
+                                            shape: RoundedRectangleBorder(
+                                                borderRadius:
+                                                    BorderRadius.vertical(
+                                                        top: Radius.circular(
+                                                            10.0))),
+                                            builder: (context) =>
+                                                CarrouselPage(_keys, index),
+                                          );
+                                        },
+                                        child: ClipRRect(
+                                          borderRadius:
+                                              BorderRadius.circular(20),
+                                          child: Image.network(
+                                            cloudfronturl + _keys[index],
                                           ),
+                                        ),
+                                      ),
                                   staggeredTileBuilder: (int index) =>
                                       index == 0
                                           ? StaggeredTile.fit(2)
