@@ -233,6 +233,7 @@ class _RightPropertyBarState extends State<RightPropertyBar> {
       ),
       //Middle section
       Expanded(
+          flex: 1,
           child: // Row(
               //mainAxisSize: MainAxisSize.max,
               // mainAxisAlignment: MainAxisAlignment.start,
@@ -241,277 +242,290 @@ class _RightPropertyBarState extends State<RightPropertyBar> {
               //rigth section
 
               Align(
-        alignment: Alignment.centerRight,
-        child: Container(
-            width: MediaQuery.of(context).size.height *
-                factorRighBarFilterIconSize *
-                1.5,
-            child: ListView(
-              //  mainAxisAlignment: MainAxisAlignment.start,
-              //crossAxisAlignment: CrossAxisAlignment.center,
-              children: [
-                Column(
-                  mainAxisAlignment: MainAxisAlignment.start,
+            alignment: Alignment.centerRight,
+            child: Container(
+                width: MediaQuery.of(context).size.height *
+                    factorRighBarFilterIconSize *
+                    1.5,
+                child: ListView(
+                  //  mainAxisAlignment: MainAxisAlignment.start,
+                  //crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
-                    InkWell(
-                      onTap: () async {
-                        _openModal();
+                    Column(
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      children: [
+                        InkWell(
+                          onTap: () async {
+                            _openModal();
 
-                        Future<void> future = showModalBottomSheet<void>(
-                          isScrollControlled: true,
-                          useRootNavigator: true,
-                          context: context,
-                          shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.vertical(
-                                  top: Radius.circular(10.0))),
-                          builder: (context) => SearchPage(widget.status,
-                              widget.toggleplay, widget.thereisanopenwindow),
-                        );
-                        future.then((void value) => _closeModal(value));
-                      },
-                      child: buildprofile(
-                          widget.total, _filterIconSize + _filterIconSize / 5),
+                            Future<void> future = showModalBottomSheet<void>(
+                              isScrollControlled: true,
+                              useRootNavigator: true,
+                              context: context,
+                              shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.vertical(
+                                      top: Radius.circular(10.0))),
+                              builder: (context) => SearchPage(
+                                  widget.status,
+                                  widget.toggleplay,
+                                  widget.thereisanopenwindow),
+                            );
+                            future.then((void value) => _closeModal(value));
+                          },
+                          child: buildprofile(widget.total,
+                              _filterIconSize + _filterIconSize / 5),
+                        ),
+                        SizedBox(
+                          height: _propertyIconSize,
+                        )
+                      ],
                     ),
-                    SizedBox(
-                      height: _propertyIconSize,
-                    )
-                  ],
-                ),
-                widget.total != 0
-                    ? Column(
-                        children: [
-                          SizedBox(
-                            height: 60,
-                          ),
-                          InkWell(
-                              onTap: () async {
-                                if (widget.status != AuthFlowStatus.session) {
-                                  await showDialog(
-                                      context: context,
-                                      builder: (_) => new AlertDialog(
-                                            title: new Text(
-                                              'Ups! ',
-                                              style: TextStyle(
-                                                  fontFamily: "Smash"),
-                                            ),
-                                            content: new Text(
-                                              'La funcionalidad de Favoritos solo esta disponible para nuestros usuarios registrados. Corre Registrate! ...',
-                                              style: TextStyle(
-                                                  fontFamily: "Smash"),
-                                            ),
-                                          ));
+                    widget.total != 0
+                        ? Column(
+                            children: [
+                              SizedBox(
+                                height: 60,
+                              ),
+                              InkWell(
+                                  onTap: () async {
+                                    if (widget.status !=
+                                        AuthFlowStatus.session) {
+                                      await showDialog(
+                                          context: context,
+                                          builder: (_) => new AlertDialog(
+                                                title: new Text(
+                                                  'Ups! ',
+                                                  style: TextStyle(
+                                                      fontFamily: "Smash"),
+                                                ),
+                                                content: new Text(
+                                                  'La funcionalidad de Favoritos solo esta disponible para nuestros usuarios registrados. Corre Registrate! ...',
+                                                  style: TextStyle(
+                                                      fontFamily: "Smash"),
+                                                ),
+                                              ));
 
-                                  // Doesn't run
-                                  Navigator.of(context).maybePop();
-                                } else {
-                                  await likevideo(widget.property.id);
-                                  setState(() {
-                                    isfav = !isfav;
-                                  });
-                                }
-                              },
-                              child: isfav == true
-                                  ? SvgPicture.asset(
-                                      'images/CORAZONAZUL.svg',
-                                      width: _propertyIconSize,
-                                      height: _propertyIconSize,
-                                      color: Color.fromRGBO(0, 59, 139, 1),
-                                    )
-                                  : SvgPicture.asset(
-                                      'images/CORAZON PERFIL.svg',
-                                      width: _propertyIconSize,
-                                      height: _propertyIconSize,
-                                      color: Colors.white)),
-                          SizedBox(
-                            height: _propertyIconSize,
+                                      // Doesn't run
+                                      Navigator.of(context).maybePop();
+                                    } else {
+                                      await likevideo(widget.property.id);
+                                      setState(() {
+                                        isfav = !isfav;
+                                      });
+                                    }
+                                  },
+                                  child: isfav == true
+                                      ? SvgPicture.asset(
+                                          'images/CORAZONAZUL.svg',
+                                          width: _propertyIconSize,
+                                          height: _propertyIconSize,
+                                          color: Color.fromRGBO(0, 59, 139, 1),
+                                        )
+                                      : SvgPicture.asset(
+                                          'images/CORAZON PERFIL.svg',
+                                          width: _propertyIconSize,
+                                          height: _propertyIconSize,
+                                          color: Colors.white)),
+                              SizedBox(
+                                height: _propertyIconSize,
+                              )
+                            ],
                           )
-                        ],
-                      )
-                    : Container(),
-                widget.total != 0
-                    ? Column(
-                        children: [
-                          InkWell(
-                            onTap: () async {
-                              _openModal();
-                              Future<void> future = showModalBottomSheet<void>(
-                                useRootNavigator: true,
-                                isScrollControlled: true,
-                                context: context,
-                                shape: RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.all(
-                                        Radius.circular(10.0))),
-                                builder: (context) => PhotoPage(
-                                    widget.property.id,
-                                    widget.toggleplay,
-                                    widget.thereisanopenwindow),
-                              );
-                              future.then((void value) => _closeModal(value));
-                            },
-                            child: SvgPicture.asset(
-                              'images/FOTOS.svg',
-                              width: _propertyIconSize,
-                              height: _propertyIconSize,
-                              color: Colors.white,
-                            ),
-                          ),
-                          SizedBox(
-                            height: _propertyIconSize,
-                          ),
-                        ],
-                      )
-                    : Container(),
-                widget.total != 0
-                    ? Column(
-                        children: [
-                          InkWell(
-                            onTap: () async {
-                              _openModal();
-                              Future<void> future = showModalBottomSheet<void>(
-                                useRootNavigator: true,
-                                isScrollControlled: true,
-                                context: context,
-                                shape: RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.vertical(
-                                        top: Radius.circular(10.0))),
-                                builder: (context) => LocationPage(
-                                    widget.property,
-                                    widget.toggleplay,
-                                    widget.thereisanopenwindow),
-                              );
-                              future.then((void value) => _closeModal(value));
-                            },
-                            child: SvgPicture.asset(
-                              'images/UBICACION.svg',
-                              width: _propertyIconSize,
-                              height: _propertyIconSize,
-                              color: Colors.white,
-                            ),
-                          ),
-                          SizedBox(
-                            height: _propertyIconSize,
-                          ),
-                        ],
-                      )
-                    : Container(),
-                widget.total != 0
-                    ? Column(
-                        children: [
-                          InkWell(
-                            onTap: () async {
-                              _openModal();
-                              Future<void> future = showModalBottomSheet<void>(
-                                useRootNavigator: true,
-                                isScrollControlled: true,
-                                context: context,
-                                shape: RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.vertical(
-                                        top: Radius.circular(10.0))),
-                                builder: (context) => InfoPage(
-                                    widget.property,
-                                    widget.toggleplay,
-                                    widget.thereisanopenwindow),
-                              );
-                              future.then((void value) => _closeModal(value));
-                            },
-                            child: SvgPicture.asset(
-                              'images/INFORMACION.svg',
-                              width: _propertyIconSize,
-                              height: _propertyIconSize,
-                              color: Colors.white,
-                            ),
-                          ),
-                          SizedBox(
-                            height: _propertyIconSize,
-                          ),
-                        ],
-                      )
-                    : Container(),
-                widget.total != 0
-                    ? Column(
-                        children: [
-                          InkWell(
-                            onTap: () async {
-                              _openModal();
-                              Future<void> future = showModalBottomSheet<void>(
-                                useRootNavigator: true,
-                                isScrollControlled: true,
-                                context: context,
-                                shape: RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.vertical(
-                                        top: Radius.circular(10.0))),
-                                builder: (context) => ContactPage(
-                                    widget.property,
-                                    widget.status != AuthFlowStatus.session
-                                        ? true
-                                        : false,
-                                    widget.status == AuthFlowStatus.session
-                                        ? widget.email
-                                        : null,
-                                    widget.toggleplay,
-                                    widget.thereisanopenwindow),
-                              );
-                              future.then((void value) => _closeModal(value));
-                            },
-                            child: SvgPicture.asset(
-                              'images/DUDAS.svg',
-                              width: _propertyIconSize,
-                              height: _propertyIconSize,
-                              color: Colors.white,
-                            ),
-                          ),
-                          SizedBox(
-                            height: _propertyIconSize,
-                          ),
-                        ],
-                      )
-                    : Container(),
-                widget.total != 0
-                    ? Column(
-                        children: [
-                          InkWell(
-                            onTap: () async {
-                              _openModal();
-                              Future<void> future = showModalBottomSheet<void>(
-                                useRootNavigator: true,
-                                isScrollControlled: true,
-                                context: context,
-                                shape: RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.vertical(
-                                        top: Radius.circular(10.0))),
-                                builder: (context) => SchedulerPage(
-                                    widget.property,
-                                    widget.status != AuthFlowStatus.session
-                                        ? true
-                                        : false,
-                                    widget.status == AuthFlowStatus.session
-                                        ? widget.email
-                                        : null,
-                                    widget.toggleplay,
-                                    widget.thereisanopenwindow),
-                              );
-                              future.then((void value) => _closeModal(value));
-                            },
-                            child: SvgPicture.asset(
-                              'images/CITAS.svg',
-                              width: _propertyIconSize,
-                              height: _propertyIconSize,
-                              color: Colors.white,
-                            ),
+                        : Container(),
+                    widget.total != 0
+                        ? Column(
+                            children: [
+                              InkWell(
+                                onTap: () async {
+                                  _openModal();
+                                  Future<void> future =
+                                      showModalBottomSheet<void>(
+                                    useRootNavigator: true,
+                                    isScrollControlled: true,
+                                    context: context,
+                                    shape: RoundedRectangleBorder(
+                                        borderRadius: BorderRadius.all(
+                                            Radius.circular(10.0))),
+                                    builder: (context) => PhotoPage(
+                                        widget.property.id,
+                                        widget.toggleplay,
+                                        widget.thereisanopenwindow),
+                                  );
+                                  future
+                                      .then((void value) => _closeModal(value));
+                                },
+                                child: SvgPicture.asset(
+                                  'images/FOTOS.svg',
+                                  width: _propertyIconSize,
+                                  height: _propertyIconSize,
+                                  color: Colors.white,
+                                ),
+                              ),
+                              SizedBox(
+                                height: _propertyIconSize,
+                              ),
+                            ],
                           )
-                        ],
-                      )
-                    : Container(),
-                Column(
-                  children: [
-                    SizedBox(
-                      height: 20,
+                        : Container(),
+                    widget.total != 0
+                        ? Column(
+                            children: [
+                              InkWell(
+                                onTap: () async {
+                                  _openModal();
+                                  Future<void> future =
+                                      showModalBottomSheet<void>(
+                                    useRootNavigator: true,
+                                    isScrollControlled: true,
+                                    context: context,
+                                    shape: RoundedRectangleBorder(
+                                        borderRadius: BorderRadius.vertical(
+                                            top: Radius.circular(10.0))),
+                                    builder: (context) => LocationPage(
+                                        widget.property,
+                                        widget.toggleplay,
+                                        widget.thereisanopenwindow),
+                                  );
+                                  future
+                                      .then((void value) => _closeModal(value));
+                                },
+                                child: SvgPicture.asset(
+                                  'images/UBICACION.svg',
+                                  width: _propertyIconSize,
+                                  height: _propertyIconSize,
+                                  color: Colors.white,
+                                ),
+                              ),
+                              SizedBox(
+                                height: _propertyIconSize,
+                              ),
+                            ],
+                          )
+                        : Container(),
+                    widget.total != 0
+                        ? Column(
+                            children: [
+                              InkWell(
+                                onTap: () async {
+                                  _openModal();
+                                  Future<void> future =
+                                      showModalBottomSheet<void>(
+                                    useRootNavigator: true,
+                                    isScrollControlled: true,
+                                    context: context,
+                                    shape: RoundedRectangleBorder(
+                                        borderRadius: BorderRadius.vertical(
+                                            top: Radius.circular(10.0))),
+                                    builder: (context) => InfoPage(
+                                        widget.property,
+                                        widget.toggleplay,
+                                        widget.thereisanopenwindow),
+                                  );
+                                  future
+                                      .then((void value) => _closeModal(value));
+                                },
+                                child: SvgPicture.asset(
+                                  'images/INFORMACION.svg',
+                                  width: _propertyIconSize,
+                                  height: _propertyIconSize,
+                                  color: Colors.white,
+                                ),
+                              ),
+                              SizedBox(
+                                height: _propertyIconSize,
+                              ),
+                            ],
+                          )
+                        : Container(),
+                    widget.total != 0
+                        ? Column(
+                            children: [
+                              InkWell(
+                                onTap: () async {
+                                  _openModal();
+                                  Future<void> future =
+                                      showModalBottomSheet<void>(
+                                    useRootNavigator: true,
+                                    isScrollControlled: true,
+                                    context: context,
+                                    shape: RoundedRectangleBorder(
+                                        borderRadius: BorderRadius.vertical(
+                                            top: Radius.circular(10.0))),
+                                    builder: (context) => ContactPage(
+                                        widget.property,
+                                        widget.status != AuthFlowStatus.session
+                                            ? true
+                                            : false,
+                                        widget.status == AuthFlowStatus.session
+                                            ? widget.email
+                                            : null,
+                                        widget.toggleplay,
+                                        widget.thereisanopenwindow),
+                                  );
+                                  future
+                                      .then((void value) => _closeModal(value));
+                                },
+                                child: SvgPicture.asset(
+                                  'images/DUDAS.svg',
+                                  width: _propertyIconSize,
+                                  height: _propertyIconSize,
+                                  color: Colors.white,
+                                ),
+                              ),
+                              SizedBox(
+                                height: _propertyIconSize,
+                              ),
+                            ],
+                          )
+                        : Container(),
+                    widget.total != 0
+                        ? Column(
+                            children: [
+                              InkWell(
+                                onTap: () async {
+                                  _openModal();
+                                  Future<void> future =
+                                      showModalBottomSheet<void>(
+                                    useRootNavigator: true,
+                                    isScrollControlled: true,
+                                    context: context,
+                                    shape: RoundedRectangleBorder(
+                                        borderRadius: BorderRadius.vertical(
+                                            top: Radius.circular(10.0))),
+                                    builder: (context) => SchedulerPage(
+                                        widget.property,
+                                        widget.status != AuthFlowStatus.session
+                                            ? true
+                                            : false,
+                                        widget.status == AuthFlowStatus.session
+                                            ? widget.email
+                                            : null,
+                                        widget.toggleplay,
+                                        widget.thereisanopenwindow),
+                                  );
+                                  future
+                                      .then((void value) => _closeModal(value));
+                                },
+                                child: SvgPicture.asset(
+                                  'images/CITAS.svg',
+                                  width: _propertyIconSize,
+                                  height: _propertyIconSize,
+                                  color: Colors.white,
+                                ),
+                              )
+                            ],
+                          )
+                        : Container(),
+                    Column(
+                      children: [
+                        SizedBox(
+                          height: 20,
+                        ),
+                      ],
                     ),
                   ],
-                ),
-              ],
-            )),
-      )
+                )),
+          )
           //]),
           ),
     ]);

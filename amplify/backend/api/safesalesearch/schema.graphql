@@ -27,6 +27,7 @@ type Property @model @searchable @auth(
   terreno_m2: Int
   direccion: String
   creacion: String
+  createdAt: AWSDateTime!
   propertyHashKey: String
   cp: String
   edad: Int
@@ -34,6 +35,7 @@ type Property @model @searchable @auth(
   entidad: String
   status: String
   video: Boolean
+  photo: Boolean
   galery: [S3Object]
   favs: [UserFavs] @connection(name:"PropertyFav")
   conversations: [Conversation] @connection(name:"PropertyConv")

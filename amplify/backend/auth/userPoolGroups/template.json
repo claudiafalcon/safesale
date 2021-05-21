@@ -45,7 +45,7 @@
           "Type" : "AWS::Cognito::UserPoolGroup",
           "Properties" : {
               "GroupName" : "UserGroupFinalUsers",
-              "Precedence" : 1,
+              "Precedence" : 3,
               
               "RoleArn" : {
                 "Fn::GetAtt": [
@@ -153,7 +153,7 @@
           "Type" : "AWS::Cognito::UserPoolGroup",
           "Properties" : {
               "GroupName" : "UserGroupSaleForce",
-              "Precedence" : 3,
+              "Precedence" : 1,
               
               "RoleArn" : {
                 "Fn::GetAtt": [

@@ -13,6 +13,7 @@ final double factorSmallIconSize = 0.022;
 final double factorPropertyTitle = 0.15;
 final double factorVerticalSpace = 0.05;
 final double factorPaddingSpace = 0.08;
+final double factorPaddingSmallSpace = 0.04;
 
 final double factorFontTitle1 = 0.025;
 final double factorFontInput = 0.02;

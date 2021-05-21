@@ -6,3 +6,7 @@ Helpful resources:
 - Amplify CLI documentation: https://docs.amplify.aws/cli
 - More details on this folder & generated files: https://docs.amplify.aws/cli/reference/files
 - Join Amplify's community: https://amplify.aws/community/
+
+# Troubleshooting Section
+
+Si el usuario admin no puede cargar a S3 revisa la precedencia de Usuarios de Grupo en el auth Backend. Precencia 1 para el grupo de ventas

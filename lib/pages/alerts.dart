@@ -148,7 +148,7 @@ class _AlertsPageState extends State<AlertsPage> {
                 : item.criterio.preciofrom.toString()) +
             (item.criterio.precioto == null
                 ? ""
-                : "-" + item.criterio.preciofrom.toString()) +
+                : "-" + item.criterio.precioto.toString()) +
             " ");
       if (item.criterio.amenidades != null)
         text.write(item.criterio.amenidades.replaceAll("OR", "ó"));

@@ -97,14 +97,18 @@ class _PhotoPageState extends State<PhotoPage> {
                                   mainAxisSpacing: 24,
                                   crossAxisSpacing: 12,
                                   itemCount: _keys.length,
-                                  itemBuilder: (BuildContext context,
-                                          int index) =>
-                                      ClipRRect(
-                                        borderRadius: BorderRadius.circular(20),
-                                        child: Image.network(
-                                          cloudfronturl + _keys[index],
-                                        ),
-                                      ),
+                                  itemBuilder:
+                                      (BuildContext context, int index) =>
+                                          GestureDetector(
+                                            onTap: () {},
+                                            child: ClipRRect(
+                                              borderRadius:
+                                                  BorderRadius.circular(20),
+                                              child: Image.network(
+                                                cloudfronturl + _keys[index],
+                                              ),
+                                            ),
+                                          ),
                                   staggeredTileBuilder: (int index) =>
                                       index == 0
                                           ? StaggeredTile.fit(2)

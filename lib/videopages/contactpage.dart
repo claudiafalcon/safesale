@@ -258,12 +258,13 @@ class _ContactPageState extends State<ContactPage> {
                                     key: _formKey,
                                     child: Column(
                                       mainAxisAlignment:
-                                          MainAxisAlignment.start,
+                                          MainAxisAlignment.spaceEvenly,
                                       crossAxisAlignment:
                                           CrossAxisAlignment.center,
                                       children: [
                                         Padding(
-                                          padding: EdgeInsets.all(padding),
+                                          padding:
+                                              EdgeInsets.only(top: padding),
                                         ),
                                         Text("Tienes dudas?",
                                             textAlign: TextAlign.center,
@@ -278,8 +279,11 @@ class _ContactPageState extends State<ContactPage> {
                                                 fontWeight: FontWeight.w600,
                                               ),
                                             )),
-                                        SizedBox(
-                                          height: padding,
+                                        Expanded(
+                                          flex: 1,
+                                          child: SizedBox(
+                                            height: padding,
+                                          ),
                                         ),
                                         Text(
                                             "Revisa nuestra sección de preguntas frecuentes.",
@@ -293,8 +297,11 @@ class _ContactPageState extends State<ContactPage> {
                                                   factorFontSmall,
                                               fontWeight: FontWeight.normal,
                                             ))),
-                                        SizedBox(
-                                          height: padding,
+                                        Expanded(
+                                          flex: 1,
+                                          child: SizedBox(
+                                            height: padding,
+                                          ),
                                         ),
                                         InkWell(
                                           onTap: () => _launchInBrowser(
@@ -304,7 +311,7 @@ class _ContactPageState extends State<ContactPage> {
                                                     .size
                                                     .width /
                                                 2,
-                                            height: 50,
+                                            height: padding * 2,
                                             decoration: BoxDecoration(
                                               color: Color(0xff003b8b),
                                               borderRadius:
@@ -325,8 +332,11 @@ class _ContactPageState extends State<ContactPage> {
                                             ),
                                           ),
                                         ),
-                                        SizedBox(
-                                          height: padding,
+                                        Expanded(
+                                          flex: 1,
+                                          child: SizedBox(
+                                            height: padding,
+                                          ),
                                         ),
                                         Text(
                                             "Si aún tienes dudas mándanos un mensaje.",
@@ -340,8 +350,11 @@ class _ContactPageState extends State<ContactPage> {
                                                   factorFontSmall,
                                               fontWeight: FontWeight.normal,
                                             ))),
-                                        SizedBox(
-                                          height: padding,
+                                        Expanded(
+                                          flex: 1,
+                                          child: SizedBox(
+                                            height: padding,
+                                          ),
                                         ),
                                         Container(
                                           alignment: Alignment.center,
@@ -411,53 +424,20 @@ class _ContactPageState extends State<ContactPage> {
                                           ),
                                         ),
                                         SizedBox(
-                                          height: 10,
+                                          height: padding / 3,
                                         ),
-                                        Container(
-                                            width: MediaQuery.of(context)
-                                                .size
-                                                .width,
-                                            height: 200,
-                                            margin: EdgeInsets.only(
-                                                left: 20, right: 20),
-                                            child: TextFormField(
-                                                maxLines: 8,
-                                                style: GoogleFonts.raleway(
-                                                    textStyle: TextStyle(
-                                                  color: Color(0xff003b8b),
-                                                  fontSize:
-                                                      MediaQuery.of(context)
-                                                              .size
-                                                              .height *
-                                                          factorFontInput,
-                                                  fontWeight: FontWeight.w600,
-                                                )),
-                                                controller: dudecontroller,
-                                                decoration: InputDecoration(
-                                                  contentPadding:
-                                                      EdgeInsets.only(
-                                                          left: 15,
-                                                          top: 15,
-                                                          bottom: 15,
-                                                          right: 15),
-                                                  enabledBorder:
-                                                      OutlineInputBorder(
-                                                    borderRadius:
-                                                        BorderRadius.circular(
-                                                            20),
-                                                    borderSide:
-                                                        const BorderSide(
-                                                            color: Colors.white,
-                                                            width: 0.0),
-                                                  ),
-                                                  fillColor: Color.fromRGBO(
-                                                      255, 255, 255, 0.9),
-                                                  filled: true,
-                                                  hintText:
-                                                      "Escribenos tu duda ...",
-                                                  hintStyle:
-                                                      GoogleFonts.raleway(
-                                                          textStyle: TextStyle(
+                                        Expanded(
+                                          flex: 2,
+                                          child: Container(
+                                              width: MediaQuery.of(context)
+                                                  .size
+                                                  .width,
+                                              margin: EdgeInsets.only(
+                                                  left: 20, right: 20),
+                                              child: TextFormField(
+                                                  maxLines: 8,
+                                                  style: GoogleFonts.raleway(
+                                                      textStyle: TextStyle(
                                                     color: Color(0xff003b8b),
                                                     fontSize:
                                                         MediaQuery.of(context)
@@ -466,12 +446,56 @@ class _ContactPageState extends State<ContactPage> {
                                                             factorFontInput,
                                                     fontWeight: FontWeight.w600,
                                                   )),
-                                                  border: OutlineInputBorder(
-                                                    borderRadius:
-                                                        BorderRadius.circular(
-                                                            20),
-                                                  ),
-                                                ))),
+                                                  controller: dudecontroller,
+                                                  decoration: InputDecoration(
+                                                    contentPadding:
+                                                        EdgeInsets.only(
+                                                            left: 15,
+                                                            top: 15,
+                                                            bottom: 15,
+                                                            right: 15),
+                                                    enabledBorder:
+                                                        OutlineInputBorder(
+                                                      borderRadius:
+                                                          BorderRadius.circular(
+                                                              20),
+                                                      borderSide:
+                                                          const BorderSide(
+                                                              color:
+                                                                  Colors.white,
+                                                              width: 0.0),
+                                                    ),
+                                                    fillColor: Color.fromRGBO(
+                                                        255, 255, 255, 0.9),
+                                                    filled: true,
+                                                    hintText:
+                                                        "Escribenos tu duda ...",
+                                                    hintStyle:
+                                                        GoogleFonts.raleway(
+                                                            textStyle:
+                                                                TextStyle(
+                                                      color: Color(0xff003b8b),
+                                                      fontSize:
+                                                          MediaQuery.of(context)
+                                                                  .size
+                                                                  .height *
+                                                              factorFontInput,
+                                                      fontWeight:
+                                                          FontWeight.w600,
+                                                    )),
+                                                    border: OutlineInputBorder(
+                                                      borderRadius:
+                                                          BorderRadius.circular(
+                                                              20),
+                                                    ),
+                                                  ))),
+                                        ),
+                                        Expanded(
+                                          flex: 1,
+                                          child: SizedBox(
+                                            height: padding,
+                                          ),
+                                        ),
                                         InkWell(
                                           onTap: () => _sendquestion(),
                                           child: Container(

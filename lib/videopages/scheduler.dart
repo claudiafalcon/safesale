@@ -14,9 +14,7 @@ import 'package:safesale/services/notification_service.dart';
 import 'package:safesale/services/user_service.dart';
 import 'package:safesale/utils.dart';
 import 'package:safesale/variables.dart';
-import 'package:safesale/widgets/listItem.dart';
-import 'package:intl/date_symbol_data_local.dart';
-import 'package:url_launcher/url_launcher.dart';
+
 import 'package:intl/intl.dart';
 
 class AlwaysDisabledFocusNode extends FocusNode {
@@ -335,36 +333,40 @@ class _SchedulerPageState extends State<SchedulerPage> {
                                     crossAxisAlignment:
                                         CrossAxisAlignment.center,
                                     children: [
-                                      Padding(
-                                        padding: EdgeInsets.all(padding / 2),
-                                        child: SvgPicture.asset(
-                                          'images/LoadingImage.svg',
-                                          width: MediaQuery.of(context)
-                                                  .size
-                                                  .height *
-                                              factorAuthLogoWd,
-                                          height: MediaQuery.of(context)
-                                                  .size
-                                                  .height *
-                                              factorAuthLogoWd,
+                                      Expanded(
+                                        flex: 1,
+                                        child: SizedBox(
+                                          height: 10,
                                         ),
                                       ),
-                                      Padding(
-                                        padding: EdgeInsets.all(padding / 2),
-                                        child: Text(
-                                            "Esta es la casa de tus sueños, si deseas visitarla por favor déjanos tus datos y agenda una cita.",
-                                            textAlign: TextAlign.center,
-                                            style: GoogleFonts.raleway(
-                                              textStyle: TextStyle(
-                                                color: Colors.white,
-                                                fontSize: MediaQuery.of(context)
-                                                        .size
-                                                        .height *
-                                                    factorFontSmall *
-                                                    1.2,
-                                                fontWeight: FontWeight.w600,
-                                              ),
-                                            )),
+                                      SvgPicture.asset(
+                                        'images/LoadingImage.svg',
+                                        width:
+                                            MediaQuery.of(context).size.height *
+                                                factorAuthLogoWd,
+                                        height:
+                                            MediaQuery.of(context).size.height *
+                                                factorAuthLogoWd,
+                                      ),
+                                      Text(
+                                          "Esta es la casa de tus sueños, si deseas visitarla por favor déjanos tus datos y agenda una cita.",
+                                          textAlign: TextAlign.center,
+                                          style: GoogleFonts.raleway(
+                                            textStyle: TextStyle(
+                                              color: Colors.white,
+                                              fontSize: MediaQuery.of(context)
+                                                      .size
+                                                      .height *
+                                                  factorFontSmall *
+                                                  1.2,
+                                              fontWeight: FontWeight.w600,
+                                            ),
+                                          )),
+                                      Expanded(
+                                        flex: 1,
+                                        child: SizedBox(
+                                          height: 10,
+                                        ),
                                       ),
                                       Container(
                                         alignment: Alignment.center,
@@ -425,8 +427,11 @@ class _SchedulerPageState extends State<SchedulerPage> {
                                           textAlign: TextAlign.center,
                                         ),
                                       ),
-                                      SizedBox(
-                                        height: 10,
+                                      Expanded(
+                                        flex: 1,
+                                        child: SizedBox(
+                                          height: 10,
+                                        ),
                                       ),
                                       Container(
                                         alignment: Alignment.center,
@@ -495,8 +500,11 @@ class _SchedulerPageState extends State<SchedulerPage> {
                                           textAlign: TextAlign.center,
                                         ),
                                       ),
-                                      SizedBox(
-                                        height: 10,
+                                      Expanded(
+                                        flex: 1,
+                                        child: SizedBox(
+                                          height: 10,
+                                        ),
                                       ),
                                       Container(
                                         alignment: Alignment.center,
@@ -558,8 +566,11 @@ class _SchedulerPageState extends State<SchedulerPage> {
                                           textAlign: TextAlign.center,
                                         ),
                                       ),
-                                      SizedBox(
-                                        height: 10,
+                                      Expanded(
+                                        flex: 1,
+                                        child: SizedBox(
+                                          height: 10,
+                                        ),
                                       ),
                                       Row(
                                         mainAxisAlignment:
@@ -729,6 +740,12 @@ class _SchedulerPageState extends State<SchedulerPage> {
                                           )
                                         ]),
                                       ]),
+                                      Expanded(
+                                        flex: 1,
+                                        child: SizedBox(
+                                          height: 10,
+                                        ),
+                                      ),
                                       InkWell(
                                         onTap: () => _sendquestion(),
                                         child: Container(
@@ -758,8 +775,11 @@ class _SchedulerPageState extends State<SchedulerPage> {
                                           ),
                                         ),
                                       ),
-                                      SizedBox(
-                                        height: 10,
+                                      Expanded(
+                                        flex: 1,
+                                        child: SizedBox(
+                                          height: 10,
+                                        ),
                                       ),
                                     ],
                                   ),

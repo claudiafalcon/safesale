@@ -1,7 +1,7 @@
 [
     {
         "groupName": "UserGroupFinalUsers",
-        "precedence": 1
+        "precedence": 3
     },
     {
         "groupName": "UserGroupCustomers",
@@ -9,7 +9,7 @@
     },
     {
         "groupName": "UserGroupSaleForce",
-        "precedence": 3,
+        "precedence": 1,
         "customPolicies": [
             {
                 "PolicyName": "safesaleba936a14-admin-group-policy",
