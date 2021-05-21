@@ -22,6 +22,10 @@ class RightPropertyBar extends StatefulWidget {
 
   final void Function(bool) thereisanopenwindow;
 
+  final void Function() toggleSound;
+
+  final double volume;
+
   final void Function(String) toggleplay;
 
   final AuthFlowStatus status;
@@ -38,7 +42,9 @@ class RightPropertyBar extends StatefulWidget {
       @required this.headText,
       @required this.status,
       this.toggleplay,
-      this.thereisanopenwindow})
+      this.thereisanopenwindow,
+      this.toggleSound,
+      this.volume})
       : super(key: key);
   @override
   _RightPropertyBarState createState() => _RightPropertyBarState();
@@ -168,6 +174,8 @@ class _RightPropertyBarState extends State<RightPropertyBar> {
 
   @override
   Widget build(BuildContext context) {
+    double volume = 1;
+    if (widget.volume != null) volume = widget.volume;
     final double _propertyIconSize =
         MediaQuery.of(context).size.height * factorRighBarVideoIconSize;
     final double _filterIconSize =
@@ -512,7 +520,34 @@ class _RightPropertyBarState extends State<RightPropertyBar> {
                                   height: _propertyIconSize,
                                   color: Colors.white,
                                 ),
+                              ),
+                              SizedBox(
+                                height: _propertyIconSize,
                               )
+                            ],
+                          )
+                        : Container(),
+                    widget.total != 0
+                        ? Column(
+                            children: [
+                              InkWell(
+                                  onTap: () {
+                                    setState(() {
+                                      if (widget.toggleSound != null)
+                                        widget.toggleSound();
+                                    });
+                                  },
+                                  child: volume == 1
+                                      ? SvgPicture.asset(
+                                          'images/PLAYSOUND.svg',
+                                          width: _propertyIconSize,
+                                          height: _propertyIconSize,
+                                          color: Colors.white,
+                                        )
+                                      : SvgPicture.asset('images/MUTE.svg',
+                                          width: _propertyIconSize,
+                                          height: _propertyIconSize,
+                                          color: Colors.white))
                             ],
                           )
                         : Container(),

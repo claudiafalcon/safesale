@@ -12,7 +12,7 @@ class Property {
   final bool video;
   final List<Media> gallery;
   final String caracteristicas;
-  final int construccionM2;
+  final double construccionM2;
   final String amenidades;
   final String cp;
   final String createdAt;
@@ -28,7 +28,7 @@ class Property {
   final String precio;
   final String propietario;
   final int recamaras;
-  final int terrenoM2;
+  final double terrenoM2;
   final String updatedAt;
 
   Property(
@@ -85,8 +85,11 @@ class Property {
       caracteristicas: data["caracteristicas"] == null
           ? ''
           : data["caracteristicas"] as String,
-      construccionM2:
-          data["construccion_m2"] == null ? 0 : data["construccion_m2"] as int,
+      construccionM2: data["construccion_m2"] == null
+          ? 0.0
+          : (data["construccion_m2"] is int
+              ? (data["construccion_m2"] as int).toDouble()
+              : data["construccion_m2"]),
       amenidades:
           data["amenidades"] == null ? "" : data["amenidades"] as String,
       cp: data["cp"] == null ? '' : data["cp"] as String,
@@ -105,7 +108,11 @@ class Property {
       propietario:
           data["propietario"] == null ? "" : data["propietario"] as String,
       recamaras: data["recamaras"] == null ? 0 : data["recamaras"] as int,
-      terrenoM2: data["terreno_m2"] == null ? 0 : data["terreno_m2"] as int,
+      terrenoM2: data["terreno_m2"] == null
+          ? 0.0
+          : (data["terreno_m2"] is int
+              ? (data["terreno_m2"] as int).toDouble()
+              : data["terreno_m2"]),
       updatedAt: data["updatedAt"] == null ? null : data["updatedAt"] as String,
       wc: data["wc"] == null ? 0 : data["wc"] as int,
       baths: data["baths"] == null ? 0 : data["baths"] as int,

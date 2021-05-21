@@ -18,13 +18,13 @@ type Property @model @searchable @auth(
   wc: Int
   baths: Int
   asesor: String
-  construccion_m2: Int
+  construccion_m2: Float
   amenidades: String
   estacionamientos: Int
   localidad: String
   inventario: Int
   propertyGeohash: String
-  terreno_m2: Int
+  terreno_m2: Float
   direccion: String
   creacion: String
   createdAt: AWSDateTime!
