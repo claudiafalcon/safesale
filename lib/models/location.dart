@@ -7,6 +7,11 @@ class Location {
   Location({this.lon, this.lat});
 
   factory Location.fromJson(Map<String, dynamic> data) {
-    return Location(lon: data["lon"] as double, lat: data["lat"] as double);
+    return Location(
+        lon: data["lon"] is int
+            ? (data["lon"] as int).toDouble()
+            : data["lon"] as double,
+        lat:
+            data["lat"] is int ? (data["lat"] as int).toDouble() : data["lat"]);
   }
 }

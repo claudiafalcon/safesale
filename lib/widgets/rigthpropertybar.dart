@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:safesale/auth_credentials.dart';
 import 'package:safesale/models/property.dart';
 import 'package:safesale/models/userfav.dart';
 import 'package:safesale/services/auth_service.dart';
@@ -32,13 +33,13 @@ class RightPropertyBar extends StatefulWidget {
 
   final Property property;
 
-  final String email;
+  final SignedCredentials credentials;
 
   const RightPropertyBar(
       {Key key,
       @required this.total,
       this.property,
-      this.email,
+      this.credentials,
       @required this.headText,
       @required this.status,
       this.toggleplay,
@@ -465,7 +466,7 @@ class _RightPropertyBarState extends State<RightPropertyBar> {
                                             ? true
                                             : false,
                                         widget.status == AuthFlowStatus.session
-                                            ? widget.email
+                                            ? widget.credentials
                                             : null,
                                         widget.toggleplay,
                                         widget.thereisanopenwindow),
@@ -506,7 +507,7 @@ class _RightPropertyBarState extends State<RightPropertyBar> {
                                             ? true
                                             : false,
                                         widget.status == AuthFlowStatus.session
-                                            ? widget.email
+                                            ? widget.credentials
                                             : null,
                                         widget.toggleplay,
                                         widget.thereisanopenwindow),

@@ -162,8 +162,9 @@ type Conversation
   )
   @auth(rules: [
   { allow: owner },
-  { allow: owner, ownerField: "members", operations: [update, read] },
-  {allow: public, operations:[create], provider:iam, queries: null}]) {
+  { allow: owner, ownerField: "members", operations: [update, read,create] },
+  {allow: public, operations:[create], provider:iam, queries: null}])
+{
   id: ID!
   messages: [Message] @connection(name: "ConvoMsgs", sortField: "createdAt")
   associated: [ConvoLink] @connection(name: "AssociatedLinks")
@@ -180,9 +181,10 @@ type Conversation
 
 type Message 
   @model(subscriptions: null, queries: null) 
-  @auth(rules: [{ allow: owner, ownerField: "authorId" }
-  {allow: private, operations:[read,update]}
-  {allow: public, operations:[create], provider:iam, queries: null}]) {
+    @auth(rules: [
+  { allow: owner },
+  { allow: owner, ownerField: "members", operations: [update, read,create] },
+  {allow: public, operations:[create], provider:iam, queries: null}]){
   id: ID!
   author: User @connection(name: "UserMessages", keyField: "authorId")
   authorId: ID !
@@ -196,13 +198,15 @@ type Message
 }
 
 type ConvoLink 
-
   @model(
     mutations: { create: "createConvoLink", update: "updateConvoLink" }
     queries: null
     subscriptions: null
-  ) @auth(rules: [{  allow: owner},
-   {allow: private, operations:[create,update,read], queries: null}
+  )
+  
+  @auth(rules: [
+  { allow: owner },
+  { allow: owner, ownerField: "members", operations: [update, read,create] },
   {allow: public, operations:[create], provider:iam, queries: null}]) {
   id: ID!
   user: User! @connection(name: "UserLinks")

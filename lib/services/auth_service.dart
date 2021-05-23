@@ -120,7 +120,7 @@ class AuthService {
         // 4
       }
     } catch (authError) {
-      logOut();
+      // logOut();
       error = "Usuario o contraseña incorrectos.";
 
       print('Could not login - ${authError.message}');

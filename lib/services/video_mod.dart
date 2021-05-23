@@ -31,6 +31,10 @@ class SafeSalePlayer extends StatefulWidget {
   final void Function(bool) thereisanopenwindow;
   final bool windowOpen;
 
+  final void Function(bool) setAudio;
+
+  final bool volume;
+
   final int total;
 
   final Property property;
@@ -39,17 +43,19 @@ class SafeSalePlayer extends StatefulWidget {
 
   final AuthFlowStatus status;
 
-  SafeSalePlayer({
-    Key key,
-    this.onfullscreen,
-    this.onpeningvideo,
-    this.total,
-    this.credentials,
-    this.status,
-    @required this.property,
-    this.thereisanopenwindow,
-    this.windowOpen,
-  }) : super(key: key);
+  SafeSalePlayer(
+      {Key key,
+      this.onfullscreen,
+      this.onpeningvideo,
+      this.total,
+      this.credentials,
+      this.status,
+      @required this.property,
+      this.thereisanopenwindow,
+      this.windowOpen,
+      this.volume,
+      this.setAudio})
+      : super(key: key);
 
   @override
   _SafeSalePlayerState createState() => _SafeSalePlayerState();
@@ -170,11 +176,12 @@ class _SafeSalePlayerState extends State<SafeSalePlayer>
           total: widget.total,
           property: widget.property,
           headText: widget.property.nombre,
-          email:
-              widget.credentials != null ? widget.credentials.username : null,
+          credentials: widget.credentials != null ? widget.credentials : null,
           status: widget.status,
           toggleplay: togglePlayAction,
-          thereisanopenwindow: widget.thereisanopenwindow)
+          thereisanopenwindow: widget.thereisanopenwindow,
+          toggleSound: toggleSound,
+          volume: controller.value.volume)
     ];
     videoChildrens.addAll(videoBuiltInChildrens());
     return //AspectRatio(
@@ -387,6 +394,10 @@ class _SafeSalePlayerState extends State<SafeSalePlayer>
     videoInit(url);
     controller.addListener(listener);
     if (!widget.windowOpen) controller.play();
+    if (widget.volume)
+      controller.setVolume(1);
+    else
+      controller.setVolume(0);
     controller.setLooping(true);
   }
 
@@ -406,6 +417,17 @@ class _SafeSalePlayerState extends State<SafeSalePlayer>
 
   void clearHideControlbarTimer() {
     showTime?.cancel();
+  }
+
+  void toggleSound() {
+    if (controller.value.volume > 0) {
+      controller.setVolume(0);
+      widget.setAudio(false);
+    } else {
+      controller.setVolume(1);
+      widget.setAudio(true);
+    }
+    setState(() {});
   }
 
   void togglePlayAction(String action) {

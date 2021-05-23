@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:safesale/auth/formvalidator.dart';
+import 'package:safesale/auth_credentials.dart';
 import 'package:safesale/models/associated.dart';
 import 'package:safesale/models/conversation.dart';
 import 'package:safesale/models/property.dart';
@@ -24,13 +25,13 @@ class AlwaysDisabledFocusNode extends FocusNode {
 class ContactPage extends StatefulWidget {
   final Property property;
   final bool isGuest;
-  final String email;
+  final SignedCredentials credentials;
 
   final void Function(bool) thereisanopenwindow;
   final void Function(String) toggleplay;
 
-  const ContactPage(this.property, this.isGuest, this.email, this.toggleplay,
-      this.thereisanopenwindow,
+  const ContactPage(this.property, this.isGuest, this.credentials,
+      this.toggleplay, this.thereisanopenwindow,
       {Key key})
       : super(key: key);
   @override
@@ -157,7 +158,7 @@ class _ContactPageState extends State<ContactPage> {
         _showDialog(
             text:
                 "Ya has enviado una duda con anteriorioridad, te contactaremos por e-mail.");
-        Navigator.of(context).pop();
+        // Navigator.of(context).pop();
         return;
       }
     }
@@ -166,6 +167,15 @@ class _ContactPageState extends State<ContactPage> {
     if (contact == null) {
       contact = await _userService.getUserByUsername(UserService.genericEmail);
       contactNotRegister = true;
+    } else {
+      if (contact.id == owner.id) {
+        Navigator.pop(context);
+        _showDialog(
+            text:
+                "Tu eres el asesor de la casa, no puedes entablar una conversacion contigo mismo");
+        // Navigator.of(context).pop();
+        return;
+      }
     }
 
     List<String> members = [];
@@ -175,14 +185,20 @@ class _ContactPageState extends State<ContactPage> {
     String id = await _notiService.createConvo(
         "Duda:" +
             widget.property.nombre +
-            " de :" +
-            (!widget.isGuest ? widget.email : username),
+            " de: " +
+            (!widget.isGuest
+                ? (widget.credentials.name != null
+                        ? widget.credentials.name + " "
+                        : "") +
+                    widget.credentials.username
+                : username),
         "dude",
         members,
         widget.property.id,
         '',
         '');
     if (id != null) {
+      Navigator.of(context).pop();
       await _notiService.createConvoLink(
           id, owner.id, widget.isGuest ? username : "");
       await _notiService.createConvoLink(
@@ -191,8 +207,8 @@ class _ContactPageState extends State<ContactPage> {
       await _notiService.createMessage(
           id, owner.id, dude, widget.isGuest ? username : "");
     }
+    if (!widget.isGuest) _userService.updateUser(owner.id);
 
-    Navigator.of(context).pop();
     // final credentials =
     //   LoginCredentials(username: username, password: password);
     //widget.didProvideCredentials(credentials);
@@ -210,8 +226,14 @@ class _ContactPageState extends State<ContactPage> {
     }
   }
 
+  bool _enable = true;
+
   @override
   Widget build(BuildContext context) {
+    if (!widget.isGuest) {
+      User owner = _userService.getUser();
+      _userService.updateUser(owner.id);
+    }
     var padding = MediaQuery.of(context).size.height * 0.04;
     double _fontsize = MediaQuery.of(context).size.height < 800 ? 10 : 14;
 
@@ -387,7 +409,7 @@ class _ContactPageState extends State<ContactPage> {
                                                   .validateEmail(value);
                                             },
                                             initialValue: widget.isGuest != true
-                                                ? widget.email
+                                                ? widget.credentials.username
                                                 : null,
                                             decoration: InputDecoration(
                                               contentPadding: EdgeInsets.only(
@@ -497,7 +519,9 @@ class _ContactPageState extends State<ContactPage> {
                                           ),
                                         ),
                                         InkWell(
-                                          onTap: () => _sendquestion(),
+                                          onTap: () {
+                                            _sendquestion();
+                                          },
                                           child: Container(
                                             width: MediaQuery.of(context)
                                                     .size

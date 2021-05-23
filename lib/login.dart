@@ -1,3 +1,5 @@
+import 'package:amplify_auth_cognito/amplify_auth_cognito.dart';
+import 'package:amplify_flutter/amplify.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -34,15 +36,21 @@ class _LoginPageState extends State<LoginPage> {
 
   GlobalKey<FormState> _key = new GlobalKey();
 
-  void _login() {
+  void _login() async {
     if (_key.currentState.validate()) {
       final username = emailcontroller.text.trim().toLowerCase();
       final password = passwordcontroller.text.trim();
 
       final credentials =
           LoginCredentials(username: username, password: password);
-      widget.didProvideCredentials(credentials);
-      widget.shouldUpdateDevice();
+      await widget.didProvideCredentials(credentials);
+
+      CognitoAuthSession res = await Amplify.Auth.fetchAuthSession(
+          options: CognitoSessionOptions(getAWSCredentials: true));
+
+      if (res.isSignedIn) {
+        widget.shouldUpdateDevice();
+      }
     } else {
       setState(() {
         _validate = true;

@@ -5,6 +5,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:safesale/auth/formvalidator.dart';
+import 'package:safesale/auth_credentials.dart';
 import 'package:safesale/models/associated.dart';
 import 'package:safesale/models/conversation.dart';
 import 'package:safesale/models/property.dart';
@@ -25,12 +26,12 @@ class AlwaysDisabledFocusNode extends FocusNode {
 class SchedulerPage extends StatefulWidget {
   final Property property;
   final bool isGuest;
-  final String email;
+  final SignedCredentials credentials;
   final void Function(String) toggleplay;
   final void Function(bool) thereisanopenwindow;
 
-  const SchedulerPage(this.property, this.isGuest, this.email, this.toggleplay,
-      this.thereisanopenwindow,
+  const SchedulerPage(this.property, this.isGuest, this.credentials,
+      this.toggleplay, this.thereisanopenwindow,
       {Key key})
       : super(key: key);
   @override
@@ -115,6 +116,7 @@ class _SchedulerPageState extends State<SchedulerPage> {
     );
   }
 
+  bool _firstPress = true;
   void _sendquestion() async {
     if (_formKey.currentState.validate() && _date != null) {
       final username = emailcontroller.text.trim().toLowerCase();
@@ -167,7 +169,7 @@ class _SchedulerPageState extends State<SchedulerPage> {
         if (conv != null) {
           Navigator.pop(context);
           _showDialog(text: "Tienes ya una visita próxima a esta casa.");
-          Navigator.of(context).pop();
+          //   Navigator.of(context).pop();
           return;
         }
       }
@@ -177,6 +179,15 @@ class _SchedulerPageState extends State<SchedulerPage> {
         contact =
             await _userService.getUserByUsername(UserService.genericEmail);
         contactNotRegister = true;
+      } else {
+        if (contact.id == owner.id) {
+          Navigator.pop(context);
+          _showDialog(
+              text:
+                  "Tu eres el asesor de la casa, no puedes crear cita contigo mismo.");
+          //    Navigator.of(context).pop();
+          return;
+        }
       }
 
       List<String> members = [];
@@ -199,14 +210,20 @@ class _SchedulerPageState extends State<SchedulerPage> {
       String id = await _notiService.createConvo(
           "Cita:" +
               widget.property.nombre +
-              " de :" +
-              (!widget.isGuest ? widget.email : username),
+              " de:" +
+              (!widget.isGuest
+                  ? (widget.credentials.name != null
+                          ? widget.credentials.name + " "
+                          : "") +
+                      widget.credentials.username
+                  : username),
           "scheduler",
           members,
           widget.property.id,
           _date,
           _hour);
       if (id != null) {
+        Navigator.of(context).pop();
         await _notiService.createConvoLink(
             id, owner.id, widget.isGuest ? username : "");
         await _notiService.createConvoLink(
@@ -217,10 +234,14 @@ class _SchedulerPageState extends State<SchedulerPage> {
             owner.id,
             "Cita:" +
                 widget.property.nombre +
-                " de :" +
-                name +
-                " con email :" +
-                (!widget.isGuest ? widget.email : username) +
+                " de: " +
+                (!widget.isGuest
+                    ? (widget.credentials.name != null
+                        ? widget.credentials.name
+                        : widget.credentials.username)
+                    : name) +
+                " con email: " +
+                (!widget.isGuest ? widget.credentials.username : username) +
                 " Tel: " +
                 phone +
                 " fecha: " +
@@ -231,7 +252,6 @@ class _SchedulerPageState extends State<SchedulerPage> {
 
       if (!widget.isGuest) _userService.updateUser(owner.id);
 
-      Navigator.of(context).pop();
       // final credentials =
       //   LoginCredentials(username: username, password: password);
       //widget.didProvideCredentials(credentials);
@@ -283,6 +303,10 @@ class _SchedulerPageState extends State<SchedulerPage> {
 
   @override
   Widget build(BuildContext context) {
+    if (!widget.isGuest) {
+      User owner = _userService.getUser();
+      _userService.updateUser(owner.id);
+    }
     // initializeDateFormatting('es_MX', null);
     var padding = MediaQuery.of(context).size.height * 0.04;
     double _fontsize = MediaQuery.of(context).size.height < 800 ? 10 : 14;
@@ -348,85 +372,128 @@ class _SchedulerPageState extends State<SchedulerPage> {
                                             MediaQuery.of(context).size.height *
                                                 factorAuthLogoWd,
                                       ),
-                                      Text(
-                                          "Esta es la casa de tus sueños, si deseas visitarla por favor déjanos tus datos y agenda una cita.",
-                                          textAlign: TextAlign.center,
-                                          style: GoogleFonts.raleway(
-                                            textStyle: TextStyle(
-                                              color: Colors.white,
-                                              fontSize: MediaQuery.of(context)
-                                                      .size
-                                                      .height *
-                                                  factorFontSmall *
-                                                  1.2,
-                                              fontWeight: FontWeight.w600,
-                                            ),
-                                          )),
+                                      widget.isGuest
+                                          ? Text(
+                                              "Esta es la casa de tus sueños, si deseas visitarla por favor déjanos tus datos y agenda una cita.",
+                                              textAlign: TextAlign.center,
+                                              style: GoogleFonts.raleway(
+                                                textStyle: TextStyle(
+                                                  color: Colors.white,
+                                                  fontSize:
+                                                      MediaQuery.of(context)
+                                                              .size
+                                                              .height *
+                                                          factorFontSmall *
+                                                          1.2,
+                                                  fontWeight: FontWeight.w600,
+                                                ),
+                                              ))
+                                          : Text(
+                                              "Hola ${widget.credentials.name != null ? widget.credentials.name : widget.credentials.username}",
+                                              textAlign: TextAlign.center,
+                                              style: GoogleFonts.raleway(
+                                                textStyle: TextStyle(
+                                                  color: Colors.white,
+                                                  fontSize:
+                                                      MediaQuery.of(context)
+                                                              .size
+                                                              .height *
+                                                          factorFontTitle1,
+                                                  fontWeight: FontWeight.w600,
+                                                ),
+                                              )),
                                       Expanded(
                                         flex: 1,
                                         child: SizedBox(
                                           height: 10,
                                         ),
                                       ),
-                                      Container(
-                                        alignment: Alignment.center,
-                                        width:
-                                            MediaQuery.of(context).size.width,
-                                        margin: EdgeInsets.only(
-                                            left: 20, right: 20),
-                                        child: TextFormField(
-                                          inputFormatters: <TextInputFormatter>[
-                                            FilteringTextInputFormatter.allow(
-                                                RegExp("[a-z A-Z á-ú Á-Ú]"))
-                                          ],
-                                          style: GoogleFonts.raleway(
-                                              textStyle: TextStyle(
-                                            color: Color(0xff003b8b),
-                                            fontSize: MediaQuery.of(context)
-                                                    .size
-                                                    .height *
-                                                factorFontInput,
-                                            fontWeight: FontWeight.w600,
-                                          )),
-                                          controller: namecontroller,
-                                          validator: (String value) {
-                                            return FormValidator()
-                                                .validateName(value);
-                                          },
-                                          decoration: InputDecoration(
-                                            contentPadding: EdgeInsets.only(
-                                                left: 15,
-                                                top: 15,
-                                                bottom: 15,
-                                                right: 15),
-                                            enabledBorder: OutlineInputBorder(
-                                              borderRadius:
-                                                  BorderRadius.circular(20),
-                                              borderSide: const BorderSide(
-                                                  color: Colors.white,
-                                                  width: 0.0),
-                                            ),
-                                            fillColor: Color.fromRGBO(
-                                                255, 255, 255, 0.9),
-                                            filled: true,
-                                            hintText: 'Dinos tu nombre',
-                                            hintStyle: GoogleFonts.raleway(
+                                      widget.isGuest
+                                          ? Container(
+                                              alignment: Alignment.center,
+                                              width: MediaQuery.of(context)
+                                                  .size
+                                                  .width,
+                                              margin: EdgeInsets.only(
+                                                  left: 20, right: 20),
+                                              child: TextFormField(
+                                                inputFormatters: <
+                                                    TextInputFormatter>[
+                                                  FilteringTextInputFormatter
+                                                      .allow(RegExp(
+                                                          "[a-z A-Z á-ú Á-Ú]"))
+                                                ],
+                                                style: GoogleFonts.raleway(
+                                                    textStyle: TextStyle(
+                                                  color: Color(0xff003b8b),
+                                                  fontSize:
+                                                      MediaQuery.of(context)
+                                                              .size
+                                                              .height *
+                                                          factorFontInput,
+                                                  fontWeight: FontWeight.w600,
+                                                )),
+                                                controller: namecontroller,
+                                                validator: (String value) {
+                                                  return FormValidator()
+                                                      .validateName(value);
+                                                },
+                                                decoration: InputDecoration(
+                                                  contentPadding:
+                                                      EdgeInsets.only(
+                                                          left: 15,
+                                                          top: 15,
+                                                          bottom: 15,
+                                                          right: 15),
+                                                  enabledBorder:
+                                                      OutlineInputBorder(
+                                                    borderRadius:
+                                                        BorderRadius.circular(
+                                                            20),
+                                                    borderSide:
+                                                        const BorderSide(
+                                                            color: Colors.white,
+                                                            width: 0.0),
+                                                  ),
+                                                  fillColor: Color.fromRGBO(
+                                                      255, 255, 255, 0.9),
+                                                  filled: true,
+                                                  hintText: 'Dinos tu nombre',
+                                                  hintStyle:
+                                                      GoogleFonts.raleway(
+                                                          textStyle: TextStyle(
+                                                    color: Color(0xff003b8b),
+                                                    fontSize:
+                                                        MediaQuery.of(context)
+                                                                .size
+                                                                .height *
+                                                            factorFontInput,
+                                                    fontWeight: FontWeight.w600,
+                                                  )),
+                                                  border: OutlineInputBorder(
+                                                    borderRadius:
+                                                        BorderRadius.circular(
+                                                            20),
+                                                  ),
+                                                ),
+                                                textAlign: TextAlign.center,
+                                              ),
+                                            )
+                                          : Text(
+                                              "Esta es la casa de tus sueños, si deseas visitarla por favor agenda una cita.",
+                                              textAlign: TextAlign.center,
+                                              style: GoogleFonts.raleway(
                                                 textStyle: TextStyle(
-                                              color: Color(0xff003b8b),
-                                              fontSize: MediaQuery.of(context)
-                                                      .size
-                                                      .height *
-                                                  factorFontInput,
-                                              fontWeight: FontWeight.w600,
-                                            )),
-                                            border: OutlineInputBorder(
-                                              borderRadius:
-                                                  BorderRadius.circular(20),
-                                            ),
-                                          ),
-                                          textAlign: TextAlign.center,
-                                        ),
-                                      ),
+                                                  color: Colors.white,
+                                                  fontSize:
+                                                      MediaQuery.of(context)
+                                                              .size
+                                                              .height *
+                                                          factorFontSmall *
+                                                          1.2,
+                                                  fontWeight: FontWeight.w600,
+                                                ),
+                                              )),
                                       Expanded(
                                         flex: 1,
                                         child: SizedBox(
@@ -464,7 +531,7 @@ class _SchedulerPageState extends State<SchedulerPage> {
                                                 .validateEmail(value);
                                           },
                                           initialValue: widget.isGuest != true
-                                              ? widget.email
+                                              ? widget.credentials.username
                                               : null,
                                           decoration: InputDecoration(
                                             contentPadding: EdgeInsets.only(
@@ -747,7 +814,7 @@ class _SchedulerPageState extends State<SchedulerPage> {
                                         ),
                                       ),
                                       InkWell(
-                                        onTap: () => _sendquestion(),
+                                        onTap: () => {_sendquestion()},
                                         child: Container(
                                           width: MediaQuery.of(context)
                                                   .size

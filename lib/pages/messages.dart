@@ -4,6 +4,7 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:safesale/models/conversation.dart';
 
 import 'package:safesale/models/pushnotification.dart';
+import 'package:safesale/models/user.dart';
 import 'package:safesale/pages/chats.dart';
 import 'package:safesale/painters/softpaint.dart';
 import 'package:safesale/services/auth_service.dart';
@@ -66,6 +67,7 @@ class _MessagesPageState extends State<MessagesPage> {
   List<Conversation> result;
   final _userService = UserService();
   final _notiService = NotificationService();
+  var _firstPress = true;
 
   @override
   void initState() {
@@ -226,7 +228,6 @@ class _MessagesPageState extends State<MessagesPage> {
   List<Widget> _createConvoList(List<Conversation> list) {
     return new List<Widget>.generate(list.length, (index) {
       Conversation item = list[index];
-      StringBuffer text = StringBuffer();
       return GestureDetector(
         onTap: () => Navigator.of(context, rootNavigator: true).push(
             MaterialPageRoute(

@@ -235,6 +235,8 @@ class _VideoPageState extends State<VideoPage> {
 
   bool _openWindow = false;
 
+  bool _volume = true;
+
   bool _transition = false;
 
   void _thereisanopenwindow(bool isthere) {
@@ -242,6 +244,10 @@ class _VideoPageState extends State<VideoPage> {
     _transition = true;
     _openWindow = isthere;
     // });
+  }
+
+  void setAudio(bool turn) {
+    _volume = turn;
   }
 
   @override
@@ -336,17 +342,20 @@ class _VideoPageState extends State<VideoPage> {
                             Property property = _result[_idx];
                             return Stack(fit: StackFit.expand, children: [
                               SafeSalePlayer(
-                                  onfullscreen: (t) {
-                                    setState(() {
-                                      fullscreen = t;
-                                    });
-                                  },
-                                  total: _searchService.getTotal(),
-                                  property: property,
-                                  credentials: widget.credentials,
-                                  status: widget.authstatus,
-                                  thereisanopenwindow: _thereisanopenwindow,
-                                  windowOpen: _openWindow),
+                                onfullscreen: (t) {
+                                  setState(() {
+                                    fullscreen = t;
+                                  });
+                                },
+                                total: _searchService.getTotal(),
+                                property: property,
+                                credentials: widget.credentials,
+                                status: widget.authstatus,
+                                thereisanopenwindow: _thereisanopenwindow,
+                                windowOpen: _openWindow,
+                                setAudio: setAudio,
+                                volume: _volume,
+                              ),
                             ]);
                           } else {
                             return Stack(
