@@ -1,6 +1,9 @@
 import 'dart:async';
 import 'dart:convert';
 import 'dart:io';
+import 'package:amplify_flutter/amplify.dart';
+import 'package:amplify_storage_s3/amplify_storage_s3.dart';
+import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:orientation/orientation.dart';
@@ -97,12 +100,40 @@ class _SafeSalePlayerState extends State<SafeSalePlayer>
 
   Timer showTime;
 
+  List _keys = <String>[];
+
   Size get screenSize => MediaQuery.of(context).size;
+
+  Future<String> getPhotos() async {
+    try {
+      S3ListOptions options =
+          S3ListOptions(accessLevel: StorageAccessLevel.guest);
+      ListResult res = await Amplify.Storage.list(
+          path: "images/" + widget.property.id, options: options);
+
+      await Future.forEach(res.items, (item) async {
+        if (item.key.startsWith("images/" + widget.property.id) &&
+            item.key.toUpperCase().endsWith("JPG")) {
+          try {
+            //GetUrlResult result = await Amplify.Storage.getUrl(key: item.key);
+            _keys.add(item.key);
+          } catch (e) {
+            print(e.message);
+          }
+        }
+      });
+    } catch (e) {
+      print(e.message);
+    }
+
+    return "Finalized";
+  }
 
   @override
   void initState() {
     url =
         cloudfronturl + widget.property.id + "/" + widget.property.id + ".m3u8";
+
     urlcheck(url);
     super.initState();
     var widgetsBinding = WidgetsBinding.instance;
@@ -184,14 +215,58 @@ class _SafeSalePlayerState extends State<SafeSalePlayer>
           volume: controller.value.volume)
     ];
     videoChildrens.addAll(videoBuiltInChildrens());
+    final imageChildrens = <Widget>[
+      FutureBuilder<String>(
+          future: getPhotos(),
+          builder: (BuildContext context, AsyncSnapshot<String> snapshot) {
+            if (snapshot.hasData) {
+              final double height = MediaQuery.of(context).size.height;
+              if (_keys.length > 0) {
+                return CarouselSlider(
+                  options: CarouselOptions(
+                      height: MediaQuery.of(context).size.height,
+                      autoPlay: true,
+                      enlargeCenterPage: false,
+                      viewportFraction: 1),
+                  items: _keys
+                      .map((item) => Container(
+                            child: Center(
+                                child: Image.network(cloudfronturl + item,
+                                    fit: BoxFit.cover, height: height
+                                    //fit: BoxFit.cover,
+                                    //  height:
+                                    //    MediaQuery.of(context).size.height * 0.75,
+                                    )),
+                          ))
+                      .toList(),
+                );
+              } else {
+                return LoadingPage();
+              }
+            } else if (snapshot.hasError) {
+              return LoadingPage();
+            } else {
+              return LoadingPage();
+            }
+          }),
+      RightPropertyBar(
+          total: widget.total,
+          property: widget.property,
+          headText: widget.property.nombre,
+          credentials: widget.credentials != null ? widget.credentials : null,
+          status: widget.status,
+          toggleplay: togglePlayAction,
+          thereisanopenwindow: widget.thereisanopenwindow,
+          toggleSound: toggleSound,
+          volume: controller.value.volume)
+    ];
+    videoChildrens.addAll(videoBuiltInChildrens());
     return //AspectRatio(
         // aspectRatio: 16 / 9,
         //child:
         controller.value.initialized
             ? Stack(children: videoChildrens)
-            : LoadingPage()
-        // )
-        ;
+            : Stack(children: imageChildrens);
   }
 
   /// Vieo Player ActionBar
