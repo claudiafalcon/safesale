@@ -17,17 +17,15 @@ class NavigatorPage extends StatefulWidget {
   final String pagename;
   final bool guestallowed;
   final void Function(int) call;
-  final bool Function() needsreload;
-  final void Function() turnoffreloading;
+  final bool Function() isExternalSearch;
 
-  const NavigatorPage(
-      {Key key,
-      @required this.pagename,
-      this.guestallowed: false,
-      this.call,
-      this.needsreload,
-      this.turnoffreloading})
-      : super(key: key);
+  const NavigatorPage({
+    Key key,
+    @required this.pagename,
+    this.guestallowed: false,
+    this.call,
+    this.isExternalSearch,
+  }) : super(key: key);
   @override
   _NavigatorPageState createState() => _NavigatorPageState();
 }
@@ -49,8 +47,7 @@ class _NavigatorPageState extends State<NavigatorPage> {
         return VideoPage(
             authstatus: status,
             credentials: _authService.getCredentials(),
-            needsreload: widget.needsreload,
-            turnoffreloading: widget.turnoffreloading);
+            isExternalSearch: widget.isExternalSearch);
       case "AlertsPage":
         return AlertsPage(authstatus: status, call: widget.call);
       case "FavsPage":

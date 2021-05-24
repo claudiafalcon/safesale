@@ -23,16 +23,14 @@ class VideoPage extends StatefulWidget {
   final AuthFlowStatus authstatus;
   final SignedCredentials credentials;
 
-  final bool Function() needsreload;
-  final void Function() turnoffreloading;
+  final bool Function() isExternalSearch;
 
-  const VideoPage(
-      {Key key,
-      this.authstatus,
-      this.credentials,
-      this.needsreload,
-      this.turnoffreloading})
-      : super(key: key);
+  const VideoPage({
+    Key key,
+    this.authstatus,
+    this.credentials,
+    this.isExternalSearch,
+  }) : super(key: key);
 
   @override
   _VideoPageState createState() => _VideoPageState();
@@ -58,6 +56,7 @@ class _VideoPageState extends State<VideoPage> {
   initState() {
     super.initState();
     searchStateController = _searchService.searchStateController.stream;
+
     // setInitialLocation();
     //  _listenForPermissionStatus();
 
@@ -84,6 +83,7 @@ class _VideoPageState extends State<VideoPage> {
   Future<void> setInitialLocation() async {
     _pages = null;
     _pages = new Map<int, List<Property>>();
+    if (!widget.isExternalSearch()) _searchService.turnOffExternalSearch();
     Location location = new Location();
     _element = 0;
     _currentProperty = 0;
@@ -252,7 +252,7 @@ class _VideoPageState extends State<VideoPage> {
 
   @override
   Widget build(BuildContext context) {
-    if (widget.needsreload() && !_transition) {
+    if (!_transition) {
       // widget.turnoffreloading();
       setInitialLocation();
     }
@@ -289,7 +289,7 @@ class _VideoPageState extends State<VideoPage> {
                       SearchFlowStatus.started) return LoadingPage();
                   if (snapshot.data.searchFlowStatus ==
                       SearchFlowStatus.empty) {
-                    _searchService.turnOffExternalSearch();
+                    //  _searchService.turnOffExternalSearch();
                     return Stack(
                       children: [
                         EmptyPage(),
@@ -330,7 +330,7 @@ class _VideoPageState extends State<VideoPage> {
                             _result = _pages[resultBlockSize * _ele];
                           }
 
-                          _searchService.turnOffExternalSearch();
+                          // _searchService.turnOffExternalSearch();
                           bool fullscreen = false;
                           if (index < 0) {
                             _element = _element - 1;

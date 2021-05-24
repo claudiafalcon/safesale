@@ -117,16 +117,18 @@ class UserService {
         updateUser(_user.id);
         return null;
       });
-      var operation = Amplify.API.mutate(
-          request: GraphQLRequest<String>(
-              document: m_updateDevice,
-              variables: {'token': token, 'id': device.id}));
+      if (device != null) {
+        var operation = Amplify.API.mutate(
+            request: GraphQLRequest<String>(
+                document: m_updateDevice,
+                variables: {'token': token, 'id': device.id}));
 
-      var response = await operation.response;
-      var data = response.data;
-      await updateUser(_user.id);
+        var response = await operation.response;
+        var data = response.data;
+        await updateUser(_user.id);
 
-      print('Mutation result: ' + data);
+        print('Mutation result: ' + data);
+      }
     } on ApiException catch (e) {
       print('Mutation failed: $e');
     }
