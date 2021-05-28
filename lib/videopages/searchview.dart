@@ -43,6 +43,33 @@ class _SearchPageState extends State<SearchPage> {
     }
   }
 
+  String convertToTitleCase(String text) {
+    if (text == null) {
+      return null;
+    }
+
+    if (text.length <= 1) {
+      return text.toUpperCase();
+    }
+
+    // Split string into multiple words
+    final List<String> words = text.split(' ');
+
+    // Capitalize first letter of each words
+    final capitalizedWords = words.map((word) {
+      if (word.trim().isNotEmpty) {
+        final String firstLetter = word.trim().substring(0, 1).toUpperCase();
+        final String remainingLetters = word.trim().substring(1);
+
+        return '$firstLetter$remainingLetters';
+      }
+      return '';
+    });
+
+    // Join/Merge all words back to one String
+    return capitalizedWords.join(' ');
+  }
+
   Widget getNumberInput(
       String key, String unit, double boxsize, double fontsize) {
     return SizedBox(
@@ -204,24 +231,47 @@ class _SearchPageState extends State<SearchPage> {
         break;
     }
     return InkWell(
-      onTap: () {
-        setState(() {
-          switch (parameter) {
-            case "tipo":
-              _criterio.tipo == option
-                  ? _criterio.tipo = ''
-                  : _criterio.tipo = option;
-              break;
-            case "amenidades":
-              _amenidades.contains(option)
-                  ? _amenidades.remove(option)
-                  : _amenidades.add(option);
-              break;
-          }
-        });
-      },
-      child: SvgPicture.asset(svg, width: size, height: size, color: color),
-    );
+        onTap: () {
+          setState(() {
+            switch (parameter) {
+              case "tipo":
+                _criterio.tipo == option
+                    ? _criterio.tipo = ''
+                    : _criterio.tipo = option;
+                break;
+              case "amenidades":
+                _amenidades.contains(option)
+                    ? _amenidades.remove(option)
+                    : _amenidades.add(option);
+                break;
+            }
+          });
+        },
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.end,
+          children: [
+            SvgPicture.asset(
+              svg,
+              width: size,
+              height: size,
+              color: color,
+              semanticsLabel: option,
+            ),
+            Container(
+              width: size * 1.2,
+              child: Text(convertToTitleCase(option),
+                  overflow: TextOverflow.ellipsis,
+                  textAlign: TextAlign.center,
+                  style: GoogleFonts.raleway(
+                    textStyle: TextStyle(
+                      color: color,
+                      fontSize: size / 6,
+                      fontWeight: FontWeight.w600,
+                    ),
+                  )),
+            ),
+          ],
+        ));
   }
 
   Widget getAmenidadesOptions(double boxsize) {
@@ -268,6 +318,8 @@ class _SearchPageState extends State<SearchPage> {
                         'images/TERRENO AZUL.svg'),
                     getIconCheckbox(boxsize / 2, "tipo", "departamento",
                         'images/DEPARTAMENTOS.svg'),
+                    getIconCheckbox(
+                        boxsize / 2, "tipo", "oficina", 'images/OFICINA.svg'),
                   ]),
             )));
   }
