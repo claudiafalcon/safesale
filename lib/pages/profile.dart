@@ -28,8 +28,8 @@ class _ProfilePageState extends State<ProfilePage> {
   final _userService = UserService();
 
   void logout() async {
-    // await widget.detachDevice();
-    //  _userService.resetUser();
+    await widget.detachDevice();
+    _userService.resetUser();
     widget.shouldLogOut();
   }
 
