@@ -63,8 +63,7 @@ type Query {
     {allow: groups, groups:["UserGroupSaleForce"]}
     {allow: private},
       { allow: public, provider: iam }
-    ]),
-    
+    ]),  
   searchProperties(
    criteria: CriteriaInput!, 
    limit: Int, 

@@ -21,7 +21,7 @@
          {"term": { "photo": "true" }},
          {"term": { "video": "true" }}
        ],
-      "minimum_should_match" : 1          
+      "minimum_should_match" : 1             
       }      
      },      
      "sort": [{ 
@@ -30,7 +30,8 @@
         "order": "asc",          
         "unit": "m",          
         "distance_type": "arc"        
-       } 
+       } ,
+       { "createdAt" : {"order" : "desc"}}
      }]
    }  
 }}

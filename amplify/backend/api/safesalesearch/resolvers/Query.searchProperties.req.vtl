@@ -39,7 +39,12 @@
                                 {  "range": {"precio": { #if( $context.args.criteria.precio_from) "gte" : "$context.args.criteria.precio_from" #if( $context.args.criteria.precio_to) , #end #end
                                         #if( $context.args.criteria.precio_to) "lte" : "$context.args.criteria.precio_to" #end }}}  
                             #end           
-                            ]
+                            ],
+                "should":[
+                          {"term": { "photo": "true" }},
+                          {"term": { "video": "true" }}
+                        ],
+                "minimum_should_match" : 1  
                 }
               },
                     "sort": [{"_score":{"order" : "desc"}},{ "createdAt" : {"order" : "desc"}}
