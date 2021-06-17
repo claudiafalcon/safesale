@@ -1,15 +1,13 @@
-import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:safesale/models/conversation.dart';
 
 import 'package:safesale/models/pushnotification.dart';
-import 'package:safesale/models/user.dart';
+
 import 'package:safesale/pages/chats.dart';
 import 'package:safesale/painters/softpaint.dart';
 import 'package:safesale/services/auth_service.dart';
 
-import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:safesale/services/notification_service.dart';
 import 'package:safesale/services/user_service.dart';
 import 'package:safesale/variables.dart';
@@ -45,7 +43,7 @@ Future<dynamic> _firebaseMessagingBackgroundHandler(
   Map<String, dynamic> message,
 ) async {
   // Initialize the Firebase app
-  await Firebase.initializeApp();
+
   print('onBackgroundMessage received: $message');
 }
 
@@ -58,7 +56,6 @@ class MessagesPage extends StatefulWidget {
 }
 
 class _MessagesPageState extends State<MessagesPage> {
-  static final FirebaseMessaging _messaging = FirebaseMessaging();
   int _totalNotifications;
   PushNotification _notificationInfo;
 
@@ -72,7 +69,7 @@ class _MessagesPageState extends State<MessagesPage> {
   @override
   void initState() {
     _totalNotifications = 0;
-    registerNotification();
+
     super.initState();
     subscribeConversations();
   }
@@ -80,71 +77,6 @@ class _MessagesPageState extends State<MessagesPage> {
   void subscribeConversations() async {
     userId = await _userService.getUser().id;
     //await _notiService.subscribeConvos(userId);
-  }
-
-  void registerNotification() async {
-    // Initialize the Firebase app
-
-    // On iOS, this helps to take the user permissions
-    await _messaging.requestNotificationPermissions(
-      IosNotificationSettings(
-        alert: true,
-        badge: true,
-        provisional: false,
-        sound: true,
-      ),
-    );
-
-    // For handling the received notifications
-    _messaging.configure(
-      onMessage: (message) async {
-        print('onMessage received: $message');
-
-        PushNotification notification = PushNotification.fromJson(message);
-
-        setState(() {
-          _notificationInfo = notification;
-          _totalNotifications++;
-        });
-
-        // For displaying the notification as an overlay
-        /*  showSimpleNotification(
-          Text(_notificationInfo.title),
-          leading: NotificationBadge(totalNotifications: _totalNotifications),
-          subtitle: Text(_notificationInfo.body),
-          background: Colors.cyan[700],
-          duration: Duration(seconds: 2),
-        );*/
-      },
-      onBackgroundMessage: _firebaseMessagingBackgroundHandler,
-      onLaunch: (message) async {
-        print('onLaunch: $message');
-
-        PushNotification notification = PushNotification.fromJson(message);
-
-        setState(() {
-          _notificationInfo = notification;
-          _totalNotifications++;
-        });
-      },
-      onResume: (message) async {
-        print('onResume: $message');
-
-        PushNotification notification = PushNotification.fromJson(message);
-
-        setState(() {
-          _notificationInfo = notification;
-          _totalNotifications++;
-        });
-      },
-    );
-
-    // Used to get the current FCM token
-    _messaging.getToken().then((token) {
-      print('Token: $token');
-    }).catchError((e) {
-      print(e);
-    });
   }
 
   @override

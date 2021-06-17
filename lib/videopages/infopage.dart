@@ -411,8 +411,12 @@ class _InfoPageState extends State<InfoPage> {
                                                             parametro:
                                                                 "Precio : ",
                                                             texto: '\$ ' +
-                                                                oCcy.format(double
-                                                                    .parse(widget
+                                                                oCcy.format(double.parse(widget
+                                                                            .property
+                                                                            .precio ==
+                                                                        ""
+                                                                    ? "0"
+                                                                    : widget
                                                                         .property
                                                                         .precio)),
                                                             bulletcolor:

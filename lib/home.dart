@@ -8,8 +8,12 @@ import 'package:safesale/pages/profile.dart';
 import 'package:safesale/pages/videos.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:safesale/variables.dart';
+import 'package:safesale/widgets/loading.dart';
 
 class HomePage extends StatefulWidget {
+  final bool amplifyConfigured;
+
+  const HomePage(this.amplifyConfigured, {Key key}) : super(key: key);
   @override
   _HomePageState createState() => _HomePageState();
 }
@@ -46,12 +50,14 @@ class _HomePageState extends State<HomePage> {
     final double _footerIconSize =
         MediaQuery.of(context).size.height * factorFooterIconSize;
     return Scaffold(
-      body: NavigatorPage(
-        pagename: pageoptions[page].page,
-        guestallowed: pageoptions[page].isGuestAllowed,
-        call: updatePage,
-        isExternalSearch: isExternalSearch,
-      ),
+      body: widget.amplifyConfigured
+          ? NavigatorPage(
+              pagename: pageoptions[page].page,
+              guestallowed: pageoptions[page].isGuestAllowed,
+              call: updatePage,
+              isExternalSearch: isExternalSearch,
+            )
+          : LoadingPage(),
       bottomNavigationBar: new Theme(
         data: Theme.of(context)
             .copyWith(canvasColor: Color.fromRGBO(42, 180, 233, 300)),

@@ -392,7 +392,7 @@ class _SafeSalePlayerState extends State<SafeSalePlayer>
       },
     );
     if (m3u8Content == null && video != null) {
-      http.Response response = await http.get(video);
+      http.Response response = await http.get(Uri.parse(video));
       if (response.statusCode == 200) {
         m3u8Content = utf8.decode(response.bodyBytes);
       }

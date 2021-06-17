@@ -23,18 +23,17 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
-  flutter_svg: ^0.19.3
-  google_fonts: ^1.1.1
+  flutter_svg: ^0.22.0
+  google_fonts: ^2.1.0
   amplify_flutter: "<1.0.0"
   amplify_auth_cognito: "<1.0.0"
   amplify_api: "<1.0.0"
   amazon_cognito_identity_dart_2:
-  graphql_flutter: ^4.0.0
-  amplify_storage_s3: ^0.1.0
+  graphql_flutter: ^5.0.0
+  amplify_storage_s3: "<1.0.0"
   video_player: ^1.0.1
   location: ^2.3.5
-  google_maps_flutter: ^1.0.3
-  adobe_xd: ^1.0.0+1
+  google_maps_flutter: ^2.0.6
   screen: ^0.0.5
   orientation: ^1.2.0
   wakelock: ^0.2.1+1
@@ -43,8 +42,6 @@ dependencies:
   device_info: ^2.0.0
   intl: ^0.17.0
   carousel_slider: ^3.0.0
-  firebase_messaging:
-  firebase_core:
   flutter_localizations: # Add this line
     sdk: flutter
 
@@ -57,7 +54,7 @@ dependencies:
 dev_dependencies:
   flutter_test:
     sdk: flutter
-  http: ^0.12.2
+  http: ^0.13.0
 
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec

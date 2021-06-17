@@ -2,7 +2,7 @@ import 'package:amplify_flutter/amplify.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:amplify_auth_cognito/amplify_auth_cognito.dart';
 import 'package:amplify_storage_s3/amplify_storage_s3.dart';
-import 'package:firebase_core/firebase_core.dart';
+
 import 'package:flutter/material.dart';
 import 'package:safesale/services/auth_service.dart';
 import 'package:safesale/amplifyconfiguration.dart';
@@ -18,10 +18,6 @@ class MyApp extends StatefulWidget {
   State<StatefulWidget> createState() => _MyAppState();
 }
 
-Future initialiseFirebase() async {
-  await Firebase.initializeApp();
-}
-
 class _MyAppState extends State<MyApp> {
   final _authService = AuthService();
 
@@ -31,22 +27,19 @@ class _MyAppState extends State<MyApp> {
   initState() {
     super.initState();
     _configureAmplify();
-    _authService.checkAuthStatus();
-    initialiseFirebase();
   }
 
   void _configureAmplify() async {
+    if (!mounted) return;
     // Add Pinpoint and Cognito Plugins, or any other plugins you want to use
-
-    AmplifyAuthCognito authPlugin = AmplifyAuthCognito();
-
-    Amplify.addPlugins([authPlugin]);
+    Amplify.addPlugin(AmplifyAuthCognito());
     Amplify.addPlugin(AmplifyAPI());
     Amplify.addPlugin(AmplifyStorageS3());
 
     // Once Plugins are added, configure Amplify
     try {
       await Amplify.configure(amplifyconfig);
+      print('Amplify eas configured');
     } catch (e) {
       print(e);
     }
@@ -80,6 +73,6 @@ class _MyAppState extends State<MyApp> {
                 backgroundColor: Colors.white.withOpacity(0))),
         // 2
 
-        home: HomePage());
+        home: HomePage(_amplifyConfigured));
   }
 }

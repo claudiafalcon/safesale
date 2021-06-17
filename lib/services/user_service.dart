@@ -240,7 +240,7 @@ class UserService {
             }));
         http.Response response;
         try {
-          response = await http.post(signedRequest.url,
+          response = await http.post(Uri.parse(signedRequest.url),
               headers: signedRequest.headers, body: signedRequest.body);
         } catch (e) {
           print(e);
