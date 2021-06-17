@@ -105,10 +105,10 @@
 					]
 				},
 				"Runtime": "nodejs10.x",
-				"Timeout": "25",
+				"Timeout": 25,
 				"Code": {
 					"S3Bucket": "amplify-safesale-dev-205233-deployment",
-					"S3Key": "amplify-builds/safesaleba936a14PostConfirmation-61343468683934454d58-build.zip"
+					"S3Key": "amplify-builds/safesaleba936a14PostConfirmation-366b444a324f57367475-build.zip"
 				}
 			}
 		},

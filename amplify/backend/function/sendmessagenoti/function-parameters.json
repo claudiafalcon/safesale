@@ -1,7 +1,7 @@
 {
   "permissions": {
     "function": {
-      "searchdeliveryaddresses": [
+      "safesaleba936a14PostConfirmation": [
         "create",
         "read",
         "update",
@@ -17,11 +17,5 @@
       ]
     }
   },
-  "lambdaLayers": [
-    {
-      "type": "ProjectLayer",
-      "resourceName": "safsaleappsynclayer",
-      "version": 6
-    }
-  ]
+  "lambdaLayers": []
 }

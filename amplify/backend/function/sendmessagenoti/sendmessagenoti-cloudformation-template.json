@@ -18,21 +18,13 @@
 			"Type": "String",
 			"Default": "apisafesalesearchGraphQLAPIEndpointOutput"
 		},
-		"pinpointProjectId": {
+		"functionsafesaleba936a14PostConfirmationName": {
 			"Type": "String",
-			"Default": "pinpointProjectId"
-		},
-		"functionsearchdeliveryaddressesName": {
-			"Type": "String",
-			"Default": "functionsearchdeliveryaddressesName"
+			"Default": "functionsafesaleba936a14PostConfirmationName"
 		},
 		"apisafesalesearchGraphQLAPIKeyOutput": {
 			"Type": "String",
 			"Default": "apisafesalesearchGraphQLAPIKeyOutput"
-		},
-		"functionsafsaleappsynclayerArn": {
-			"Type": "String",
-			"Default": "functionsafsaleappsynclayerArn"
 		}
 	},
 	"Conditions": {
@@ -80,17 +72,14 @@
 						"REGION": {
 							"Ref": "AWS::Region"
 						},
+						"FUNCTION_SAFESALEBA936A14POSTCONFIRMATION_NAME": {
+							"Ref": "functionsafesaleba936a14PostConfirmationName"
+						},
 						"API_SAFESALESEARCH_GRAPHQLAPIIDOUTPUT": {
 							"Ref": "apisafesalesearchGraphQLAPIIdOutput"
 						},
 						"API_SAFESALESEARCH_GRAPHQLAPIENDPOINTOUTPUT": {
 							"Ref": "apisafesalesearchGraphQLAPIEndpointOutput"
-						},
-						"FUNCTION_SEARCHDELIVERYADDRESSES_NAME": {
-							"Ref": "functionsearchdeliveryaddressesName"
-						},
-						"PINPOINT_PROJECT_ID": {
-							"Ref": "pinpointProjectId"
 						},
 						"API_SAFESALESEARCH_GRAPHQLAPIKEYOUTPUT": {
 							"Ref": "apisafesalesearchGraphQLAPIKeyOutput"
@@ -104,15 +93,11 @@
 					]
 				},
 				"Runtime": "nodejs12.x",
-				"Layers": [
-					{
-						"Fn::Sub": "arn:aws:lambda:${AWS::Region}:${AWS::AccountId}:layer:safsaleappsynclayer:6"
-					}
-				],
-				"Timeout": 25,
+				"Layers": [],
+				"Timeout": "25",
 				"Code": {
 					"S3Bucket": "amplify-safesale-dev-205233-deployment",
-					"S3Key": "amplify-builds/sendmessagenoti-6a70487356597a4e4165-build.zip"
+					"S3Key": "amplify-builds/sendmessagenoti-7671474f31775650766c-build.zip"
 				}
 			}
 		},
@@ -122,12 +107,12 @@
 				"RoleName": {
 					"Fn::If": [
 						"ShouldNotCreateEnvResources",
-						"safesaleLambdaRole23f50480",
+						"safesaleLambdaRoleacd08a41",
 						{
 							"Fn::Join": [
 								"",
 								[
-									"safesaleLambdaRole23f50480",
+									"safesaleLambdaRoleacd08a41",
 									"-",
 									{
 										"Ref": "env"
@@ -241,7 +226,7 @@
 											},
 											":function:",
 											{
-												"Ref": "functionsearchdeliveryaddressesName"
+												"Ref": "functionsafesaleba936a14PostConfirmationName"
 											}
 										]
 									]

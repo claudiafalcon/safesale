@@ -21,7 +21,9 @@
                     "GROUP": "UserGroupFinalUsers",
                     "deploymentBucketName": "amplify-safesale-dev-205233-deployment",
                     "s3Key": "amplify-builds/safesaleba936a14PostConfirmation-6531463444554f353148-build.zip"
-                }
+                },
+                "sendmessagenoti": {},
+                "safsaleappsynclayer": {}
             },
             "video": {
                 "properiesvodstream": {
