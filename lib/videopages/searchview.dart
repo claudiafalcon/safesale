@@ -775,7 +775,7 @@ class _SearchPageState extends State<SearchPage> {
                                       if (_amenidades.length > 0)
                                         _criterio.amenidades =
                                             _amenidades.join(" OR ");
-
+                                      _searchService.setSearchType("filter");
                                       // If the form is valid, display a Snackbar.
                                       _searchService.searchProperties(
                                           _criterio, null);

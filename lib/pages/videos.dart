@@ -1,10 +1,12 @@
 import 'dart:ui';
 import 'dart:async';
 import 'package:flutter/material.dart';
-import 'package:location/location.dart' show Location, LocationData;
+import 'package:location/location.dart'
+    show Location, LocationData, PermissionStatus;
 import 'package:safesale/auth_credentials.dart';
 
 import 'package:safesale/models/property.dart';
+import 'package:safesale/painters/ribbon_shape.dart';
 import 'package:safesale/services/auth_service.dart';
 import 'package:safesale/services/video_mod.dart';
 import 'package:safesale/variables.dart';
@@ -16,8 +18,6 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:safesale/widgets/empyList.dart';
 import 'package:safesale/widgets/loading.dart';
 import 'package:safesale/widgets/rigthpropertybar.dart';
-
-//import 'package:location_permissions/location_permissions.dart';
 
 class VideoPage extends StatefulWidget {
   final AuthFlowStatus authstatus;
@@ -41,7 +41,7 @@ class _VideoPageState extends State<VideoPage> {
 
   Stream<SearchState> searchStateController;
 
-  LocationData currentLocation;
+  String searchType = "geo";
 
   Map<int, List<Property>> _pages = new Map<int, List<Property>>();
   int _element = 0;
@@ -81,19 +81,41 @@ class _VideoPageState extends State<VideoPage> {
   //}
 
   Future<void> setInitialLocation() async {
+    LocationData currentLocation;
     _pages = null;
     _pages = new Map<int, List<Property>>();
     if (!widget.isExternalSearch()) _searchService.turnOffExternalSearch();
     Location location = new Location();
+    PermissionStatus _permissionGranted;
     _element = 0;
     _currentProperty = 0;
     // establece la ubicación inicial tirando del usuario
     // ubicación actual de getLocation () de la ubicación
     await _searchService.checkState();
-    currentLocation = await location.getLocation();
-    if (!_searchService.isAExternalSearch())
-      _searchService.fetchProperties(
-          currentLocation.latitude, currentLocation.longitude, null);
+    if (!_searchService.isAExternalSearch()) {
+      bool _serviceEnabled = await location.serviceEnabled();
+      if (!_serviceEnabled) {
+        _serviceEnabled = await location.requestService();
+      }
+      if (_serviceEnabled) {
+        _permissionGranted = await location.hasPermission();
+        if (_permissionGranted == PermissionStatus.DENIED) {
+          _permissionGranted = await location.requestPermission();
+        }
+        if (_permissionGranted == PermissionStatus.GRANTED) {
+          currentLocation = await location.getLocation();
+        }
+      }
+
+      if (currentLocation != null) {
+        _searchService.setSearchType("geo");
+        _searchService.fetchProperties(
+            currentLocation.latitude, currentLocation.longitude, null);
+        return;
+      }
+      _searchService.setSearchType("new");
+      _searchService.getNewProperties(null);
+    }
     //else
     //_searchService.turnOffExternalSearch();
     // destino codificado para este ejemplo
@@ -203,34 +225,17 @@ class _VideoPageState extends State<VideoPage> {
     print("Current Page: " + page.toString());
     if (page < _searchService.getTotal()) {
       _element = ((page) ~/ resultBlockSize);
-      if (_searchService.criterio == null)
-        _searchService.fetchProperties(
-            null, null, _searchService.getnextToken(_element - 1));
-      else
+      if (_searchService.criterio == null) {
+        if (_searchService.getSearchType() == "geo")
+          _searchService.fetchProperties(
+              null, null, _searchService.getnextToken(_element - 1));
+        else
+          _searchService
+              .getNewProperties(_searchService.getnextToken(_element - 1));
+      } else
         _searchService.searchProperties(
             null, _searchService.getnextToken(_element - 1));
     }
-  }
-
-  _onPreviousPage(int page) async {
-    int _index = (page - resultBlockSize) + (resultBlockSize * (_element));
-
-    if (page < resultBlockSize) _element = _element - 1;
-    print("Current Page: " + page.toString());
-    if (page - resultBlockSize == _result.length &&
-        _index < _searchService.getTotal()) {
-      _element = ((_index) ~/ resultBlockSize);
-      if (_searchService.criterio == null && _index > 0)
-        _searchService.fetchProperties(
-            null, null, _searchService.getnextToken(_element - 1));
-    }
-
-    int previousPage = page;
-    if (page != 0)
-      previousPage--;
-    else
-      previousPage = 2;
-    print("Previous page: $previousPage");
   }
 
   bool _openWindow = false;
@@ -260,7 +265,7 @@ class _VideoPageState extends State<VideoPage> {
 
     return Scaffold(
       resizeToAvoidBottomInset: false,
-      backgroundColor: Colors.white,
+      backgroundColor: Colors.black,
       body: new StreamBuilder<SearchState>(
           stream: searchStateController,
           builder: (context, snapshot) {
@@ -338,9 +343,25 @@ class _VideoPageState extends State<VideoPage> {
                           }
 
                           if (_result != null) {
+                            Color one;
+                            Color two;
+                            switch (_searchService.getSearchType()) {
+                              case "geo":
+                                one = geoSearchOne;
+                                two = geoSearchTwo;
+                                break;
+                              case "new":
+                                one = newSearchOne;
+                                two = newSearchTwo;
+                                break;
+                              default:
+                                one = filterSearchOne;
+                                two = filterSearchTwo;
+                            }
+
                             int _idx = index % resultBlockSize;
                             Property property = _result[_idx];
-                            return Stack(fit: StackFit.expand, children: [
+                            return Stack(children: [
                               SafeSalePlayer(
                                 onfullscreen: (t) {
                                   setState(() {
@@ -356,6 +377,7 @@ class _VideoPageState extends State<VideoPage> {
                                 setAudio: setAudio,
                                 volume: _volume,
                               ),
+                              RibbonShape(one, two),
                             ]);
                           } else {
                             return Stack(
@@ -379,6 +401,11 @@ class _VideoPageState extends State<VideoPage> {
                           total: 0, headText: "", status: widget.authstatus)
                     ],
                   );
+                  break;
+                default:
+                  return Stack(children: [
+                    EmptyPage(),
+                  ]);
               }
             }
           }),

@@ -70,7 +70,7 @@ class _MyAppState extends State<MyApp> {
             primaryColor: Color(0xff003b8b),
             canvasColor: Color.fromRGBO(58, 184, 234, 1),
             bottomSheetTheme: BottomSheetThemeData(
-                backgroundColor: Colors.white.withOpacity(0))),
+                backgroundColor: Colors.black.withOpacity(0))),
         // 2
 
         home: HomePage(_amplifyConfigured));

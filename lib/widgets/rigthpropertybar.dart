@@ -208,6 +208,7 @@ class _RightPropertyBarState extends State<RightPropertyBar> {
                                   alignment: Alignment.bottomLeft,
                                   child: Text(
                                     widget.headText,
+                                    maxLines: 2,
                                     // MediaQuery.of(context).size.toString(),
                                     style: GoogleFonts.raleway(
                                       textStyle: TextStyle(

@@ -109,6 +109,7 @@ class _FavsPageState extends State<FavsPage> {
   }
 
   void dosearch(Property property) async {
+    _searchService.setSearchType("fav");
     _searchService.setProperty(property);
     widget.call(0);
   }

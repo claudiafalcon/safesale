@@ -33,6 +33,16 @@ class SearchService {
 
   bool _fromASearch = false;
 
+  String _searchType;
+
+  void setSearchType(String type) {
+    if (type != null) _searchType = type;
+  }
+
+  String getSearchType() {
+    return _searchType;
+  }
+
   int _currentindex = 0;
 
   List<String> _tokens = <String>[];
@@ -166,9 +176,6 @@ class SearchService {
                 ["nextToken"]);
 
         _properties = parseProperties(parsedList);
-        final state = SearchState(searchFlowStatus: SearchFlowStatus.finalized);
-        searchStateController.add(state);
-        return;
       } else {
         var operation = Amplify.API.query(
             request: GraphQLRequest<String>(
@@ -192,10 +199,103 @@ class SearchService {
 
         _properties = parseProperties(parsedList);
         _props.addAll(_properties);
-        final state = SearchState(searchFlowStatus: SearchFlowStatus.finalized);
-        searchStateController.add(state);
+      }
+      var states = SearchState(searchFlowStatus: SearchFlowStatus.finalized);
+      if (_total > 0) {
+        searchStateController.add(states);
         return;
       }
+      _searchType = "new";
+      getNewProperties(null);
+    } catch (e) {
+      print(e);
+    }
+    return null;
+  }
+
+  void getNewProperties(String nextToken) async {
+    print("[info] Esta iniciando la busqueda news");
+    try {
+      _properties = null;
+      if (nextToken == null) {
+        criterio = null;
+        _total = 0;
+        _tokens = <String>[];
+      }
+
+      final state = SearchState(searchFlowStatus: SearchFlowStatus.started);
+      searchStateController.add(state);
+
+      CognitoAuthSession res = await Amplify.Auth.fetchAuthSession(
+          options: CognitoSessionOptions(getAWSCredentials: true));
+
+      if (!res.isSignedIn) {
+        var amplifyconfigJson = jsonDecode(amplifyconfig);
+        final endpoint = amplifyconfigJson["api"]["plugins"]["awsAPIPlugin"]
+            ["safesalesearch"]["endpoint"];
+        final region = amplifyconfigJson["api"]["plugins"]["awsAPIPlugin"]
+            ["safesalesearch"]["region"];
+        final awsSigV4Client = new AwsSigV4Client(res.credentials.awsAccessKey,
+            res.credentials.awsSecretKey, endpoint,
+            serviceName: 'appsync',
+            sessionToken: res.credentials.sessionToken,
+            region: region);
+        final signedRequest = new SigV4Request(awsSigV4Client,
+            method: 'POST',
+            path: '',
+            headers: new Map<String, String>.from(
+                {'Content-Type': 'application/graphql; charset=utf-8'}),
+            body: new Map<String, Object>.from({
+              'query': q_getNewProperties,
+              'variables': {"limit": resultBlockSize, "nextToken": nextToken}
+            }));
+        http.Response response;
+        try {
+          response = await http.post(Uri.parse(signedRequest.url),
+              headers: signedRequest.headers, body: signedRequest.body);
+        } catch (e) {
+          print(e);
+        }
+        final List parsedList =
+            json.decode(response.body)["data"]["searchPropertys"]["items"];
+        if (nextToken == null)
+          _total = json.decode(response.body)["data"]["searchPropertys"]
+                      ["total"] ==
+                  null
+              ? 0
+              : json.decode(response.body)["data"]["searchPropertys"]["total"];
+        _tokens.add(json.decode(response.body)["data"]["searchPropertys"]
+                    ["nextToken"] ==
+                null
+            ? "-1"
+            : json.decode(response.body)["data"]["searchPropertys"]
+                ["nextToken"]);
+
+        _properties = parseProperties(parsedList);
+      } else {
+        var operation = Amplify.API.query(
+            request: GraphQLRequest<String>(
+                document: q_getNewProperties,
+                variables: {"limit": resultBlockSize, "nextToken": nextToken}));
+        var response = await operation.response;
+        var data = response.data;
+        final List parsedList = json.decode(data)["searchPropertys"]["items"];
+        if (nextToken == null)
+          _total = json.decode(data)["searchPropertys"]["total"] == null
+              ? 0
+              : json.decode(data)["searchPropertys"]["total"];
+        _tokens.add(json.decode(data)["searchPropertys"]["nextToken"] == null
+            ? "-1"
+            : json.decode(data)["searchPropertys"]["nextToken"]);
+
+        _properties = parseProperties(parsedList);
+        _props.addAll(_properties);
+      }
+      var states = SearchState(searchFlowStatus: SearchFlowStatus.finalized);
+      if (_total == 0)
+        states = SearchState(searchFlowStatus: SearchFlowStatus.empty);
+      searchStateController.add(states);
+      return;
     } catch (e) {
       print(e);
     }

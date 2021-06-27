@@ -2,6 +2,52 @@ import 'dart:convert';
 
 import 'package:safesale/models/searchcriterio.dart';
 
+const q_getNewProperties =
+    '''query getPropertiesOrderByCreatedAt( \$nextToken: String, \$limit:Int) {
+                                  searchPropertys(
+                                    nextToken:\$nextToken,
+                                    filter:{photo: {eq: true}, or: {video: {eq: true}}},   
+                                    sort: {field: createdAt, direction: desc}, limit: \$limit) {
+                                    nextToken
+                                    total
+                                    items {
+                                      video 
+                                      updatedAt
+                                      tipo
+                                      terreno_m2
+                                      status
+                                      recamaras
+                                      propietario
+                                      precio
+                                      pais
+                                      nombre
+                                      location {
+                                        lon
+                                        lat
+                                      }
+                                      localidad
+                                      inventario
+                                      id
+                                      galery {
+                                        bucket
+                                        key
+                                        region
+                                      }
+                                      estacionamientos
+                                      entidad
+                                      edad
+                                      direccion
+                                      descripcion
+                                      createdAt
+                                      cp
+                                      construccion_m2
+                                      caracteristicas
+                                      asesor
+                                      amenidades
+                                    }
+                                  }
+                                }''';
+
 const q_nerbyProperties =
     '''query MyQuery(\$lat:Float!, \$lon: Float!, \$limit: Int!, \$nextToken:String ) {
                                     nearbyProperties(limit: \$limit, nextToken: \$nextToken, location: {lat: \$lat, lon: \$lon}, m: 50000) {

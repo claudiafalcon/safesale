@@ -10,7 +10,7 @@ final double factorBottonHeigh = 0.1;
 final double factorAuthLogoWd = 0.16;
 
 final double factorSmallIconSize = 0.022;
-final double factorPropertyTitle = 0.15;
+final double factorPropertyTitle = 0.12;
 final double factorVerticalSpace = 0.05;
 final double factorPaddingSpace = 0.08;
 final double factorPaddingSmallSpace = 0.04;
@@ -18,6 +18,15 @@ final double factorPaddingSmallSpace = 0.04;
 final double factorFontTitle1 = 0.025;
 final double factorFontInput = 0.02;
 final double factorFontSmall = 0.015;
+
+final Color newSearchOne = Colors.amberAccent[400];
+final Color newSearchTwo = Colors.amberAccent[700];
+
+final Color geoSearchOne = Colors.green[800];
+final Color geoSearchTwo = Colors.green[900];
+
+final Color filterSearchOne = Colors.indigo[800];
+final Color filterSearchTwo = Colors.indigo[900];
 
 final String cloudfronturl = 'https://didsugvpn60.cloudfront.net/public/';
 

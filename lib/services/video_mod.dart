@@ -196,10 +196,8 @@ class _SafeSalePlayerState extends State<SafeSalePlayer>
             height: double.infinity,
             color: Colors.black,
             child: Center(
-                child: Padding(
-              padding: const EdgeInsets.only(top: 70),
               child: VideoPlayer(controller),
-            )),
+            ),
           ),
         ),
       ),

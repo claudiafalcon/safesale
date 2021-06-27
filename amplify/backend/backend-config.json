@@ -60,11 +60,10 @@
             "service": "Lambda",
             "dependsOn": [
                 {
-                    "category": "api",
-                    "resourceName": "safesalesearch",
+                    "category": "auth",
+                    "resourceName": "safesaleba936a14",
                     "attributes": [
-                        "GraphQLAPIIdOutput",
-                        "GraphQLAPIEndpointOutput"
+                        "UserPoolId"
                     ]
                 },
                 {
@@ -81,6 +80,34 @@
                         "GraphQLAPIIdOutput",
                         "GraphQLAPIEndpointOutput",
                         "GraphQLAPIKeyOutput"
+                    ]
+                },
+                {
+                    "category": "function",
+                    "resourceName": "safsaleappsynclayer",
+                    "attributes": [
+                        "Arn"
+                    ]
+                },
+                {
+                    "category": "function",
+                    "resourceName": "safsaleappsynclayer",
+                    "attributes": [
+                        "Arn"
+                    ]
+                },
+                {
+                    "category": "function",
+                    "resourceName": "safsaleappsynclayer",
+                    "attributes": [
+                        "Arn"
+                    ]
+                },
+                {
+                    "category": "function",
+                    "resourceName": "safsaleappsynclayer",
+                    "attributes": [
+                        "Arn"
                     ]
                 }
             ]

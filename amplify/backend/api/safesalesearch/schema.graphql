@@ -134,7 +134,8 @@ type User @model @searchable
 } 
 
 type Device @model  
-  @auth(rules: [{ allow: owner }]) {
+  @auth(rules: [{ allow: owner },{allow: private, operations:[read], queries: null},
+    {allow: public, operations:[read], provider:iam, queries: null}]) {
   id: ID!
   platform: String
   vendorid: String
@@ -162,7 +163,8 @@ type Conversation
   @auth(rules: [
   { allow: owner },
   { allow: owner, ownerField: "members", operations: [update, read,create] },
-  {allow: public, operations:[create], provider:iam, queries: null}])
+  {allow: public, operations:[create,read], provider:iam, queries: null},
+  { allow: public, provider: apiKey, operations: [create, delete, read, update] },])
 {
   id: ID!
   messages: [Message] @connection(name: "ConvoMsgs", sortField: "createdAt")

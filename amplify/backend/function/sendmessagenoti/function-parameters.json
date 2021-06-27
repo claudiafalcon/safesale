@@ -1,5 +1,13 @@
 {
   "permissions": {
+    "auth": {
+      "safesaleba936a14": [
+        "create",
+        "read",
+        "update",
+        "delete"
+      ]
+    },
     "function": {
       "safesaleba936a14PostConfirmation": [
         "create",
@@ -17,5 +25,11 @@
       ]
     }
   },
-  "lambdaLayers": []
+  "lambdaLayers": [
+    {
+      "type": "ProjectLayer",
+      "resourceName": "safsaleappsynclayer",
+      "version": 23
+    }
+  ]
 }

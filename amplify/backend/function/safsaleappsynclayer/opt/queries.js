@@ -1,28 +1,27 @@
+
 const gql = require('graphql-tag');
-
-
-const getConvo = /* GraphQL */ gql`
-  query GetConvo($id: ID!,$guestmail:String,$convoLinkUserId:ID!) {
-    getConvo(id: $id) {
-      id
-      associated (filter: { not: { guestmail: { eq: $guestmail }, and: { not: { convoLinkUserId: { eq: $convoLinkUserId } } } } }) {
-        items {
-          guestmail
-          id
-          user {
-            devices {
-              items {
-                token
-                platform
+exports.getConvo = gql(`query GetConvo {
+      getConvo(id: "85dc3fff-00aa-4433-b9f2-7adadf53f142") {
+        id
+        associated (filter: 
+                            { not:  { convoLinkUserId: { eq: "933156f2-0a2a-43ac-b437-0d8152dbd91b"} } } ) {
+          items {
+            guestmail
+            id
+            user {
+              devices {
+                items {
+                  token
+                  platform
+                }
               }
             }
+            convoLinkUserId
           }
-          convoLinkUserId
+          nextToken
         }
-        nextToken
+        name
+        type
       }
-      name
-      type
     }
-  }
-`;
+    `);
