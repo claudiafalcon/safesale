@@ -40,6 +40,12 @@ class AuthService {
 
   String error;
 
+  static Future<bool> isUserSignedIn() async {
+    bool _isSignedIn = false;
+
+    return _isSignedIn;
+  }
+
   // 5
   void showSignUp() {
     final state = AuthState(authFlowStatus: AuthFlowStatus.signUp);
@@ -94,9 +100,14 @@ class AuthService {
   void loginWithCredentials(AuthCredentials credentials) async {
     try {
       // 2
-      final result = await Amplify.Auth.signIn(
-          username: credentials.username, password: credentials.password);
-
+      var result;
+      try {
+        result = await Amplify.Auth.signIn(
+            username: credentials.username, password: credentials.password);
+      } catch (e) {
+        final result = await Amplify.Auth.signIn(
+            username: credentials.username, password: credentials.password);
+      }
       // 3
       if (result.isSignedIn) {
         var res2 = await Amplify.Auth.fetchUserAttributes();
@@ -225,7 +236,7 @@ class AuthService {
   void logOut() async {
     try {
       // 1
-      await Amplify.Auth.signOut();
+      SignOutResult result = await Amplify.Auth.signOut();
 
       // 2
       showLogin();

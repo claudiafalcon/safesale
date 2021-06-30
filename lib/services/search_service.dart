@@ -111,7 +111,7 @@ class SearchService {
   }
 
   void fetchProperties(double lat, double lon, String nextToken) async {
-    print("[info] Esta iniciando la busqueda");
+    //print("[info] Esta iniciando la busqueda ");
     try {
       _properties = null;
       if (nextToken == null) {

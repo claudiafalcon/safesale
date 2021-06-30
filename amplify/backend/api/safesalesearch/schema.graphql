@@ -122,6 +122,7 @@ type Alert @model
 type User @model @searchable
   @auth(rules: [{  allow: owner},
    {allow: private, operations:[read], queries: null},
+      { allow: public, provider: apiKey, operations: [create, delete, read, update] }
     {allow: public, operations:[read], provider:iam, queries: null}])
 {
   id: ID!
@@ -135,6 +136,7 @@ type User @model @searchable
 
 type Device @model  
   @auth(rules: [{ allow: owner },{allow: private, operations:[read], queries: null},
+     { allow: public, provider: apiKey, operations: [create, delete, read, update] }
     {allow: public, operations:[read], provider:iam, queries: null}]) {
   id: ID!
   platform: String
@@ -168,7 +170,7 @@ type Conversation
 {
   id: ID!
   messages: [Message] @connection(name: "ConvoMsgs", sortField: "createdAt")
-  associated: [ConvoLink] @connection(name: "AssociatedLinks")
+  associated: [ConvoLink] @connection(name: "AssociatedLinks")                                                                
   name: String!
   type: String!
   members: [ID!]!
@@ -201,17 +203,18 @@ type Message
 type ConvoLink 
   @model(
     mutations: { create: "createConvoLink", update: "updateConvoLink"}
-    queries: null
     subscriptions: null
   )
   @auth(rules: [
   { allow: owner },
    {allow: private, operations:[create,update,read]}
-  {allow: public, operations:[create], provider:iam, queries: null}]) {
+  {allow: public, operations:[create], provider:iam, queries: null}
+    { allow: public, provider: apiKey, operations: [create, delete, read, update] }
+  ]) {
   id: ID!
   user: User! @connection(name: "UserLinks")
   convoLinkUserId: ID
-  conversation: Conversation! @connection(name: "AssociatedLinks")
+  conversation: Conversation! @connection(name: "AssociatedLinks") 
   convoLinkConversationId: ID!
   guestmail: String
 	createdAt: String

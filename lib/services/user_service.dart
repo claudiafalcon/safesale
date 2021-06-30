@@ -47,6 +47,7 @@ class UserService {
     }
 
     final String token = await plainNotificationToken.getToken();
+
     return token;
   }
 

@@ -316,7 +316,7 @@ class _VideoPageState extends State<VideoPage> {
                         itemBuilder: (context, page) {
                           final index = (page - initialPage);
 
-                          print("[info] This is the current page $index");
+                          //        print("[info] This is the current page $index");
                           if ((index) ~/ resultBlockSize < _element) {
                             _element = _element - 1;
                             _result = _pages[(resultBlockSize * _element)];

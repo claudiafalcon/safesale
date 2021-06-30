@@ -1,11 +1,11 @@
 /* Amplify Params - DO NOT EDIT
-	API_SAFESALESEARCH_GRAPHQLAPIENDPOINTOUTPUT
-	API_SAFESALESEARCH_GRAPHQLAPIIDOUTPUT
-	API_SAFESALESEARCH_GRAPHQLAPIKEYOUTPUT
-	AUTH_SAFESALEBA936A14_USERPOOLID
-	ENV
-	FUNCTION_SAFESALEBA936A14POSTCONFIRMATION_NAME
-	REGION
+  API_SAFESALESEARCH_GRAPHQLAPIENDPOINTOUTPUT
+  API_SAFESALESEARCH_GRAPHQLAPIIDOUTPUT
+  API_SAFESALESEARCH_GRAPHQLAPIKEYOUTPUT
+  AUTH_SAFESALEBA936A14_USERPOOLID
+  ENV
+  FUNCTION_SAFESALEBA936A14POSTCONFIRMATION_NAME
+  REGION
 Amplify Params - DO NOT EDIT *//* Amplify Params - DO NOT EDIT
   API_SAFESALESEARCH_GRAPHQLAPIENDPOINTOUTPUT
   API_SAFESALESEARCH_GRAPHQLAPIIDOUTPUT
@@ -32,6 +32,9 @@ const axios = require('axios');
 const gql = require('graphql-tag');
 const graphql = require('graphql');
 const { print } = graphql;
+var AWS = require("aws-sdk");
+
+
 
 
 const appsyncUrl = process.env.API_SAFESALESEARCH_GRAPHQLAPIENDPOINTOUTPUT
@@ -44,32 +47,40 @@ const { getConvo } = require('/opt/queries')
 exports.handler = async (event) => {
   //eslint-disable-line
   console.log(JSON.stringify(event, null, 2));
-  event.Records.forEach(record => {
-    console.log(record.eventID);
-    console.log(record.eventName);
-    console.log('DynamoDB Record: %j', record.dynamodb);
-  });
 
-  try {
-    // create a TODO with AWS_IAM auth
-    var result = await request(
-      {
-        query: print(getConvo),
-        operationName: 'GetConvo',
-        variables: {
-          input: {
-            id: '3881abe5-1066-4827-9f09-0dd68f938378',
-            guestmail: 'contacto@gpoaztlan.com',
-            convoLinkUserId: '9f532486-8a44-4b0a-82cf-0544e33cd416'
+  for (let prop in event.Records) {
+    console.log(event.Records[prop].eventID);
+    console.log(event.Records[prop].eventName);
+    console.log('DynamoDB Record: %j', event.Records[prop].dynamodb);
+    if (event.Records[prop].eventName == "INSERT") {
+      try {
+
+        const record = AWS.DynamoDB.Converter.unmarshall(event.Records[prop].dynamodb.NewImage);
+        let conversationId = record["messageConversationId"];
+        let guestmail = record["guestmail"];
+        let authorid = record["authorId"];
+        let id = record["id"];
+        let content = record["content"];
+
+        // create a TODO with AWS_IAM auth
+        var result = await request(
+          {
+            query: print(getConvo),
+            operationName: 'GetConvo',
+            variables: {
+              id: conversationId,
+              guestmail: guestmail,
+              convoLinkUserId: authorid,
+            },
           },
-        },
-      },
-      appsyncUrl, apiKey
-    )
-    console.log('iam results:', result)
+          appsyncUrl, apiKey
+        )
+        console.log('iam results:', result)
 
-  } catch (error) {
-    console.log(error)
+      } catch (error) {
+        console.log(error)
+      }
+    }
   }
 
   return Promise.resolve('Successfully processed DynamoDB record');

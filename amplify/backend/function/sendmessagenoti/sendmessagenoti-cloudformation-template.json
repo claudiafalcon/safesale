@@ -33,6 +33,10 @@
 		"functionsafsaleappsynclayerArn": {
 			"Type": "String",
 			"Default": "functionsafsaleappsynclayerArn"
+		},
+		"notificationsId": {
+			"Type": "String",
+			"Default": "notificationssafesalenotyId"
 		}
 	},
 	"Conditions": {
@@ -94,6 +98,9 @@
 						},
 						"AUTH_SAFESALEBA936A14_USERPOOLID": {
 							"Ref": "authsafesaleba936a14UserPoolId"
+						},
+						"PINPOINT_PROJECT_ID": {
+							"Ref": "notificationsId"
 						}
 					}
 				},
@@ -106,13 +113,13 @@
 				"Runtime": "nodejs12.x",
 				"Layers": [
 					{
-						"Fn::Sub": "arn:aws:lambda:${AWS::Region}:${AWS::AccountId}:layer:safsaleappsynclayer:23"
+						"Fn::Sub": "arn:aws:lambda:${AWS::Region}:${AWS::AccountId}:layer:safsaleappsynclayer:43"
 					}
 				],
 				"Timeout": "25",
 				"Code": {
 					"S3Bucket": "amplify-safesale-dev-205233-deployment",
-					"S3Key": "amplify-builds/sendmessagenoti-31522b694c7233536c62-build.zip"
+					"S3Key": "amplify-builds/sendmessagenoti-49574f3830704c667773-build.zip"
 				}
 			}
 		},
@@ -193,6 +200,13 @@
 									}
 								]
 							}
+						},
+						{
+							"Effect": "Allow",
+							"Action": [
+								"mobiletargeting:SendMessages"
+							],
+							"Resource": "*"
 						}
 					]
 				}
