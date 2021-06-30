@@ -21,7 +21,7 @@
 					"S3Bucket": "amplify-safesale-dev-205233-deployment",
 					"S3Key": "amplify-builds/safsaleappsynclayer-build.zip"
 				},
-				"Description": "Lambda layer version 43",
+				"Description": "Lambda layer version 49",
 				"LayerName": "safsaleappsynclayer"
 			},
 			"DeletionPolicy": "Retain",
@@ -478,6 +478,114 @@
 			}
 		},
 		"LambdaLayerPermissionprivate43": {
+			"Type": "AWS::Lambda::LayerVersionPermission",
+			"Properties": {
+				"Action": "lambda:GetLayerVersion",
+				"LayerVersionArn": {
+					"Fn::Sub": [
+						"arn:aws:lambda:${AWS::Region}:${AWS::AccountId}:layer:${layerName}:${layerVersion}",
+						{
+							"layerName": "safsaleappsynclayer",
+							"layerVersion": "43"
+						}
+					]
+				},
+				"Principal": {
+					"Ref": "AWS::AccountId"
+				}
+			}
+		},
+		"LambdaLayerPermissionprivate44": {
+			"Type": "AWS::Lambda::LayerVersionPermission",
+			"Properties": {
+				"Action": "lambda:GetLayerVersion",
+				"LayerVersionArn": {
+					"Fn::Sub": [
+						"arn:aws:lambda:${AWS::Region}:${AWS::AccountId}:layer:${layerName}:${layerVersion}",
+						{
+							"layerName": "safsaleappsynclayer",
+							"layerVersion": "44"
+						}
+					]
+				},
+				"Principal": {
+					"Ref": "AWS::AccountId"
+				}
+			}
+		},
+		"LambdaLayerPermissionprivate45": {
+			"Type": "AWS::Lambda::LayerVersionPermission",
+			"Properties": {
+				"Action": "lambda:GetLayerVersion",
+				"LayerVersionArn": {
+					"Fn::Sub": [
+						"arn:aws:lambda:${AWS::Region}:${AWS::AccountId}:layer:${layerName}:${layerVersion}",
+						{
+							"layerName": "safsaleappsynclayer",
+							"layerVersion": "45"
+						}
+					]
+				},
+				"Principal": {
+					"Ref": "AWS::AccountId"
+				}
+			}
+		},
+		"LambdaLayerPermissionprivate46": {
+			"Type": "AWS::Lambda::LayerVersionPermission",
+			"Properties": {
+				"Action": "lambda:GetLayerVersion",
+				"LayerVersionArn": {
+					"Fn::Sub": [
+						"arn:aws:lambda:${AWS::Region}:${AWS::AccountId}:layer:${layerName}:${layerVersion}",
+						{
+							"layerName": "safsaleappsynclayer",
+							"layerVersion": "46"
+						}
+					]
+				},
+				"Principal": {
+					"Ref": "AWS::AccountId"
+				}
+			}
+		},
+		"LambdaLayerPermissionprivate47": {
+			"Type": "AWS::Lambda::LayerVersionPermission",
+			"Properties": {
+				"Action": "lambda:GetLayerVersion",
+				"LayerVersionArn": {
+					"Fn::Sub": [
+						"arn:aws:lambda:${AWS::Region}:${AWS::AccountId}:layer:${layerName}:${layerVersion}",
+						{
+							"layerName": "safsaleappsynclayer",
+							"layerVersion": "47"
+						}
+					]
+				},
+				"Principal": {
+					"Ref": "AWS::AccountId"
+				}
+			}
+		},
+		"LambdaLayerPermissionprivate48": {
+			"Type": "AWS::Lambda::LayerVersionPermission",
+			"Properties": {
+				"Action": "lambda:GetLayerVersion",
+				"LayerVersionArn": {
+					"Fn::Sub": [
+						"arn:aws:lambda:${AWS::Region}:${AWS::AccountId}:layer:${layerName}:${layerVersion}",
+						{
+							"layerName": "safsaleappsynclayer",
+							"layerVersion": "48"
+						}
+					]
+				},
+				"Principal": {
+					"Ref": "AWS::AccountId"
+				}
+			}
+		},
+		"LambdaLayerPermissionprivate49": {
 			"Type": "AWS::Lambda::LayerVersionPermission",
 			"Properties": {
 				"Action": "lambda:GetLayerVersion",

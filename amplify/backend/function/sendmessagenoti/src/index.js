@@ -37,13 +37,23 @@ var AWS = require("aws-sdk");
 
 
 
-const appsyncUrl = process.env.API_SAFESALESEARCH_GRAPHQLAPIENDPOINTOUTPUT
-const apiKey = process.env.API_SAFESALESEARCH_GRAPHQLAPIKEYOUTPUT
+const appsyncUrl = process.env.API_SAFESALESEARCH_GRAPHQLAPIENDPOINTOUTPUT;
+const apiKey = process.env.API_SAFESALESEARCH_GRAPHQLAPIKEYOUTPUT;
+
+const region = process.env.REGION;
+
+var applicationId = process.env.PINPOINT_PROJECT_ID;
 
 
-const { request } = require('/opt/appSyncRequest')
+const { request } = require('/opt/appSyncRequest');
 
-const { getConvo } = require('/opt/queries')
+const { getConvo } = require('/opt/queries');
+
+const { sendmessage } = require('/opt/sendNotifications');
+const { sendemail } = require('/opt/sendEmail');
+
+
+
 exports.handler = async (event) => {
   //eslint-disable-line
   console.log(JSON.stringify(event, null, 2));
@@ -59,7 +69,7 @@ exports.handler = async (event) => {
         let conversationId = record["messageConversationId"];
         let guestmail = record["guestmail"];
         let authorid = record["authorId"];
-        let id = record["id"];
+
         let content = record["content"];
 
         // create a TODO with AWS_IAM auth
@@ -74,11 +84,63 @@ exports.handler = async (event) => {
             },
           },
           appsyncUrl, apiKey
-        )
-        console.log('iam results:', result)
+        );
+        if (result.data.getConvo.associated) {
+          let name = result.data.getConvo.name;
+          let idxx1 = result.data.getConvo.name.indexOf(":") + 1;
+          let idxx2 = result.data.getConvo.name.indexOf(" de: ");
+          if (idxx1 < 1)
+            idxx1 = 0;
+          if (idxx2 < 1)
+            idxx2 = result.data.getConvo.name.length() - 1;
+          let title = result.data.getConvo.name.substring(idxx1, idxx2);
+
+
+          for (let idx in result.data.getConvo.associated.items) {
+            let typechannel;
+            let toaddress;
+            const user = result.data.getConvo.associated.items[idx];
+            if (user.guestmail) {
+              typechannel = "Email";
+              toaddress = user.guestmail;
+
+            }
+            else {
+              toaddress = user.user.username;
+              console.log("user ::", toaddress);
+
+              if (user.user.devices) {
+
+                for (let idx2 in user.user.devices.items) {
+                  if (user.user.devices.items[idx2].platform == "ios") {
+                    typechannel = "APNS";
+                  }
+                  else if (user.user.devices.items[idx2].platform == "android") {
+                    typechannel = "FCM";
+                  }
+
+                  await sendmessage(typechannel, user.user.devices.items[idx2].token, content, title);
+                }
+              }
+              if (!typechannel) {
+                typechannel = "Email";
+                console.log("Email::", toaddress);
+              }
+
+
+
+            }
+            if (typechannel == "Email") {
+              var body_html = `<html><head></head><body><h1>Safe Sale Te ha respondindo:</h1><p>` + content + `</p></body></html>`;
+
+              await sendemail(toaddress, body_html, title);
+
+            }
+          }
+        }
 
       } catch (error) {
-        console.log(error)
+        console.log(error);
       }
     }
   }

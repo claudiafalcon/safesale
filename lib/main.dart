@@ -1,13 +1,17 @@
+import 'dart:async';
+
 import 'package:amplify_flutter/amplify.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:amplify_auth_cognito/amplify_auth_cognito.dart';
 import 'package:amplify_storage_s3/amplify_storage_s3.dart';
 
 import 'package:flutter/material.dart';
+import 'package:plain_notification_token/plain_notification_token.dart';
 import 'package:safesale/services/auth_service.dart';
 import 'package:safesale/amplifyconfiguration.dart';
 import 'package:safesale/home.dart';
 import 'package:amplify_api/amplify_api.dart';
+import 'package:safesale/services/user_service.dart';
 
 void main() {
   runApp(MyApp());
@@ -21,12 +25,26 @@ class MyApp extends StatefulWidget {
 class _MyAppState extends State<MyApp> {
   final _authService = AuthService();
 
+  IosNotificationSettings _settings;
+
+  StreamSubscription onTokenRefreshSubscription;
+
+  StreamSubscription onIosSubscription;
+
   bool _amplifyConfigured = false;
 
   @override
   initState() {
     super.initState();
+
     _configureAmplify();
+  }
+
+  @override
+  void dispose() {
+    onTokenRefreshSubscription.cancel();
+    onIosSubscription.cancel();
+    super.dispose();
   }
 
   void _configureAmplify() async {
@@ -50,6 +68,8 @@ class _MyAppState extends State<MyApp> {
     } catch (e) {
       print(e);
     }
+    final _userService = UserService();
+    _userService.refreshToken();
   }
 
   @override

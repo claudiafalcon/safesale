@@ -36,7 +36,7 @@
 		},
 		"notificationsId": {
 			"Type": "String",
-			"Default": "notificationssafesalenotyId"
+			"Default": "7fdc9f9916334dd9ab7404dc658f760a"
 		}
 	},
 	"Conditions": {
@@ -113,13 +113,13 @@
 				"Runtime": "nodejs12.x",
 				"Layers": [
 					{
-						"Fn::Sub": "arn:aws:lambda:${AWS::Region}:${AWS::AccountId}:layer:safsaleappsynclayer:43"
+						"Fn::Sub": "arn:aws:lambda:${AWS::Region}:${AWS::AccountId}:layer:safsaleappsynclayer:49"
 					}
 				],
 				"Timeout": "25",
 				"Code": {
 					"S3Bucket": "amplify-safesale-dev-205233-deployment",
-					"S3Key": "amplify-builds/sendmessagenoti-49574f3830704c667773-build.zip"
+					"S3Key": "amplify-builds/sendmessagenoti-726d775531463345346a-build.zip"
 				}
 			}
 		},

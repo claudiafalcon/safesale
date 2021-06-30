@@ -109,6 +109,36 @@ class UserService {
     }
   }
 
+  Future<void> refreshToken() async {
+    await initUser();
+    if (_user != null) {
+      final DeviceInfoPlugin deviceInfoPlugin = DeviceInfoPlugin();
+      Map<String, dynamic> deviceData = <String, dynamic>{};
+      String deviceId;
+      String token;
+      String platform = 'unknown';
+      try {
+        if (Platform.isAndroid) {
+          deviceData =
+              _readAndroidBuildData(await deviceInfoPlugin.androidInfo);
+          deviceId = deviceData["androidId"];
+          platform = 'android';
+        } else if (Platform.isIOS) {
+          deviceData = _readIosDeviceInfo(await deviceInfoPlugin.iosInfo);
+          deviceId = deviceData["identifierForVendor"];
+          platform = 'ios';
+        }
+        token = await _getToken();
+        await _updateTokenDevice(deviceId, token, platform);
+      } on PlatformException {
+        deviceData = <String, dynamic>{
+          'Error:': 'Failed to get platform version.'
+        };
+      }
+    }
+    return null;
+  }
+
   Future<void> _updateTokenDevice(
       String deviceId, String token, String platform) async {
     try {
@@ -372,7 +402,13 @@ class UserService {
     }
 
     if (_user == null) {
-      AuthUser res = await Amplify.Auth.getCurrentUser();
+      AuthUser res;
+      try {
+        res = await Amplify.Auth.getCurrentUser();
+      } catch (e) {
+        print("User SignedOut");
+        return;
+      }
       var _user_id = res.userId;
       var res2 = await Amplify.Auth.fetchUserAttributes();
       AuthUserAttribute email = res2.firstWhere(

@@ -3,6 +3,7 @@ exports.getConvo = gql`
 query GetConvo ($id:ID!,$guestmail:String,$convoLinkUserId:ID) {
     getConvo(id: $id) {
       id
+      name
       associated (filter: {not: {and: {guestmail: {eq: $guestmail}, and: {convoLinkUserId: {eq: $convoLinkUserId}}}}}){
         items {
           guestmail
