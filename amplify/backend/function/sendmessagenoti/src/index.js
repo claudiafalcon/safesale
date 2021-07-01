@@ -87,6 +87,8 @@ exports.handler = async (event) => {
         );
         if (result.data.getConvo.associated) {
           let name = result.data.getConvo.name;
+          let id = result.data.getConvo.id;
+          let category = result.data.getConvo.type;
           let idxx1 = result.data.getConvo.name.indexOf(":") + 1;
           let idxx2 = result.data.getConvo.name.indexOf(" de: ");
           if (idxx1 < 1)
@@ -119,7 +121,7 @@ exports.handler = async (event) => {
                     typechannel = "FCM";
                   }
 
-                  await sendmessage(typechannel, user.user.devices.items[idx2].token, content, title);
+                  await sendmessage(typechannel, user.user.devices.items[idx2].token, content, title, id, category);
                 }
               }
               if (!typechannel) {

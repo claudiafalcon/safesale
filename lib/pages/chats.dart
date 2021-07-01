@@ -154,7 +154,7 @@ class _ChatPageState extends State<ChatPage> {
         ],
       );
     } else {
-      _notiService.updateUnreadMessage(message.id);
+      if (message.unread) _notiService.updateUnreadMessage(message.id);
       return Column(
         children: [
           Container(

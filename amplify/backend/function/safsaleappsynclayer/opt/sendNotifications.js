@@ -11,7 +11,7 @@ var ttl = 60;
 
 var silent = false;
 
-function CreateMessageRequest(service, token, message, title) {
+function CreateMessageRequest(service, token, message, title, messageId, category) {
 
     if (service == 'FCM') {
 
@@ -36,7 +36,9 @@ function CreateMessageRequest(service, token, message, title) {
                     'SilentPush': silent,
                     'Title': title,
                     'TimeToLive': ttl,
-                    'RawContent': JSON.stringify(RawContent)
+                    'RawContent': JSON.stringify(RawContent),
+                    'CollapseKey': category + '-' + messageId,
+
                 }
             }
         };
@@ -54,7 +56,29 @@ function CreateMessageRequest(service, token, message, title) {
                     'Priority': priority,
                     'SilentPush': silent,
                     'Title': title,
-                    'TimeToLive': ttl
+                    'TimeToLive': ttl,
+                    'ThreadId': messageId,
+                    'Category': category
+                }
+            }
+        };
+    } else if (service == 'APNS_SANDBOX') {
+        messageRequest = {
+            'Addresses': {
+                [token]: {
+                    'ChannelType': 'APNS_SANDBOX'
+                }
+            },
+            'MessageConfiguration': {
+                'APNSMessage': {
+                    'Action': action,
+                    'Body': message,
+                    'Priority': priority,
+                    'SilentPush': silent,
+                    'Title': title,
+                    'TimeToLive': ttl,
+                    'ThreadId': messageId,
+                    'Category': category
                 }
             }
         };
@@ -71,8 +95,8 @@ function CreateMessageRequest(service, token, message, title) {
  * @param {String} message the message to send
  * @param {String} title the title of the message
  */
-exports.sendmessage = async (service, token, message, title) => {
-    var messageRequest = CreateMessageRequest(service, token, message, title);
+exports.sendmessage = async (service, token, message, title, messageId, category) => {
+    var messageRequest = CreateMessageRequest(service, token, message, title, messageId, category);
 
 
     // Specify that you're using a shared credentials file, and specify the
@@ -95,7 +119,18 @@ exports.sendmessage = async (service, token, message, title) => {
         console.log('App: ' + applicationId);
         // Try to send the message.
         let data = await pinpoint.sendMessages(params).promise();
-        console.log('Success sending Push: ' + JSON.stringify(data));
+        let status = data['MessageResponse']['Result'][token]['StatusCode'];
+        console.log('Success sending Push: ' + JSON.stringify(data['MessageResponse']['Result'][token]));
+        if (status != 200 && service == "APNS") {
+            messageRequest = CreateMessageRequest("APNS_SANDBOX", token, message, title);
+            params = {
+                "ApplicationId": applicationId,
+                "MessageRequest": messageRequest
+            };
+            data = await pinpoint.sendMessages(params).promise();
+            status = data['MessageResponse']['Result'][token]['StatusCode'];
+            console.log('Success sending Push SANDBOX: ' + JSON.stringify(data['MessageResponse']['Result'][token]));
+        }
     }
     catch (error) {
         console.log("error :: ", error);
