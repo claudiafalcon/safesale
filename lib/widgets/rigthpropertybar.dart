@@ -185,7 +185,7 @@ class _RightPropertyBarState extends State<RightPropertyBar> {
     return Column(children: [
       // top section
       Container(
-        padding: const EdgeInsets.all(8.0),
+        padding: const EdgeInsets.all(0.0),
         height: 160,
         child: Row(
           crossAxisAlignment: CrossAxisAlignment.end,
@@ -195,12 +195,15 @@ class _RightPropertyBarState extends State<RightPropertyBar> {
 
             Flexible(
                 child: Padding(
-                    padding: const EdgeInsets.only(left: 8.0),
+                    padding: const EdgeInsets.only(left: 0.0),
                     child: Column(
                         crossAxisAlignment: CrossAxisAlignment.end,
                         children: <Widget>[
                           Padding(
-                              padding: const EdgeInsets.only(left: 8.0),
+                              padding: EdgeInsets.only(
+                                  left: MediaQuery.of(context).size.height *
+                                      factorPaddingSmallSpace *
+                                      0.4),
                               child: SizedBox(
                                 height: MediaQuery.of(context).size.height *
                                     factorPropertyTitle,
@@ -212,14 +215,21 @@ class _RightPropertyBarState extends State<RightPropertyBar> {
                                     // MediaQuery.of(context).size.toString(),
                                     style: GoogleFonts.raleway(
                                       textStyle: TextStyle(
-                                        color: Colors.white,
-                                        fontSize:
-                                            MediaQuery.of(context).size.height <
-                                                    800
-                                                ? 17
-                                                : 24,
-                                        fontWeight: FontWeight.bold,
-                                      ),
+                                          color: Colors.white,
+                                          fontSize: MediaQuery.of(context)
+                                                      .size
+                                                      .height <
+                                                  800
+                                              ? 17
+                                              : 24,
+                                          fontWeight: FontWeight.bold,
+                                          shadows: [
+                                            Shadow(
+                                                color: Colors.black
+                                                    .withOpacity(0.8),
+                                                offset: Offset(2, 2),
+                                                blurRadius: 3)
+                                          ]),
                                     ),
                                   ),
                                 ),
@@ -252,17 +262,22 @@ class _RightPropertyBarState extends State<RightPropertyBar> {
               //rigth section
 
               Align(
-            alignment: Alignment.centerRight,
-            child: Container(
+            alignment: Alignment.bottomRight,
+            child: Padding(
+              padding: EdgeInsets.only(
+                right: MediaQuery.of(context).size.height *
+                    factorRighBarFilterIconSize *
+                    0.2,
+              ),
+              child: Container(
                 width: MediaQuery.of(context).size.height *
                     factorRighBarFilterIconSize *
-                    1.5,
-                child: ListView(
-                  //  mainAxisAlignment: MainAxisAlignment.start,
-                  //crossAxisAlignment: CrossAxisAlignment.center,
+                    0.5,
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.end,
+                  crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
                     Column(
-                      mainAxisAlignment: MainAxisAlignment.start,
                       children: [
                         InkWell(
                           onTap: () async {
@@ -282,20 +297,21 @@ class _RightPropertyBarState extends State<RightPropertyBar> {
                             );
                             future.then((void value) => _closeModal(value));
                           },
-                          child: buildprofile(widget.total,
-                              _filterIconSize + _filterIconSize / 5),
+                          child: SvgPicture.asset(
+                            'images/filter.svg',
+                            width: _propertyIconSize,
+                            height: _propertyIconSize,
+                            color: Colors.white,
+                          ),
                         ),
                         SizedBox(
                           height: _propertyIconSize,
-                        )
+                        ),
                       ],
                     ),
                     widget.total != 0
                         ? Column(
                             children: [
-                              SizedBox(
-                                height: 60,
-                              ),
                               InkWell(
                                   onTap: () async {
                                     if (widget.status !=
@@ -561,7 +577,9 @@ class _RightPropertyBarState extends State<RightPropertyBar> {
                       ],
                     ),
                   ],
-                )),
+                ),
+              ),
+            ),
           )
           //]),
           ),

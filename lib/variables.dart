@@ -19,14 +19,11 @@ final double factorFontTitle1 = 0.025;
 final double factorFontInput = 0.02;
 final double factorFontSmall = 0.015;
 
-final Color newSearchOne = Colors.amberAccent[400];
-final Color newSearchTwo = Colors.amberAccent[700];
+final Color newSearchColor = Color(0xfff6019a);
 
-final Color geoSearchOne = Colors.green[800];
-final Color geoSearchTwo = Colors.green[900];
+final Color geoSearchColor = Color(0xff00fe65);
 
-final Color filterSearchOne = Colors.indigo[800];
-final Color filterSearchTwo = Colors.indigo[900];
+final Color filterSearchColor = Color(0xff001bfe);
 
 final String cloudfronturl = 'https://didsugvpn60.cloudfront.net/public/';
 

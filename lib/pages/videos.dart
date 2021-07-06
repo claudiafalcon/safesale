@@ -343,20 +343,20 @@ class _VideoPageState extends State<VideoPage> {
                           }
 
                           if (_result != null) {
-                            Color one;
-                            Color two;
+                            String svg;
+                            Color color;
                             switch (_searchService.getSearchType()) {
                               case "geo":
-                                one = geoSearchOne;
-                                two = geoSearchTwo;
+                                svg = 'images/near.svg';
+                                color = geoSearchColor;
                                 break;
                               case "new":
-                                one = newSearchOne;
-                                two = newSearchTwo;
+                                svg = 'images/newer.svg';
+                                color = newSearchColor;
                                 break;
                               default:
-                                one = filterSearchOne;
-                                two = filterSearchTwo;
+                                svg = 'images/filtered.svg';
+                                color = filterSearchColor;
                             }
 
                             int _idx = index % resultBlockSize;
@@ -377,7 +377,21 @@ class _VideoPageState extends State<VideoPage> {
                                 setAudio: setAudio,
                                 volume: _volume,
                               ),
-                              RibbonShape(one, two),
+                              Positioned(
+                                left: MediaQuery.of(context).size.height *
+                                    factorPaddingSmallSpace *
+                                    0.4,
+                                top: MediaQuery.of(context).size.height *
+                                    factorRighBarVideoIconSize *
+                                    5,
+                                child: Draggable(
+                                  child: RibbonShape(
+                                      svg, color, _searchService.getTotal()),
+                                  feedback: RibbonShape(
+                                      svg, color, _searchService.getTotal()),
+                                  childWhenDragging: Container(),
+                                ),
+                              ),
                             ]);
                           } else {
                             return Stack(
