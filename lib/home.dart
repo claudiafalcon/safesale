@@ -1,14 +1,13 @@
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:safesale/auth/authnavigator.dart';
 
-import 'package:safesale/pages/alerts.dart';
-import 'package:safesale/pages/favs.dart';
-import 'package:safesale/pages/messages.dart';
-import 'package:safesale/pages/profile.dart';
-import 'package:safesale/pages/videos.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:safesale/variables.dart';
 import 'package:safesale/widgets/loading.dart';
+import 'package:safesale/services/user_service.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 
 class HomePage extends StatefulWidget {
   final bool amplifyConfigured;
@@ -26,6 +25,131 @@ class Page {
 
 class _HomePageState extends State<HomePage> {
   bool isexternalsearch = false;
+  String conversationId;
+  void _initMessaging() async {
+    await Firebase.initializeApp();
+
+    FirebaseMessaging messaging = FirebaseMessaging.instance;
+
+    NotificationSettings settings = await messaging.requestPermission(
+      alert: true,
+      announcement: false,
+      badge: true,
+      carPlay: false,
+      criticalAlert: false,
+      provisional: false,
+      sound: true,
+    );
+
+    print('User granted permission: ${settings.authorizationStatus}');
+    final _userService = UserService();
+    messaging.getToken().then((value) {
+      _userService.refreshToken(value);
+    });
+    FirebaseMessaging.onMessage.listen((RemoteMessage event) {
+      int state = 0;
+      print("message recieved");
+
+      showGeneralDialog(
+        context: context,
+        barrierDismissible: true,
+        transitionDuration: Duration(milliseconds: 100),
+        barrierLabel: MaterialLocalizations.of(context).dialogLabel,
+        barrierColor: Colors.black.withOpacity(0.5),
+        pageBuilder: (context, _, __) {
+          return Column(
+            mainAxisAlignment: MainAxisAlignment.start,
+            children: <Widget>[
+              Container(
+                width: MediaQuery.of(context).size.width,
+                height: MediaQuery.of(context).size.height / 10,
+                color: Color.fromRGBO(52, 57, 59, 0.5),
+                child: Card(
+                  color: Color.fromRGBO(0, 59, 139, 0.5),
+                  child: InkWell(
+                    onTap: () {
+                      state = 1;
+                      Navigator.of(context, rootNavigator: true).pop();
+                      if (event.collapseKey != null)
+                        conversationId = event.collapseKey;
+
+                      setState(() {
+                        page = 4;
+                      });
+                    },
+                    child: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Padding(
+                            padding: EdgeInsets.only(
+                                left: MediaQuery.of(context).size.height *
+                                    factorPaddingSpace /
+                                    10),
+                            child: Text(
+                              event.notification.title,
+                              style: GoogleFonts.raleway(
+                                  color: Colors.white,
+                                  fontSize: MediaQuery.of(context).size.height *
+                                      factorFontSmall,
+                                  fontWeight: FontWeight.w900),
+                            ),
+                          ),
+                          Padding(
+                            padding: EdgeInsets.only(
+                                left: MediaQuery.of(context).size.height *
+                                    factorPaddingSpace /
+                                    10),
+                            child: Text(
+                              event.notification.body,
+                              style: GoogleFonts.raleway(
+                                  color: Colors.white,
+                                  fontSize: MediaQuery.of(context).size.height *
+                                      factorFontSmall,
+                                  fontWeight: FontWeight.w300),
+                            ),
+                          ),
+                        ]),
+                  ),
+                ),
+              ),
+            ],
+          );
+        },
+        transitionBuilder: (context, animation, secondaryAnimation, child) {
+          return SlideTransition(
+            position: CurvedAnimation(
+              parent: animation,
+              curve: Curves.easeOut,
+            ).drive(Tween<Offset>(
+              begin: Offset(0, -1.0),
+              end: Offset.zero,
+            )),
+            child: child,
+          );
+        },
+      );
+      new Future.delayed(const Duration(seconds: 2), () {
+        // When task is over, close the dialog
+        if (state == 0) Navigator.of(context, rootNavigator: true).pop();
+      });
+    });
+    FirebaseMessaging.onMessageOpenedApp.listen((message) {
+      print('Message clicked!');
+      if (message.collapseKey != null) conversationId = message.collapseKey;
+
+      setState(() {
+        page = 4;
+      });
+    });
+  }
+
+  @override
+  initState() {
+    super.initState();
+    _initMessaging();
+  }
+
   List<Page> pageoptions = [
     Page(page: "VideoPage", isGuestAllowed: true),
     Page(page: "AlertsPage"),
@@ -54,6 +178,7 @@ class _HomePageState extends State<HomePage> {
           ? NavigatorPage(
               pagename: pageoptions[page].page,
               guestallowed: pageoptions[page].isGuestAllowed,
+              conversationid: conversationId,
               call: updatePage,
               isExternalSearch: isExternalSearch,
             )

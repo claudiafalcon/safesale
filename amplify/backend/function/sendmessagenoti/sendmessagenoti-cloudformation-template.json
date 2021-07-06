@@ -113,13 +113,13 @@
 				"Runtime": "nodejs12.x",
 				"Layers": [
 					{
-						"Fn::Sub": "arn:aws:lambda:${AWS::Region}:${AWS::AccountId}:layer:safsaleappsynclayer:54"
+						"Fn::Sub": "arn:aws:lambda:${AWS::Region}:${AWS::AccountId}:layer:safsaleappsynclayer:57"
 					}
 				],
 				"Timeout": 25,
 				"Code": {
 					"S3Bucket": "amplify-safesale-dev-205233-deployment",
-					"S3Key": "amplify-builds/sendmessagenoti-506f476e715139537267-build.zip"
+					"S3Key": "amplify-builds/sendmessagenoti-7a68457a422f4b704443-build.zip"
 				}
 			}
 		},

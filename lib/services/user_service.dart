@@ -109,13 +109,18 @@ class UserService {
     }
   }
 
-  Future<void> refreshToken() async {
+  Future<void> refreshUser() async {
+    initUser();
+    return null;
+  }
+
+  Future<void> refreshToken(String token) async {
     await initUser();
     if (_user != null) {
       final DeviceInfoPlugin deviceInfoPlugin = DeviceInfoPlugin();
       Map<String, dynamic> deviceData = <String, dynamic>{};
       String deviceId;
-      String token;
+
       String platform = 'unknown';
       try {
         if (Platform.isAndroid) {
@@ -128,7 +133,6 @@ class UserService {
           deviceId = deviceData["identifierForVendor"];
           platform = 'ios';
         }
-        token = await _getToken();
         await _updateTokenDevice(deviceId, token, platform);
       } on PlatformException {
         deviceData = <String, dynamic>{

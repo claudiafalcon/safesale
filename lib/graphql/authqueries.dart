@@ -402,7 +402,7 @@ const s_onCreateMessage =
 
 const q_getMessages = '''query GetConvo(\$id: ID!) {
   getConvo(id: \$id) {
-    messages(sortDirection: ASC) {
+    messages(sortDirection: DESC) {
       items {
         authorId
         content

@@ -19,8 +19,17 @@ function CreateMessageRequest(service, token, message, title, messageId, categor
             "notification": {
                 "title": title,
                 "body": message
-            }
+            },
+            "data": {
+                "collapse_key": messageId,
+                "priority": priority,
+                "id": messageId
+            },
+            "collapse_key": messageId,
+
         };
+
+        console.log("RawContent ::" + JSON.stringify(RawContent));
 
         var messageRequest = {
             'Addresses': {

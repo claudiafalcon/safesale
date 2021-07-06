@@ -303,6 +303,30 @@
         }
       ],
       "hash": "jGa8FmEiIUK2lvzqNbvX+G8bpgLwu38zTFdxPVzEnv8="
+    },
+    "55": {
+      "permissions": [
+        {
+          "type": "private"
+        }
+      ],
+      "hash": "JvfsxQP/I/4KrEGmBgthLdFedVTg+0LsqdbqgTBxiro="
+    },
+    "56": {
+      "permissions": [
+        {
+          "type": "private"
+        }
+      ],
+      "hash": "pUWGrN0JxVCvBwFEMhBGdb0MhWv02vRJ0UlhW6GAqBo="
+    },
+    "57": {
+      "permissions": [
+        {
+          "type": "private"
+        }
+      ],
+      "hash": "EUT2tzEucAao4IxH45HWrqs0WUK5K7H1mCm3GfGZJ8o="
     }
   }
 }

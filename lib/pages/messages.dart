@@ -2,15 +2,13 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:safesale/models/conversation.dart';
 
-import 'package:safesale/models/pushnotification.dart';
-
 import 'package:safesale/pages/chats.dart';
 import 'package:safesale/painters/softpaint.dart';
 import 'package:safesale/services/auth_service.dart';
 
-import 'package:safesale/services/notification_service.dart';
 import 'package:safesale/services/user_service.dart';
 import 'package:safesale/variables.dart';
+import 'package:safesale/widgets/converList.dart';
 
 class NotificationBadge extends StatelessWidget {
   final int totalNotifications;
@@ -39,44 +37,31 @@ class NotificationBadge extends StatelessWidget {
   }
 }
 
-Future<dynamic> _firebaseMessagingBackgroundHandler(
-  Map<String, dynamic> message,
-) async {
-  // Initialize the Firebase app
-
-  print('onBackgroundMessage received: $message');
-}
-
 class MessagesPage extends StatefulWidget {
   final AuthFlowStatus authstatus;
+  final String conversationid;
 
-  const MessagesPage({Key key, this.authstatus}) : super(key: key);
+  const MessagesPage({Key key, this.authstatus, this.conversationid})
+      : super(key: key);
   @override
   _MessagesPageState createState() => _MessagesPageState();
 }
 
 class _MessagesPageState extends State<MessagesPage> {
-  int _totalNotifications;
-  PushNotification _notificationInfo;
-
   String userId;
 
   List<Conversation> result;
   final _userService = UserService();
-  final _notiService = NotificationService();
-  var _firstPress = true;
 
   @override
   void initState() {
-    _totalNotifications = 0;
-
     super.initState();
-    subscribeConversations();
   }
 
-  void subscribeConversations() async {
-    userId = await _userService.getUser().id;
-    //await _notiService.subscribeConvos(userId);
+  bool _iaminchat = false;
+
+  void setiaminchat(bool iaminchat) {
+    _iaminchat = iaminchat;
   }
 
   @override
@@ -135,8 +120,10 @@ class _MessagesPageState extends State<MessagesPage> {
                         Container(),
                       ],
                     );
-                  } else {
+                  } else if (snapshot.connectionState ==
+                      ConnectionState.active) {
                     result = _userService.getUser().convs;
+                    userId = _userService.getUser().id;
                     return SingleChildScrollView(
                       child: Container(
                         height: MediaQuery.of(context).size.height *
@@ -145,118 +132,20 @@ class _MessagesPageState extends State<MessagesPage> {
                                     factorPropertyTitle +
                                     factorVerticalSpace)),
                         child: SingleChildScrollView(
-                          child: Column(
-                            children: _createConvoList(result),
-                          ),
+                          child: ConverList(
+                              list: result,
+                              conversationid: widget.conversationid,
+                              userId: userId,
+                              iaminchat: _iaminchat,
+                              setiaminchat: setiaminchat),
                         ),
                       ),
                     );
+                  } else {
+                    return Container();
                   }
                 })
           ])),
     );
-  }
-
-  List<Widget> _createConvoList(List<Conversation> list) {
-    return new List<Widget>.generate(list.length, (index) {
-      Conversation item = list[index];
-      return GestureDetector(
-        onTap: () => Navigator.of(context, rootNavigator: true).push(
-            MaterialPageRoute(
-                builder: (_) => ChatPage(conv: item, userid: userId))),
-        child: Center(
-          child: Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: ClipRRect(
-              borderRadius: BorderRadius.circular(20),
-              child: Container(
-                  padding: EdgeInsets.symmetric(
-                    horizontal: 5,
-                    vertical: 5,
-                  ),
-                  color: Colors.white,
-                  height: MediaQuery.of(context).size.height / 12 * 1,
-                  width: MediaQuery.of(context).size.width * 0.9,
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.start,
-                    children: [
-                      Container(
-                        width: MediaQuery.of(context).size.width / 10 * 1.5,
-                        height: MediaQuery.of(context).size.width / 10 * 1.5,
-                        padding: EdgeInsets.all(2),
-                        decoration: item.unreadMessage
-                            ? BoxDecoration(
-                                borderRadius:
-                                    BorderRadius.all(Radius.circular(50)),
-                                border: Border.all(
-                                    width: 2,
-                                    color: Theme.of(context).primaryColor),
-                                //  shape: BoxShape.circle,
-                                boxShadow: [
-                                    BoxShadow(
-                                      color: Colors.grey.withOpacity(0.5),
-                                      spreadRadius: 2,
-                                      blurRadius: 5,
-                                    )
-                                  ])
-                            : BoxDecoration(shape: BoxShape.circle, boxShadow: [
-                                BoxShadow(
-                                  color: Colors.grey.withOpacity(0.5),
-                                  spreadRadius: 2,
-                                  blurRadius: 5,
-                                )
-                              ]),
-                        child: CircleAvatar(
-                          radius: 35,
-                          backgroundImage: NetworkImage(cloudfronturl +
-                              'images/' +
-                              item.property.id +
-                              "/" +
-                              item.property.id +
-                              "0.jpg"),
-                        ),
-                      ),
-                      Container(
-                        width: MediaQuery.of(context).size.width / 10 * 7,
-                        padding: EdgeInsets.only(left: 20),
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: <Widget>[
-                            Container(
-                                width: MediaQuery.of(context).size.width /
-                                    10 *
-                                    4.5,
-                                child: Text(
-                                  item.name,
-                                  style: GoogleFonts.raleway(
-                                      color: Color.fromRGBO(0, 59, 139, 1),
-                                      fontSize:
-                                          MediaQuery.of(context).size.height *
-                                              factorFontSmall,
-                                      fontWeight: FontWeight.w600),
-                                  textAlign: TextAlign.start,
-                                  overflow: TextOverflow.ellipsis,
-                                  maxLines: 2,
-                                )),
-                            Text(
-                              item.dateUnreadMessage,
-                              textAlign: TextAlign.end,
-                              style: GoogleFonts.raleway(
-                                  color: Colors.black54,
-                                  fontSize: MediaQuery.of(context).size.height *
-                                      factorFontSmall,
-                                  fontWeight: FontWeight.w300),
-                            ),
-                          ],
-                        ),
-                      ),
-                    ],
-                  )),
-            ),
-          ),
-        ),
-      );
-    });
   }
 }

@@ -326,6 +326,27 @@
                     "attributes": [
                         "Arn"
                     ]
+                },
+                {
+                    "category": "function",
+                    "resourceName": "safsaleappsynclayer",
+                    "attributes": [
+                        "Arn"
+                    ]
+                },
+                {
+                    "category": "function",
+                    "resourceName": "safsaleappsynclayer",
+                    "attributes": [
+                        "Arn"
+                    ]
+                },
+                {
+                    "category": "function",
+                    "resourceName": "safsaleappsynclayer",
+                    "attributes": [
+                        "Arn"
+                    ]
                 }
             ]
         }

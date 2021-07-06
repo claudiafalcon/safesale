@@ -16,16 +16,18 @@ import 'package:safesale/widgets/loading.dart';
 class NavigatorPage extends StatefulWidget {
   final String pagename;
   final bool guestallowed;
+  final String conversationid;
   final void Function(int) call;
   final bool Function() isExternalSearch;
 
-  const NavigatorPage({
-    Key key,
-    @required this.pagename,
-    this.guestallowed: false,
-    this.call,
-    this.isExternalSearch,
-  }) : super(key: key);
+  const NavigatorPage(
+      {Key key,
+      @required this.pagename,
+      this.guestallowed: false,
+      this.call,
+      this.isExternalSearch,
+      this.conversationid})
+      : super(key: key);
   @override
   _NavigatorPageState createState() => _NavigatorPageState();
 }
@@ -59,7 +61,8 @@ class _NavigatorPageState extends State<NavigatorPage> {
             shouldLogOut: _authService.logOut,
             detachDevice: _userService.detachDevice);
       case "MessagesPage":
-        return MessagesPage(authstatus: status);
+        return MessagesPage(
+            authstatus: status, conversationid: widget.conversationid);
       default:
         return VideoPage(authstatus: status);
     }

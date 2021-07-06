@@ -21,7 +21,7 @@
 					"S3Bucket": "amplify-safesale-dev-205233-deployment",
 					"S3Key": "amplify-builds/safsaleappsynclayer-build.zip"
 				},
-				"Description": "Lambda layer version 54",
+				"Description": "Lambda layer version 57",
 				"LayerName": "safsaleappsynclayer"
 			},
 			"DeletionPolicy": "Retain",
@@ -676,6 +676,60 @@
 			}
 		},
 		"LambdaLayerPermissionprivate54": {
+			"Type": "AWS::Lambda::LayerVersionPermission",
+			"Properties": {
+				"Action": "lambda:GetLayerVersion",
+				"LayerVersionArn": {
+					"Fn::Sub": [
+						"arn:aws:lambda:${AWS::Region}:${AWS::AccountId}:layer:${layerName}:${layerVersion}",
+						{
+							"layerName": "safsaleappsynclayer",
+							"layerVersion": "54"
+						}
+					]
+				},
+				"Principal": {
+					"Ref": "AWS::AccountId"
+				}
+			}
+		},
+		"LambdaLayerPermissionprivate55": {
+			"Type": "AWS::Lambda::LayerVersionPermission",
+			"Properties": {
+				"Action": "lambda:GetLayerVersion",
+				"LayerVersionArn": {
+					"Fn::Sub": [
+						"arn:aws:lambda:${AWS::Region}:${AWS::AccountId}:layer:${layerName}:${layerVersion}",
+						{
+							"layerName": "safsaleappsynclayer",
+							"layerVersion": "55"
+						}
+					]
+				},
+				"Principal": {
+					"Ref": "AWS::AccountId"
+				}
+			}
+		},
+		"LambdaLayerPermissionprivate56": {
+			"Type": "AWS::Lambda::LayerVersionPermission",
+			"Properties": {
+				"Action": "lambda:GetLayerVersion",
+				"LayerVersionArn": {
+					"Fn::Sub": [
+						"arn:aws:lambda:${AWS::Region}:${AWS::AccountId}:layer:${layerName}:${layerVersion}",
+						{
+							"layerName": "safsaleappsynclayer",
+							"layerVersion": "56"
+						}
+					]
+				},
+				"Principal": {
+					"Ref": "AWS::AccountId"
+				}
+			}
+		},
+		"LambdaLayerPermissionprivate57": {
 			"Type": "AWS::Lambda::LayerVersionPermission",
 			"Properties": {
 				"Action": "lambda:GetLayerVersion",

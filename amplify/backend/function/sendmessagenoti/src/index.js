@@ -115,12 +115,12 @@ exports.handler = async (event) => {
 
                 for (let idx2 in user.user.devices.items) {
                   if (user.user.devices.items[idx2].platform == "ios") {
-                    typechannel = "APNS";
+                    typechannel = "FCM";
                   }
                   else if (user.user.devices.items[idx2].platform == "android") {
                     typechannel = "FCM";
                   }
-
+                  console.log("token ::", user.user.devices.items[idx2].token);
                   await sendmessage(typechannel, user.user.devices.items[idx2].token, content, title, id, category);
                 }
               }

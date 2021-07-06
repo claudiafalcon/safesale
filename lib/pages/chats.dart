@@ -1,3 +1,6 @@
+import 'dart:async';
+
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:intl/intl.dart';
@@ -8,11 +11,22 @@ import 'package:safesale/services/notification_service.dart';
 import 'package:safesale/services/user_service.dart';
 import 'package:safesale/variables.dart';
 
+enum ChatStatus { loading, finalized }
+
+// 2
+class ChatState {
+  final ChatStatus chatFlowStatus;
+
+  ChatState({this.chatFlowStatus});
+}
+
 class ChatPage extends StatefulWidget {
+  final void Function(bool) iaminchat;
   final Conversation conv;
   final String userid;
 
-  const ChatPage({Key key, this.conv, this.userid}) : super(key: key);
+  const ChatPage({Key key, this.conv, this.userid, this.iaminchat})
+      : super(key: key);
   @override
   _ChatPageState createState() => _ChatPageState();
 }
@@ -24,26 +38,46 @@ class _ChatPageState extends State<ChatPage> {
   TextEditingController _message = new TextEditingController();
 
   Future<bool> initMessages() async {
+    var state = ChatState(chatFlowStatus: ChatStatus.loading);
+    streamController.add(state);
     messages = await _notiService.getMessageByConvoId(widget.conv.id);
+    state = ChatState(chatFlowStatus: ChatStatus.finalized);
+    streamController.add(state);
     return true;
   }
 
   @override
   void dispose() {
+    streamController.close();
     super.dispose();
+
     _userService.updateUser(widget.userid);
+  }
+
+  void stayfornewMessage() async {
+    FirebaseMessaging.onMessage.listen((RemoteMessage event) {
+      if (event.collapseKey == widget.conv.id) initMessages();
+    });
+    FirebaseMessaging.onMessageOpenedApp.listen((message) {
+      if (message.collapseKey == widget.conv.id) initMessages();
+    });
+    setState(() {});
   }
 
   @override
   void initState() {
     super.initState();
-    initMessages();
+    //  initMessages();
+    stayfornewMessage();
+    // initMessages();
   }
 
   void _sendMessage() async {
+    widget.iaminchat(false);
     if (_message.text != null && _message.text != '') {
       await _notiService.createMessage(
           widget.conv.id, widget.userid, _message.text, '');
+      initMessages();
       setState(() {
         _message.clear();
         FocusScopeNode currentFocus = FocusScope.of(context);
@@ -221,8 +255,12 @@ class _ChatPageState extends State<ChatPage> {
     }
   }
 
+  final streamController = StreamController<ChatState>();
+
   @override
   Widget build(BuildContext context) {
+    initMessages();
+    widget.iaminchat(true);
     return Scaffold(
       appBar: AppBar(
         brightness: Brightness.dark,
@@ -245,52 +283,54 @@ class _ChatPageState extends State<ChatPage> {
             icon: Icon(Icons.arrow_back_ios),
             color: Colors.white,
             onPressed: () {
+              widget.iaminchat(false);
               Navigator.pop(context);
             }),
       ),
       body: (Container(
-          height: MediaQuery.of(context).size.height,
-          width: MediaQuery.of(context).size.width,
-          color: Color.fromRGBO(67, 73, 75, 0.8),
-          child: CustomPaint(
-              painter: PainterSoft(
-                  Color.fromRGBO(52, 57, 59, 0.5),
-                  Color.fromRGBO(0, 59, 139, 0.5),
-                  Color.fromRGBO(52, 57, 59, 0.5),
-                  0,
-                  20),
-              child: Container(
-                child: FutureBuilder<void>(
-                    future: initMessages(),
-                    builder: (context, snapshot) {
-                      if (snapshot.hasData) {
-                        String prevUserId = '';
-                        return Column(
-                          children: [
-                            Expanded(
-                                child: ListView.builder(
-                              reverse: false,
-                              padding: EdgeInsets.all(20),
-                              itemCount: messages.length,
-                              itemBuilder: (BuildContext context, int index) {
-                                final Message message = messages[index];
-                                final bool isMe =
-                                    message.authorId == widget.userid;
-                                final isSameUser =
-                                    (index == messages.length - 1)
-                                        ? false
-                                        : (messages[index + 1].authorId ==
-                                            message.authorId);
-                                return _chatBubble(message, isMe, isSameUser);
-                              },
-                            )),
-                            _sendMessageArea()
-                          ],
-                        );
-                      } else
-                        return Container(child: null);
-                    }),
-              )))),
+        height: MediaQuery.of(context).size.height,
+        width: MediaQuery.of(context).size.width,
+        color: Color.fromRGBO(67, 73, 75, 0.8),
+        child: CustomPaint(
+          painter: PainterSoft(
+              Color.fromRGBO(52, 57, 59, 0.5),
+              Color.fromRGBO(0, 59, 139, 0.5),
+              Color.fromRGBO(52, 57, 59, 0.5),
+              0,
+              20),
+          child: Container(
+            child: StreamBuilder<ChatState>(
+                stream: streamController.stream,
+                builder: (context, snapshot) {
+                  if (snapshot.hasData) {
+                    String prevUserId = '';
+                    return Column(
+                      children: [
+                        Expanded(
+                            child: ListView.builder(
+                          reverse: true,
+                          shrinkWrap: true,
+                          padding: EdgeInsets.all(20),
+                          itemCount: messages.length,
+                          itemBuilder: (BuildContext context, int index) {
+                            final Message message = messages[index];
+                            final bool isMe = message.authorId == widget.userid;
+                            final isSameUser = (index == messages.length - 1)
+                                ? false
+                                : (messages[index + 1].authorId ==
+                                    message.authorId);
+                            return _chatBubble(message, isMe, isSameUser);
+                          },
+                        )),
+                        _sendMessageArea()
+                      ],
+                    );
+                  } else
+                    return Container(child: null);
+                }),
+          ),
+        ),
+      )),
     );
   }
 }
