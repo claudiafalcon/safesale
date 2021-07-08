@@ -19,6 +19,7 @@ class NavigatorPage extends StatefulWidget {
   final String conversationid;
   final void Function(int) call;
   final bool Function() isExternalSearch;
+  final Function() resetNoti;
 
   const NavigatorPage(
       {Key key,
@@ -26,7 +27,8 @@ class NavigatorPage extends StatefulWidget {
       this.guestallowed: false,
       this.call,
       this.isExternalSearch,
-      this.conversationid})
+      this.conversationid,
+      this.resetNoti})
       : super(key: key);
   @override
   _NavigatorPageState createState() => _NavigatorPageState();
@@ -62,7 +64,10 @@ class _NavigatorPageState extends State<NavigatorPage> {
             detachDevice: _userService.detachDevice);
       case "MessagesPage":
         return MessagesPage(
-            authstatus: status, conversationid: widget.conversationid);
+          authstatus: status,
+          conversationid: widget.conversationid,
+          resetNoti: widget.resetNoti,
+        );
       default:
         return VideoPage(authstatus: status);
     }

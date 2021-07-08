@@ -168,6 +168,10 @@ class _HomePageState extends State<HomePage> {
     });
   }
 
+  resetNoti() {
+    conversationId = null;
+  }
+
   int page = 0;
   @override
   Widget build(BuildContext context) {
@@ -181,7 +185,7 @@ class _HomePageState extends State<HomePage> {
               conversationid: conversationId,
               call: updatePage,
               isExternalSearch: isExternalSearch,
-            )
+              resetNoti: resetNoti)
           : LoadingPage(),
       bottomNavigationBar: new Theme(
         data: Theme.of(context)
@@ -190,7 +194,7 @@ class _HomePageState extends State<HomePage> {
           height: MediaQuery.of(context).size.height * factorBottonHeigh,
           child: BottomNavigationBar(
             onTap: (index) {
-              print("Entra al tap :: page :: $page : index:: $index");
+              print("ENTRA AL BOTTOM DEL HOME");
               if (page == 0 && index == 0) {
                 isexternalsearch = false;
               } else if (page == 0) {

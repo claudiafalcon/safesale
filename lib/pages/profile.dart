@@ -87,9 +87,7 @@ class _ProfilePageState extends State<ProfilePage> {
                     Text(
                         "Email: " +
                             (widget.credentials != null
-                                ? (widget.credentials.name != null
-                                    ? widget.credentials.name
-                                    : widget.credentials.username)
+                                ? widget.credentials.username
                                 : ''),
                         textAlign: TextAlign.left,
                         style: GoogleFonts.raleway(

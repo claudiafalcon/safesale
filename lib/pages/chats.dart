@@ -94,15 +94,28 @@ class _ChatPageState extends State<ChatPage> {
     return Container(
         padding: EdgeInsets.symmetric(horizontal: 8),
         height: 70,
-        color: Colors.white,
+        color: Theme.of(context).backgroundColor.withOpacity(0.5),
         child: Row(
           children: [
             Expanded(
               child: TextField(
                 controller: _message,
-                decoration: InputDecoration.collapsed(
-                  hintText: 'Enviar mensaje ...',
-                ),
+                decoration: new InputDecoration(
+                    focusedBorder: new OutlineInputBorder(
+                      borderRadius: const BorderRadius.all(
+                        const Radius.circular(20.0),
+                      ),
+                    ),
+                    border: new OutlineInputBorder(
+                      borderRadius: const BorderRadius.all(
+                        const Radius.circular(20.0),
+                      ),
+                    ),
+                    filled: true,
+                    hintStyle: new TextStyle(color: Colors.grey[800]),
+                    hintText: "Escribe el mensaje ...",
+                    fillColor: Colors.white70,
+                    focusColor: Theme.of(context).primaryColor),
                 textCapitalization: TextCapitalization.sentences,
               ),
             ),

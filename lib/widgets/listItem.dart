@@ -55,7 +55,7 @@ class _ListItemState extends State<ListItem> {
                   style: GoogleFonts.raleway(
                       color: widget.textcolor,
                       fontSize: widget.fontsize,
-                      fontWeight: FontWeight.w200),
+                      fontWeight: FontWeight.w400),
                 ),
               ],
             ),

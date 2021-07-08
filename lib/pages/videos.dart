@@ -345,18 +345,22 @@ class _VideoPageState extends State<VideoPage> {
                           if (_result != null) {
                             String svg;
                             Color color;
+                            String text;
                             switch (_searchService.getSearchType()) {
                               case "geo":
                                 svg = 'images/near.svg';
                                 color = geoSearchColor;
+                                text = "Cerca de ti";
                                 break;
                               case "new":
                                 svg = 'images/newer.svg';
                                 color = newSearchColor;
+                                text = "Nuevas Propiedades";
                                 break;
                               default:
                                 svg = 'images/filtered.svg';
                                 color = filterSearchColor;
+                                text = "Búsqueda Personalizada";
                             }
 
                             int _idx = index % resultBlockSize;
@@ -387,9 +391,20 @@ class _VideoPageState extends State<VideoPage> {
                                 child: Draggable(
                                   child: RibbonShape(
                                       svg, color, _searchService.getTotal()),
-                                  feedback: RibbonShape(
+                                  feedback: Text(text,
+                                      textAlign: TextAlign.left,
+                                      style: GoogleFonts.raleway(
+                                        textStyle: TextStyle(
+                                          color: color,
+                                          fontSize: MediaQuery.of(context)
+                                                  .size
+                                                  .height *
+                                              factorFontInput,
+                                          fontWeight: FontWeight.w600,
+                                        ),
+                                      )),
+                                  childWhenDragging: RibbonShape(
                                       svg, color, _searchService.getTotal()),
-                                  childWhenDragging: Container(),
                                 ),
                               ),
                             ]);

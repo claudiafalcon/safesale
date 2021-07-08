@@ -2,6 +2,7 @@ import 'dart:async' show StreamController;
 import 'dart:convert';
 
 import 'dart:io';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:http/http.dart' as http;
 
 import 'package:amazon_cognito_identity_dart_2/sig_v4.dart';
@@ -40,13 +41,22 @@ class UserService {
   UserService._internal();
 
   Future<String> _getToken() async {
-    final plainNotificationToken = PlainNotificationToken();
-    if (Platform.isIOS) {
-      plainNotificationToken.requestPermission();
-      await plainNotificationToken.onIosSettingsRegistered.first;
-    }
+    FirebaseMessaging messaging = FirebaseMessaging.instance;
+    NotificationSettings settings = await messaging.requestPermission(
+      alert: true,
+      announcement: false,
+      badge: true,
+      carPlay: false,
+      criticalAlert: false,
+      provisional: false,
+      sound: true,
+    );
 
-    final String token = await plainNotificationToken.getToken();
+    String token;
+
+    print('User granted permission: ${settings.authorizationStatus}');
+
+    token = await messaging.getToken();
 
     return token;
   }

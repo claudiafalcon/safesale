@@ -41,7 +41,10 @@ class MessagesPage extends StatefulWidget {
   final AuthFlowStatus authstatus;
   final String conversationid;
 
-  const MessagesPage({Key key, this.authstatus, this.conversationid})
+  final void Function() resetNoti;
+
+  const MessagesPage(
+      {Key key, this.authstatus, this.conversationid, this.resetNoti})
       : super(key: key);
   @override
   _MessagesPageState createState() => _MessagesPageState();
@@ -62,6 +65,7 @@ class _MessagesPageState extends State<MessagesPage> {
 
   void setiaminchat(bool iaminchat) {
     _iaminchat = iaminchat;
+    widget.resetNoti();
   }
 
   @override
