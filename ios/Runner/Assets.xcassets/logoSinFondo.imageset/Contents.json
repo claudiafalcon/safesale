@@ -1,17 +1,17 @@
 {
   "images" : [
     {
-      "filename" : "logoSinFondo.png",
+      "filename" : "logoSinFondo-1.png",
       "idiom" : "universal",
       "scale" : "1x"
     },
     {
-      "filename" : "logoSinFondo-1.png",
+      "filename" : "logoSinFondo-3.png",
       "idiom" : "universal",
       "scale" : "2x"
     },
     {
-      "filename" : "logoSinFondo-2.png",
+      "filename" : "logoSinFondo.png",
       "idiom" : "universal",
       "scale" : "3x"
     }

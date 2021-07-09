@@ -186,7 +186,7 @@ class _RightPropertyBarState extends State<RightPropertyBar> {
       // top section
       Container(
         padding: const EdgeInsets.all(0.0),
-        height: 160,
+        height: MediaQuery.of(context).size.height * factorPropertyTitle,
         child: Row(
           crossAxisAlignment: CrossAxisAlignment.end,
           mainAxisSize: MainAxisSize.min,

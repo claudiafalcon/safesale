@@ -10,7 +10,7 @@ final double factorBottonHeigh = 0.1;
 final double factorAuthLogoWd = 0.16;
 
 final double factorSmallIconSize = 0.022;
-final double factorPropertyTitle = 0.12;
+final double factorPropertyTitle = 0.1;
 final double factorVerticalSpace = 0.05;
 final double factorPaddingSpace = 0.08;
 final double factorPaddingSmallSpace = 0.04;

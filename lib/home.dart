@@ -193,6 +193,8 @@ class _HomePageState extends State<HomePage> {
         child: SizedBox(
           height: MediaQuery.of(context).size.height * factorBottonHeigh,
           child: BottomNavigationBar(
+            iconSize: _footerIconSize,
+            selectedFontSize: 0,
             onTap: (index) {
               print("ENTRA AL BOTTOM DEL HOME");
               if (page == 0 && index == 0) {
