@@ -60,6 +60,9 @@ PODS:
     - AWSCore (~> 2.24.0)
   - AWSS3 (2.24.2):
     - AWSCore (= 2.24.2)
+  - connectivity (0.0.1):
+    - Flutter
+    - Reachability
   - connectivity_plus (0.0.1):
     - Flutter
     - Reachability
@@ -160,6 +163,7 @@ DEPENDENCIES:
   - amplify_core (from `.symlinks/plugins/amplify_core/ios`)
   - amplify_flutter (from `.symlinks/plugins/amplify_flutter/ios`)
   - amplify_storage_s3 (from `.symlinks/plugins/amplify_storage_s3/ios`)
+  - connectivity (from `.symlinks/plugins/connectivity/ios`)
   - connectivity_plus (from `.symlinks/plugins/connectivity_plus/ios`)
   - device_info (from `.symlinks/plugins/device_info/ios`)
   - firebase_core (from `.symlinks/plugins/firebase_core/ios`)
@@ -212,6 +216,8 @@ EXTERNAL SOURCES:
     :path: ".symlinks/plugins/amplify_flutter/ios"
   amplify_storage_s3:
     :path: ".symlinks/plugins/amplify_storage_s3/ios"
+  connectivity:
+    :path: ".symlinks/plugins/connectivity/ios"
   connectivity_plus:
     :path: ".symlinks/plugins/connectivity_plus/ios"
   device_info:
@@ -257,6 +263,7 @@ SPEC CHECKSUMS:
   AWSMobileClient: 6af7fff9e58f8d427acf3381cbbae2f0c34d52ab
   AWSPluginsCore: 1670f03a8612d60bd84c541ffa34f538e4037052
   AWSS3: 1782d0db43a1219a118ea6263d4ea01f76f8cdf4
+  connectivity: c4130b2985d4ef6fd26f9702e886bd5260681467
   connectivity_plus: 5f0eb61093bec56935f21a1699dd2758bc895587
   device_info: d7d233b645a32c40dfdc212de5cf646ca482f175
   Firebase: 73c3e3b216ec1ecbc54d2ffdd4670c65c749edb1

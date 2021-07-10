@@ -6,8 +6,11 @@ import 'package:location/location.dart'
 import 'package:safesale/auth_credentials.dart';
 
 import 'package:safesale/models/property.dart';
+import 'package:safesale/pages/offline.dart';
 import 'package:safesale/painters/ribbon_shape.dart';
+import 'package:safesale/painters/softpaint.dart';
 import 'package:safesale/services/auth_service.dart';
+import 'package:safesale/services/connection_status_service.dart';
 import 'package:safesale/services/video_mod.dart';
 import 'package:safesale/variables.dart';
 
@@ -25,12 +28,9 @@ class VideoPage extends StatefulWidget {
 
   final bool Function() isExternalSearch;
 
-  const VideoPage({
-    Key key,
-    this.authstatus,
-    this.credentials,
-    this.isExternalSearch,
-  }) : super(key: key);
+  const VideoPage(
+      {Key key, this.authstatus, this.credentials, this.isExternalSearch})
+      : super(key: key);
 
   @override
   _VideoPageState createState() => _VideoPageState();
@@ -265,36 +265,170 @@ class _VideoPageState extends State<VideoPage> {
 
     return Scaffold(
       resizeToAvoidBottomInset: false,
-      backgroundColor: Colors.black,
-      body: new StreamBuilder<SearchState>(
-          stream: searchStateController,
-          builder: (context, snapshot) {
-            if (snapshot.hasError) {
-              return Stack(
-                children: [
-                  EmptyPage(),
-                  RightPropertyBar(
-                      total: 0, headText: "", status: widget.authstatus)
-                ],
-              );
-            } else {
-              switch (snapshot.connectionState) {
-                case ConnectionState.none:
-                  return LoadingPage();
-                  break;
-                case ConnectionState.waiting:
-                  {
-                    if (_searchService.getProperties() != null)
-                      _searchService.checkState();
-
+      body: CustomPaint(
+        painter: PainterSoft(
+            Color.fromRGBO(52, 57, 59, 0.5),
+            Color.fromRGBO(0, 59, 139, 0.5),
+            Color.fromRGBO(52, 57, 59, 0.5),
+            0,
+            20),
+        child: new StreamBuilder<SearchState>(
+            stream: searchStateController,
+            builder: (context, snapshot) {
+              if (snapshot.hasError) {
+                return Stack(
+                  children: [
+                    EmptyPage(),
+                    RightPropertyBar(
+                        total: 0, headText: "", status: widget.authstatus)
+                  ],
+                );
+              } else {
+                switch (snapshot.connectionState) {
+                  case ConnectionState.none:
                     return LoadingPage();
-                  }
-                case ConnectionState.active:
-                  if (snapshot.data.searchFlowStatus ==
-                      SearchFlowStatus.started) return LoadingPage();
-                  if (snapshot.data.searchFlowStatus ==
-                      SearchFlowStatus.empty) {
-                    //  _searchService.turnOffExternalSearch();
+                    break;
+                  case ConnectionState.waiting:
+                    {
+                      if (_searchService.getProperties() != null)
+                        _searchService.checkState();
+
+                      return LoadingPage();
+                    }
+                  case ConnectionState.active:
+                    if (snapshot.data.searchFlowStatus ==
+                        SearchFlowStatus.started) return LoadingPage();
+                    if (snapshot.data.searchFlowStatus ==
+                        SearchFlowStatus.empty) {
+                      //  _searchService.turnOffExternalSearch();
+                      return Stack(
+                        children: [
+                          EmptyPage(),
+                          RightPropertyBar(
+                              total: 0, headText: "", status: widget.authstatus)
+                        ],
+                      );
+                    } else {
+                      if (_pages.containsKey(_element)) _pages.remove(_element);
+                      final initialPage = 0;
+                      final itemCount = _searchService.getTotal();
+                      return PageView.builder(
+                          itemCount: initialPage + _searchService.getTotal(),
+                          controller: PageController(
+                              initialPage:
+                                  initialPage + _element * resultBlockSize,
+                              viewportFraction: 1),
+                          scrollDirection: Axis.vertical,
+                          itemBuilder: (context, page) {
+                            final index = (page - initialPage);
+
+                            //        print("[info] This is the current page $index");
+                            if ((index) ~/ resultBlockSize < _element) {
+                              _element = _element - 1;
+                              _result = _pages[(resultBlockSize * _element)];
+                            }
+
+                            if ((index == 0 || index % resultBlockSize == 0) &&
+                                index < _searchService.getTotal()) {
+                              int _ele = ((index) ~/ resultBlockSize);
+                              if (!_pages.containsKey(resultBlockSize * _ele)) {
+                                if (_ele == _element)
+                                  _pages[resultBlockSize * _element] =
+                                      _searchService.getProperties();
+                                else
+                                  _onNextPage(index);
+                              }
+                              _result = _pages[resultBlockSize * _ele];
+                            }
+
+                            // _searchService.turnOffExternalSearch();
+                            bool fullscreen = false;
+                            if (index < 0) {
+                              _element = _element - 1;
+                              _result = _pages[(resultBlockSize * _element)];
+                            }
+
+                            if (_result != null) {
+                              String svg;
+                              Color color;
+                              String text;
+                              switch (_searchService.getSearchType()) {
+                                case "geo":
+                                  svg = 'images/near.svg';
+                                  color = geoSearchColor;
+                                  text = "Cerca de ti";
+                                  break;
+                                case "new":
+                                  svg = 'images/newer.svg';
+                                  color = newSearchColor;
+                                  text = "Nuevas Propiedades";
+                                  break;
+                                default:
+                                  svg = 'images/filtered.svg';
+                                  color = filterSearchColor;
+                                  text = "Búsqueda Personalizada";
+                              }
+
+                              int _idx = index % resultBlockSize;
+                              Property property = _result[_idx];
+                              return Stack(children: [
+                                SafeSalePlayer(
+                                  onfullscreen: (t) {
+                                    setState(() {
+                                      fullscreen = t;
+                                    });
+                                  },
+                                  total: _searchService.getTotal(),
+                                  property: property,
+                                  credentials: widget.credentials,
+                                  status: widget.authstatus,
+                                  thereisanopenwindow: _thereisanopenwindow,
+                                  windowOpen: _openWindow,
+                                  setAudio: setAudio,
+                                  volume: _volume,
+                                ),
+                                Positioned(
+                                  left: MediaQuery.of(context).size.height *
+                                      factorPaddingSmallSpace *
+                                      0.4,
+                                  top: MediaQuery.of(context).size.height *
+                                      factorRighBarVideoIconSize *
+                                      5,
+                                  child: Draggable(
+                                    child: RibbonShape(
+                                        svg, color, _searchService.getTotal()),
+                                    feedback: Text(text,
+                                        textAlign: TextAlign.left,
+                                        style: GoogleFonts.raleway(
+                                          textStyle: TextStyle(
+                                            color: color,
+                                            fontSize: MediaQuery.of(context)
+                                                    .size
+                                                    .height *
+                                                factorFontInput,
+                                            fontWeight: FontWeight.w600,
+                                          ),
+                                        )),
+                                    childWhenDragging: RibbonShape(
+                                        svg, color, _searchService.getTotal()),
+                                  ),
+                                ),
+                              ]);
+                            } else {
+                              return Stack(
+                                children: [
+                                  EmptyPage(),
+                                  RightPropertyBar(
+                                      total: 0,
+                                      headText: "",
+                                      status: widget.authstatus)
+                                ],
+                              );
+                            }
+                          });
+                    }
+                    break;
+                  case ConnectionState.done:
                     return Stack(
                       children: [
                         EmptyPage(),
@@ -302,142 +436,15 @@ class _VideoPageState extends State<VideoPage> {
                             total: 0, headText: "", status: widget.authstatus)
                       ],
                     );
-                  } else {
-                    if (_pages.containsKey(_element)) _pages.remove(_element);
-                    final initialPage = 0;
-                    final itemCount = _searchService.getTotal();
-                    return PageView.builder(
-                        itemCount: initialPage + _searchService.getTotal(),
-                        controller: PageController(
-                            initialPage:
-                                initialPage + _element * resultBlockSize,
-                            viewportFraction: 1),
-                        scrollDirection: Axis.vertical,
-                        itemBuilder: (context, page) {
-                          final index = (page - initialPage);
-
-                          //        print("[info] This is the current page $index");
-                          if ((index) ~/ resultBlockSize < _element) {
-                            _element = _element - 1;
-                            _result = _pages[(resultBlockSize * _element)];
-                          }
-
-                          if ((index == 0 || index % resultBlockSize == 0) &&
-                              index < _searchService.getTotal()) {
-                            int _ele = ((index) ~/ resultBlockSize);
-                            if (!_pages.containsKey(resultBlockSize * _ele)) {
-                              if (_ele == _element)
-                                _pages[resultBlockSize * _element] =
-                                    _searchService.getProperties();
-                              else
-                                _onNextPage(index);
-                            }
-                            _result = _pages[resultBlockSize * _ele];
-                          }
-
-                          // _searchService.turnOffExternalSearch();
-                          bool fullscreen = false;
-                          if (index < 0) {
-                            _element = _element - 1;
-                            _result = _pages[(resultBlockSize * _element)];
-                          }
-
-                          if (_result != null) {
-                            String svg;
-                            Color color;
-                            String text;
-                            switch (_searchService.getSearchType()) {
-                              case "geo":
-                                svg = 'images/near.svg';
-                                color = geoSearchColor;
-                                text = "Cerca de ti";
-                                break;
-                              case "new":
-                                svg = 'images/newer.svg';
-                                color = newSearchColor;
-                                text = "Nuevas Propiedades";
-                                break;
-                              default:
-                                svg = 'images/filtered.svg';
-                                color = filterSearchColor;
-                                text = "Búsqueda Personalizada";
-                            }
-
-                            int _idx = index % resultBlockSize;
-                            Property property = _result[_idx];
-                            return Stack(children: [
-                              SafeSalePlayer(
-                                onfullscreen: (t) {
-                                  setState(() {
-                                    fullscreen = t;
-                                  });
-                                },
-                                total: _searchService.getTotal(),
-                                property: property,
-                                credentials: widget.credentials,
-                                status: widget.authstatus,
-                                thereisanopenwindow: _thereisanopenwindow,
-                                windowOpen: _openWindow,
-                                setAudio: setAudio,
-                                volume: _volume,
-                              ),
-                              Positioned(
-                                left: MediaQuery.of(context).size.height *
-                                    factorPaddingSmallSpace *
-                                    0.4,
-                                top: MediaQuery.of(context).size.height *
-                                    factorRighBarVideoIconSize *
-                                    5,
-                                child: Draggable(
-                                  child: RibbonShape(
-                                      svg, color, _searchService.getTotal()),
-                                  feedback: Text(text,
-                                      textAlign: TextAlign.left,
-                                      style: GoogleFonts.raleway(
-                                        textStyle: TextStyle(
-                                          color: color,
-                                          fontSize: MediaQuery.of(context)
-                                                  .size
-                                                  .height *
-                                              factorFontInput,
-                                          fontWeight: FontWeight.w600,
-                                        ),
-                                      )),
-                                  childWhenDragging: RibbonShape(
-                                      svg, color, _searchService.getTotal()),
-                                ),
-                              ),
-                            ]);
-                          } else {
-                            return Stack(
-                              children: [
-                                EmptyPage(),
-                                RightPropertyBar(
-                                    total: 0,
-                                    headText: "",
-                                    status: widget.authstatus)
-                              ],
-                            );
-                          }
-                        });
-                  }
-                  break;
-                case ConnectionState.done:
-                  return Stack(
-                    children: [
+                    break;
+                  default:
+                    return Stack(children: [
                       EmptyPage(),
-                      RightPropertyBar(
-                          total: 0, headText: "", status: widget.authstatus)
-                    ],
-                  );
-                  break;
-                default:
-                  return Stack(children: [
-                    EmptyPage(),
-                  ]);
+                    ]);
+                }
               }
-            }
-          }),
+            }),
+      ),
     );
   }
 }

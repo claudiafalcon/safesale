@@ -364,7 +364,7 @@ class _SchedulerPageState extends State<SchedulerPage> {
                                         ),
                                       ),
                                       SvgPicture.asset(
-                                        'images/LoadingImage.svg',
+                                        'images/logofinal.svg',
                                         width:
                                             MediaQuery.of(context).size.height *
                                                 factorAuthLogoWd,

@@ -13,6 +13,7 @@ import 'package:safesale/services/auth_service.dart';
 import 'package:safesale/amplifyconfiguration.dart';
 import 'package:safesale/home.dart';
 import 'package:amplify_api/amplify_api.dart';
+import 'package:safesale/services/connection_status_service.dart';
 
 void main() {
   WidgetsFlutterBinding.ensureInitialized();
@@ -40,6 +41,7 @@ class _MyAppState extends State<MyApp> {
   @override
   initState() {
     super.initState();
+
     _configureAmplify();
   }
 
@@ -60,7 +62,7 @@ class _MyAppState extends State<MyApp> {
     // Once Plugins are added, configure Amplify
     try {
       await Amplify.configure(amplifyconfig);
-      print('Amplify eas configured');
+      print('Main :: Amplify  configured');
     } catch (e) {
       print(e);
     }
@@ -92,7 +94,8 @@ class _MyAppState extends State<MyApp> {
             primaryColor: Color(0xff003b8b),
             canvasColor: Color.fromRGBO(58, 184, 234, 1),
             bottomSheetTheme: BottomSheetThemeData(
-                backgroundColor: Colors.black.withOpacity(0))),
+                // backgroundColor: Colors.black.withOpacity(0)
+                )),
         // 2
 
         home: HomePage(_amplifyConfigured));

@@ -1,13 +1,21 @@
+import 'dart:async';
+
+import 'package:connectivity/connectivity.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:safesale/auth/authnavigator.dart';
 
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:safesale/pages/offline.dart';
+import 'package:safesale/painters/softpaint.dart';
+
+import 'package:safesale/services/connection_status_service.dart';
+
 import 'package:safesale/variables.dart';
-import 'package:safesale/widgets/loading.dart';
 import 'package:safesale/services/user_service.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
+import 'package:safesale/widgets/loading.dart';
 
 class HomePage extends StatefulWidget {
   final bool amplifyConfigured;
@@ -26,6 +34,9 @@ class Page {
 class _HomePageState extends State<HomePage> {
   bool isexternalsearch = false;
   String conversationId;
+
+  final _internetconnectionService = InternetConnectionService();
+
   void _initMessaging() async {
     await Firebase.initializeApp();
 
@@ -148,6 +159,12 @@ class _HomePageState extends State<HomePage> {
   initState() {
     super.initState();
     _initMessaging();
+    _internetconnectionService.checkConnection();
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
   }
 
   List<Page> pageoptions = [
@@ -155,17 +172,21 @@ class _HomePageState extends State<HomePage> {
     Page(page: "AlertsPage"),
     Page(page: "FavsPage"),
     Page(page: "ProfilePage"),
-    Page(page: "MessagesPage"),
+    Page(page: "MessagesPage")
   ];
 
   bool isExternalSearch() {
     return isexternalsearch;
   }
 
-  updatePage(int i) {
-    setState(() {
-      page = i;
-    });
+  updatePage(int i) async {
+    if (i == -1) {
+      _internetconnectionService.checkConnection();
+      _initMessaging();
+    } else
+      setState(() {
+        page = i;
+      });
   }
 
   resetNoti() {
@@ -177,26 +198,55 @@ class _HomePageState extends State<HomePage> {
   Widget build(BuildContext context) {
     final double _footerIconSize =
         MediaQuery.of(context).size.height * factorFooterIconSize;
+
     return Scaffold(
-      body: widget.amplifyConfigured
-          ? NavigatorPage(
-              pagename: pageoptions[page].page,
-              guestallowed: pageoptions[page].isGuestAllowed,
-              conversationid: conversationId,
-              call: updatePage,
-              isExternalSearch: isExternalSearch,
-              resetNoti: resetNoti)
-          : LoadingPage(),
+      body: StreamBuilder<InternetConnectionState>(
+          stream: _internetconnectionService.connectionStateController.stream,
+          builder: (context, snapshot) {
+            // 3
+            if (snapshot.hasData) {
+              if (snapshot.data.internetConnectionFlowStatus ==
+                      InternetConnectionFlowStatus.online &&
+                  widget.amplifyConfigured) {
+                return NavigatorPage(
+                    pagename: pageoptions[page].page,
+                    guestallowed: pageoptions[page].isGuestAllowed,
+                    conversationid: conversationId,
+                    call: updatePage,
+                    isExternalSearch: isExternalSearch,
+                    resetNoti: resetNoti);
+              } else if (snapshot.data.internetConnectionFlowStatus ==
+                  InternetConnectionFlowStatus.offline) {
+                return OfflinePage(call: updatePage);
+              } else {
+                return CustomPaint(
+                    painter: PainterSoft(
+                        Color.fromRGBO(52, 57, 59, 0.5),
+                        Color.fromRGBO(0, 59, 139, 0.5),
+                        Color.fromRGBO(52, 57, 59, 0.5),
+                        0,
+                        20),
+                    child: LoadingPage());
+              }
+            } else {
+              return CustomPaint(
+                  painter: PainterSoft(
+                      Color.fromRGBO(52, 57, 59, 0.5),
+                      Color.fromRGBO(0, 59, 139, 0.5),
+                      Color.fromRGBO(52, 57, 59, 0.5),
+                      0,
+                      20),
+                  child: LoadingPage());
+            }
+          }),
       bottomNavigationBar: new Theme(
-        data: Theme.of(context)
-            .copyWith(canvasColor: Color.fromRGBO(42, 180, 233, 300)),
+        data: Theme.of(context),
         child: SizedBox(
           height: MediaQuery.of(context).size.height * factorBottonHeigh,
           child: BottomNavigationBar(
             iconSize: _footerIconSize,
             selectedFontSize: 0,
             onTap: (index) {
-              print("ENTRA AL BOTTOM DEL HOME");
               if (page == 0 && index == 0) {
                 isexternalsearch = false;
               } else if (page == 0) {

@@ -1,17 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:safesale/home.dart';
+
 import 'package:safesale/models/alert.dart';
 import 'package:safesale/models/searchcriterio.dart';
-import 'package:safesale/models/user.dart';
-import 'package:safesale/pages/videos.dart';
+
 import 'package:safesale/painters/softpaint.dart';
 import 'package:safesale/services/auth_service.dart';
 import 'package:safesale/services/search_service.dart';
 import 'package:safesale/services/user_service.dart';
 import 'package:safesale/variables.dart';
-import 'package:safesale/widgets/empyList.dart';
-import 'package:safesale/widgets/loading.dart';
 
 class AlertsPage extends StatefulWidget {
   final AuthFlowStatus authstatus;

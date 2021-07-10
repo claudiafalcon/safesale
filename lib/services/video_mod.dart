@@ -10,7 +10,9 @@ import 'package:orientation/orientation.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:safesale/auth_credentials.dart';
 import 'package:safesale/models/property.dart';
+import 'package:safesale/pages/offline.dart';
 import 'package:safesale/services/auth_service.dart';
+import 'package:safesale/services/connection_status_service.dart';
 import 'package:safesale/variables.dart';
 import 'package:safesale/widgets/loading.dart';
 import 'package:safesale/widgets/rigthpropertybar.dart';
@@ -28,6 +30,7 @@ typedef VideoCallback<T> = void Function(T t);
 
 class SafeSalePlayer extends StatefulWidget {
   final VideoCallback<bool> onfullscreen;
+  final void Function(int) call;
 
   final VideoCallback<String> onpeningvideo;
 
@@ -57,7 +60,8 @@ class SafeSalePlayer extends StatefulWidget {
       this.thereisanopenwindow,
       this.windowOpen,
       this.volume,
-      this.setAudio})
+      this.setAudio,
+      this.call})
       : super(key: key);
 
   @override
@@ -131,11 +135,13 @@ class _SafeSalePlayerState extends State<SafeSalePlayer>
 
   @override
   void initState() {
+    super.initState();
+
     url =
         cloudfronturl + widget.property.id + "/" + widget.property.id + ".m3u8";
 
     urlcheck(url);
-    super.initState();
+
     var widgetsBinding = WidgetsBinding.instance;
 
     widgetsBinding.addPostFrameCallback((callback) {
@@ -390,9 +396,13 @@ class _SafeSalePlayerState extends State<SafeSalePlayer>
       },
     );
     if (m3u8Content == null && video != null) {
-      http.Response response = await http.get(Uri.parse(video));
-      if (response.statusCode == 200) {
-        m3u8Content = utf8.decode(response.bodyBytes);
+      try {
+        http.Response response = await http.get(Uri.parse(video));
+        if (response.statusCode == 200) {
+          m3u8Content = utf8.decode(response.bodyBytes);
+        }
+      } on SocketException {
+        print("VideoMod :: Network Exception");
       }
     }
     /*

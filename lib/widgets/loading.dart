@@ -14,35 +14,27 @@ class LoadingPage extends StatefulWidget {
 class _LoadingPageState extends State<LoadingPage> {
   @override
   Widget build(BuildContext context) {
-    return CustomPaint(
-      painter: PainterSoft(
-          Color.fromRGBO(58, 184, 234, widget.opacity),
-          Color.fromRGBO(255, 255, 255, widget.opacity),
-          Color.fromRGBO(255, 255, 255, widget.opacity),
-          0,
-          20),
+    return Container(
       child: Container(
-        child: Container(
-          height: double.infinity,
-          width: double.infinity,
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: [
-              Container(child: SvgPicture.asset('images/LoadingImage.svg')),
-              Container(
-                child: Text("Cargando ...",
-                    style: GoogleFonts.raleway(
-                      textStyle: TextStyle(
-                        color: Color(0xff003b8b),
-                        fontSize: 24,
-                        fontWeight: FontWeight.bold,
-                      ),
+        height: double.infinity,
+        width: double.infinity,
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: [
+            Container(child: SvgPicture.asset('images/LoadingImage.svg')),
+            Container(
+              child: Text("Cargando  ...",
+                  style: GoogleFonts.raleway(
+                    textStyle: TextStyle(
+                      color: Color(0xffA6DDEB),
+                      fontSize: 24,
+                      fontWeight: FontWeight.bold,
                     ),
-                    textAlign: TextAlign.center),
-              )
-            ],
-          ),
+                  ),
+                  textAlign: TextAlign.center),
+            )
+          ],
         ),
       ),
     );

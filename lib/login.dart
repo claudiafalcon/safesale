@@ -85,7 +85,7 @@ class _LoginPageState extends State<LoginPage> {
                       Padding(
                         padding: EdgeInsets.all(padding),
                         child: SvgPicture.asset(
-                          'images/LoadingImage.svg',
+                          'images/logofinal.svg',
                           width: MediaQuery.of(context).size.height *
                               factorAuthLogoWd,
                           height: MediaQuery.of(context).size.height *
