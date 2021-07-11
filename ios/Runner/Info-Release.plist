@@ -57,5 +57,9 @@
 	</array>
 	<key>UIViewControllerBasedStatusBarAppearance</key>
 	<false/>
+	<key>NSLocationAlwaysUsageDescription</key>
+	<string>Safe Sale usa tu ubicación para mostrarte los inmuebles cercarnos a ti, de lo contrario te mostrará los inmuebles más recientes, sin importar la localización de estos.</string>
+	<key>NSLocationWhenInUseUsageDescription</key>
+	<string>Safe Sale usa tu ubicación para mostrarte los inmuebles cercarnos a ti, de lo contrario te mostrará los inmuebles más recientes, sin importar la localización de estos.</string>
 </dict>
 </plist>
