@@ -1,17 +1,13 @@
-import 'dart:async';
-
 import 'package:flutter/material.dart';
 import 'package:safesale/login.dart';
 import 'package:safesale/pages/alerts.dart';
 import 'package:safesale/pages/favs.dart';
 import 'package:safesale/pages/messages.dart';
-import 'package:safesale/pages/offline.dart';
 import 'package:safesale/pages/profile.dart';
 import 'package:safesale/pages/videos.dart';
 import 'package:safesale/painters/softpaint.dart';
 import 'package:safesale/resetpassword.dart';
 import 'package:safesale/services/auth_service.dart';
-import 'package:safesale/services/connection_status_service.dart';
 import 'package:safesale/services/user_service.dart';
 import 'package:safesale/signup.dart';
 import 'package:safesale/verification.dart';

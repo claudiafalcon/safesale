@@ -16,7 +16,7 @@ import 'package:safesale/services/connection_status_service.dart';
 import 'package:safesale/variables.dart';
 import 'package:safesale/widgets/loading.dart';
 import 'package:safesale/widgets/rigthpropertybar.dart';
-import 'package:screen/screen.dart';
+
 import 'package:video_player/video_player.dart';
 import 'package:wakelock/wakelock.dart';
 import 'package:http/http.dart' as http;
@@ -176,7 +176,7 @@ class _SafeSalePlayerState extends State<SafeSalePlayer>
       DeviceOrientation.landscapeLeft,
       DeviceOrientation.landscapeRight,
     ]);
-    Screen.keepOn(true);
+    //Screen.keepOn(true);
   }
 
   @override
@@ -268,7 +268,7 @@ class _SafeSalePlayerState extends State<SafeSalePlayer>
     return //AspectRatio(
         // aspectRatio: 16 / 9,
         //child:
-        controller.value.initialized
+        controller.value.isInitialized
             ? Stack(children: videoChildrens)
             : Stack(children: imageChildrens);
   }
@@ -486,12 +486,12 @@ class _SafeSalePlayerState extends State<SafeSalePlayer>
 
 // video Listener
   void listener() async {
-    if (controller.value.initialized && controller.value.isPlaying) {
-      if (!await Wakelock.isEnabled) {
+    if (controller.value.isInitialized && controller.value.isPlaying) {
+      if (!await Wakelock.enabled) {
         await Wakelock.enable();
       }
     } else {
-      if (await Wakelock.isEnabled) {
+      if (await Wakelock.enabled) {
         await Wakelock.disable();
         setState(() {});
       }

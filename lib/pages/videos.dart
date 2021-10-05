@@ -99,10 +99,10 @@ class _VideoPageState extends State<VideoPage> {
       }
       if (_serviceEnabled) {
         _permissionGranted = await location.hasPermission();
-        if (_permissionGranted == PermissionStatus.DENIED) {
+        if (_permissionGranted == PermissionStatus.denied) {
           _permissionGranted = await location.requestPermission();
         }
-        if (_permissionGranted == PermissionStatus.GRANTED) {
+        if (_permissionGranted == PermissionStatus.granted) {
           currentLocation = await location.getLocation();
         }
       }

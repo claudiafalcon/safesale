@@ -15,9 +15,12 @@
       "bool" : { "must" : [{ 
                             "multi_match" : {
                                               "query" : "$context.args.criteria.searchCriteria",
-                                              "type":       "cross_fields",
-                                              "fields": [ "nombre","descripcion","caractecteristicas","entidad","direccion","localidad"]
-                                            }
+                                              "type":       "best_fields",
+                                              "fields": [ "nombre","descripcion","caractecteristicas","entidad","direccion","localidad"],
+                                              "cutoff_frequency" : "0.01",
+                                              "minimum_should_match": "85%",
+                                              "operator": "AND"                                            
+                                              }
                             }
                             #if ($context.args.criteria.amenidades)
                             ,{
