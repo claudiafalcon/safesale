@@ -20,10 +20,16 @@
         "safesaleba936a14PostConfirmation": {
           "GROUP": "UserGroupFinalUsers",
           "deploymentBucketName": "amplify-safesale-dev-205233-deployment",
-          "s3Key": "amplify-builds/safesaleba936a14PostConfirmation-6531463444554f353148-build.zip"
+          "s3Key": "amplify-builds/safesaleba936a14PostConfirmation-4d425759323147436958-build.zip"
         },
-        "sendmessagenoti": {},
-        "safsaleappsynclayer": {}
+        "sendmessagenoti": {
+          "deploymentBucketName": "amplify-safesale-dev-205233-deployment",
+          "s3Key": "amplify-builds/sendmessagenoti-505a49486f7330505951-build.zip"
+        },
+        "safsaleappsynclayer": {
+          "deploymentBucketName": "amplify-safesale-dev-205233-deployment",
+          "s3Key": "amplify-builds/safsaleappsynclayer-LambdaLayerVersionc16cd65d-build.zip"
+        }
       },
       "video": {
         "properiesvodstream": {

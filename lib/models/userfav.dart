@@ -10,7 +10,9 @@ class Fav {
   factory Fav.fromJson(Map<String, dynamic> data) {
     return Fav(
         id: data["id"] as String,
-        property: Property.fromJson(data["property"]),
+        property: data["property"] == null
+            ? null
+            : Property.fromJson(data["property"]),
         updatedAt:
             data["updatedAt"] == null ? null : data["updatedAt"] as String,
         createdAt:

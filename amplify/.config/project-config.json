@@ -1,13 +1,13 @@
 {
-    "projectName": "safesale",
-    "version": "3.0",
-    "frontend": "flutter",
-    "flutter": {
-        "config": {
-            "ResDir": "./lib/"
-        }
-    },
-    "providers": [
-        "awscloudformation"
-    ]
+  "projectName": "safesale",
+  "version": "3.1",
+  "frontend": "flutter",
+  "flutter": {
+    "config": {
+      "ResDir": "./lib/"
+    }
+  },
+  "providers": [
+    "awscloudformation"
+  ]
 }
