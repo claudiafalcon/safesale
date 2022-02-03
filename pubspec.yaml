@@ -44,6 +44,7 @@ dependencies:
   firebase_messaging: ^10.0.3
   connectivity: ^3.0.6
   firebase_core: ^1.3.0
+  shared_preferences: ^2.0.12
   flutter_localizations: # Add this line
     sdk: flutter
 
